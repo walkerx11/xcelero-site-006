@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Plus, Minus, ArrowRight, ChevronDown } from "lucide-react";
 import { Link } from "@/artemis/router";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
@@ -18,15 +18,18 @@ const heroMetrics = [
 const traits = [
   {
     title: "Believe in the art of the pick",
-    desc: "There's a popular narrative that a startup's first few years are for moving fast and finding ways out of tough problems later. We're firm believers in taking beginnings seriously, in slowing down to speed up. A high degree of startup mortality is baked in at the beginning, so being a good picker of technology, market, and architecture is vastly underrated."
+    desc: "There's a popular narrative that a startup's first few years are for moving fast and finding ways out of tough problems later. We're firm believers in taking beginnings seriously, in slowing down to speed up. A high degree of startup mortality is baked in at the beginning, so being a good picker of technology, market, and architecture is vastly underrated.",
+    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=80"
   },
   {
     title: "Embrace their extremes",
-    desc: "We don't back well-rounded founders. We seek people who have one or two outlier abilities, areas where they have a shot at being the best in the world. This is what allows them to see opportunities others miss, solve problems others can't crack, and work with a drive that others don't match."
+    desc: "We don't back well-rounded founders. We seek people who have one or two outlier abilities, areas where they have a shot at being the best in the world. This is what allows them to see opportunities others miss, solve problems others can't crack, and work with a drive that others don't match.",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
   },
   {
     title: "Go unreasonably deep",
-    desc: "There's a particular kind of intensity we look for — a relentless drive that goes far beyond surface insights or hard work. It's curiosity that crosses over into obsession but reads more \"learn-it-all\" than \"know-it-all.\" It means full immersion in materials science when starting an energy company or working on the factory floor to live the pain of industrial bottlenecks."
+    desc: "There's a particular kind of intensity we look for — a relentless drive that goes far beyond surface insights or hard work. It's curiosity that crosses over into obsession but reads more \"learn-it-all\" than \"know-it-all.\" It means full immersion in materials science when starting an energy company or working on the factory floor to live the pain of industrial bottlenecks.",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
@@ -148,9 +151,10 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   WHO WE BACK — Centered intro, full-width expandable trait rows
+   WHO WE BACK — Split Screen Layout (NEW)
    ══════════════════════════════════════════════════════════════════════════ */
 function WhoWeBackSection() {
+  const [activeTrait, setActiveTrait] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -178,75 +182,107 @@ function WhoWeBackSection() {
           </p>
         </motion.div>
 
-        {/* Trait rows — full-width, numbered, expandable */}
-        <div className="max-w-5xl mx-auto">
-          {traits.map((trait, i) => (
-            <TraitRow key={i} trait={trait} index={i} />
-          ))}
-        </div>
+        {/* Split Screen Layout */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="grid lg:grid-cols-12 gap-12 lg:gap-16"
+        >
+          {/* Left Column — Number Indicators */}
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-32 flex lg:flex-col flex-row gap-4 lg:gap-0 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 scrollbar-hide">
+              {traits.map((trait, i) => (
+                <button
+                  key={i}
+                  suppressHydrationWarning
+                  onClick={() => setActiveTrait(i)}
+                  className={`flex items-center lg:items-center gap-4 lg:gap-6 shrink-0 lg:shrink group transition-all duration-300 cursor-pointer ${
+                    i > 0 ? "lg:mt-2" : ""
+                  }`}
+                >
+                  {/* Orange vertical bar indicator */}
+                  <div className="relative flex items-center">
+                    <div
+                      className={`w-1 rounded-full transition-all duration-300 ${
+                        activeTrait === i
+                          ? "h-[60px] md:h-[80px] bg-[#FF4D00]"
+                          : "h-[60px] md:h-[80px] bg-[#111111]/10 group-hover:bg-[#111111]/20"
+                      }`}
+                    />
+                  </div>
+                  {/* Number */}
+                  <span
+                    className={`text-[60px] md:text-[80px] lg:text-[120px] font-display font-medium leading-none transition-all duration-300 ${
+                      activeTrait === i
+                        ? "text-[#111111]"
+                        : "text-[#111111]/15 group-hover:text-[#111111]/30"
+                    }`}
+                  >
+                    0{i + 1}
+                  </span>
+                  {/* Title — only visible on mobile/tablet inline */}
+                  <span
+                    className={`lg:hidden text-[14px] md:text-[16px] font-display font-medium transition-colors whitespace-nowrap ${
+                      activeTrait === i
+                        ? "text-[#111111]"
+                        : "text-[#111111]/40"
+                    }`}
+                  >
+                    {trait.title}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column — Active Trait Content */}
+          <div className="lg:col-span-8 min-h-[320px] md:min-h-[400px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTrait}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="grid md:grid-cols-2 gap-8 md:gap-12 items-start"
+              >
+                {/* Text content */}
+                <div className="flex flex-col justify-center">
+                  <h3 className="text-[28px] md:text-[36px] lg:text-[44px] font-display font-medium tracking-tight leading-[1.1] mb-6 text-[#111111]">
+                    {traits[activeTrait].title}
+                  </h3>
+                  <p className="text-[17px] md:text-[19px] text-[#111111]/60 font-medium leading-[1.7]">
+                    {traits[activeTrait].desc}
+                  </p>
+                  {activeTrait === traits.length - 1 && (
+                    <div className="mt-8 text-[#FF4D00]">
+                      <svg width="26" height="53" viewBox="0 0 26 53" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.02421 0.5L0 14.1035H8.64923V52.5H26V0.5H3.02421Z" fill="currentColor"></path>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {/* Image */}
+                <div className="relative overflow-hidden rounded-sm">
+                  <img
+                    src={traits[activeTrait].image}
+                    alt={traits[activeTrait].title}
+                    className="w-full aspect-[3/4] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/10 to-transparent" />
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
-function TraitRow({ trait, index }: { trait: typeof traits[number]; index: number }) {
-  const [isOpen, setIsOpen] = useState(index === 0);
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.12, ease: "easeOut" }}
-      className="border-t border-[#111111]/10"
-    >
-      <button
-        suppressHydrationWarning
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-8 md:py-10 flex items-start justify-between text-left group gap-6"
-      >
-        <div className="flex items-start gap-6 md:gap-10">
-          <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-[#111111]/30 mt-2 shrink-0">
-            0{index + 1}
-          </span>
-          <h3 className="text-[24px] md:text-[32px] lg:text-[40px] font-display font-medium tracking-tight leading-[1.1] group-hover:text-[#FF4D00] transition-colors">
-            {trait.title}
-          </h3>
-        </div>
-        <span
-          className={`shrink-0 w-8 h-8 rounded-full border border-[#111111]/10 flex items-center justify-center transition-all mt-2 ${
-            isOpen ? "bg-[#FF4D00] text-white border-[#FF4D00]" : "group-hover:border-[#FF4D00] group-hover:text-[#FF4D00]"
-          }`}
-        >
-          {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-        </span>
-      </button>
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="pb-8 md:pb-10 pl-[52px] md:pl-[72px]">
-          <p className="text-[17px] md:text-[19px] text-[#111111]/60 font-medium leading-[1.7] max-w-2xl">
-            {trait.desc}
-          </p>
-          {index === traits.length - 1 && (
-            <div className="mt-8 text-[#FF4D00]">
-              <svg width="26" height="53" viewBox="0 0 26 53" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3.02421 0.5L0 14.1035H8.64923V52.5H26V0.5H3.02421Z" fill="currentColor"></path>
-              </svg>
-            </div>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 /* ══════════════════════════════════════════════════════════════════════════
-   HOW WE WORK — Centered 3-step process grid
+   HOW WE WORK — Card Carousel Layout (NEW)
    ══════════════════════════════════════════════════════════════════════════ */
 function HowWeWorkSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -276,9 +312,31 @@ function HowWeWorkSection() {
           </p>
         </motion.div>
 
-        {/* 3-step grid */}
+        {/* Connector line with dots */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          className="max-w-6xl mx-auto mb-0"
+        >
+          <div className="hidden md:flex items-center px-8 md:px-12 relative">
+            {/* Horizontal line */}
+            <div className="absolute top-1/2 left-[calc(16.66%)] right-[calc(16.66%)] h-px bg-[#111111]/10 -translate-y-1/2" />
+            {/* Dots at each card position */}
+            {howWeWork.map((_, i) => (
+              <div
+                key={i}
+                className="flex-1 flex justify-center relative z-10"
+              >
+                <div className="w-3 h-3 rounded-full bg-[#FF4D00] border-2 border-white shadow-sm" />
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Card carousel */}
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-0">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {howWeWork.map((step, i) => (
               <HowWeWorkCard key={i} step={step} index={i} />
             ))}
@@ -314,17 +372,32 @@ function HowWeWorkCard({ step, index }: { step: typeof howWeWork[number]; index:
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay: index * 0.15, ease: "easeOut" }}
-      className={`border-t border-[#111111]/10 pt-10 pb-10 ${index > 0 ? "md:border-l md:pl-8" : ""}`}
+      className="group"
     >
-      <div className="text-[10px] font-mono font-bold tracking-[0.2em] text-[#FF4D00] mb-6">
-        STEP {step.step}
+      <div className="border-l-4 border-[#FF4D00] pt-8 pb-8 px-6 md:px-8 bg-white shadow-sm hover:shadow-md transition-all duration-300 min-h-[280px] flex flex-col justify-between hover:-translate-y-1">
+        {/* Top content */}
+        <div>
+          <div className="text-[48px] md:text-[56px] font-display font-medium tracking-[-0.03em] leading-none text-[#FF4D00] mb-6">
+            {step.step}
+          </div>
+          <h3 className="text-[22px] md:text-[26px] font-display font-medium tracking-tight leading-[1.15] mb-5 text-[#111111]">
+            {step.title}
+          </h3>
+          <p className="text-[15px] md:text-[16px] text-[#111111]/55 font-medium leading-[1.7]">
+            {step.desc}
+          </p>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#111111]/5">
+          <span className="text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/30">
+            Step {step.step}
+          </span>
+          <span className="w-8 h-8 rounded-full border border-[#111111]/10 flex items-center justify-center text-[#111111]/30 group-hover:border-[#FF4D00] group-hover:text-[#FF4D00] transition-all">
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          </span>
+        </div>
       </div>
-      <h3 className="text-[24px] md:text-[28px] font-display font-medium tracking-tight leading-[1.15] mb-6">
-        {step.title}
-      </h3>
-      <p className="text-[15px] md:text-[16px] text-[#111111]/55 font-medium leading-[1.7]">
-        {step.desc}
-      </p>
     </motion.div>
   );
 }

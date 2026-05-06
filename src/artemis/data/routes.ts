@@ -636,13 +636,105 @@ export const fullRoutePricing = {
   ],
 };
 
+/* ── Map Location Data (calibrated for Newlab topographic map) ── */
+
+export type LabelPos = "left" | "right";
+
+export interface MapLocation {
+  id: string;
+  name: string;
+  x: number;       // percentage from left — calibrated for Newlab map image
+  y: number;       // percentage from top — calibrated for Newlab map image
+  labelPos: LabelPos;
+  legId: string;
+  legNumber: number;
+  legColor: string;
+  description: string;
+  countries: string[];
+}
+
+export const MAP_LOCATIONS: MapLocation[] = [
+  // Leg 1 — Gulf of Guinea Arc
+  { id: "lagos", name: "LAGOS", x: 48.3, y: 55.7, labelPos: "right", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Africa's commercial nerve center — 20M people, limitless velocity", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  { id: "accra", name: "ACCRA", x: 47.3, y: 56.3, labelPos: "right", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Stable gateway for West African fintech and creative industries", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  { id: "abidjan", name: "ABIDJAN", x: 46.3, y: 56.5, labelPos: "left", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Francophone hub — financial services and cocoa logistics", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  { id: "dakar", name: "DAKAR", x: 42.7, y: 50.5, labelPos: "left", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Westernmost point — maritime gateway and digital arts capital", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  { id: "douala", name: "DOUALA", x: 50.0, y: 57.3, labelPos: "right", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Central African port entry — bilingual trade corridor", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  // Leg 2 — Sahel Band
+  { id: "bamako", name: "BAMAKO", x: 45.2, y: 51.8, labelPos: "left", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "Sahel's administrative anchor — music and gold", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  { id: "ouagadougou", name: "OUAGADOUGOU", x: 47.0, y: 52.0, labelPos: "right", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "Burkinabé cultural capital — artisan commerce and resistance", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  { id: "niamey", name: "NIAMEY", x: 48.0, y: 51.3, labelPos: "right", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "Niger River gateway — uranium and pastoral trade", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  { id: "ndjamena", name: "N'DJAMENA", x: 51.4, y: 52.2, labelPos: "right", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "Chad's crossroads — humanitarian logistics hub", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  { id: "timbuktu", name: "TIMBUKTU", x: 46.6, y: 49.2, labelPos: "left", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "The legendary city of knowledge — manuscripts and memory", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  // Leg 3 — East African Corridor
+  { id: "nairobi", name: "NAIROBI", x: 57.3, y: 60.7, labelPos: "right", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "East Africa's tech capital — M-Pesa, iHub, Silicon Savannah", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  { id: "kigali", name: "KIGALI", x: 55.5, y: 61.0, labelPos: "left", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "The clean protocol — governance innovation and ease-of-doing-business", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  { id: "dar-es-salaam", name: "DAR ES SALAAM", x: 58.0, y: 64.2, labelPos: "right", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "Indian Ocean port — freight gateway to the interior", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  { id: "kampala", name: "KAMPALA", x: 56.2, y: 59.6, labelPos: "left", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "Lake Victoria hub — mobile money and agricultural trade", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  { id: "mombasa", name: "MOMBASA", x: 58.1, y: 62.4, labelPos: "right", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "Ancient port city — the Northern Corridor's maritime terminus", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  // Leg 4 — Central African Heartland
+  { id: "kinshasa", name: "KINSHASA", x: 51.5, y: 62.6, labelPos: "left", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "17 million people — the largest francophone city on Earth", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  { id: "lubumbashi", name: "LUBUMBASHI", x: 54.8, y: 67.3, labelPos: "right", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "Copperbelt capital — mineral processing and export", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  { id: "douala-cam", name: "DOUALA", x: 50.0, y: 57.3, labelPos: "left", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "Atlantic port — the River Stack's maritime gateway", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  { id: "brazzaville", name: "BRAZZAVILLE", x: 51.6, y: 62.6, labelPos: "right", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "Pool Malebo — twin city to Kinshasa across the river", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  { id: "yaounde", name: "YAOUNDÉ", x: 50.5, y: 57.4, labelPos: "right", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "Cameroon's administrative capital — bilingual bridge", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  // Leg 5 — Southern Arc
+  { id: "harare", name: "HARARE", x: 55.7, y: 71.1, labelPos: "right", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Zimbabwe's capital — agricultural trade and tech emergence", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  { id: "lusaka", name: "LUSAKA", x: 55.0, y: 69.6, labelPos: "left", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Zambia's commercial center — Copperbelt logistics hub", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  { id: "luanda", name: "LUANDA", x: 50.9, y: 65.4, labelPos: "left", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Angola's oil capital — Portuguese-speaking gateway", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  { id: "livingstone", name: "LIVINGSTONE", x: 54.4, y: 71.1, labelPos: "left", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Victoria Falls — tourism and energy infrastructure", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  { id: "bulawayo", name: "BULAWAYO", x: 55.1, y: 72.7, labelPos: "right", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Zimbabwe's second city — rail heritage and industrial base", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  // Leg 6 — North Africa & Global Gateways
+  { id: "cairo", name: "CAIRO", x: 55.8, y: 40.8, labelPos: "right", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "20 million people — Africa's largest city and energy corridor", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+  { id: "casablanca", name: "CASABLANCA", x: 45.3, y: 38.5, labelPos: "left", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "Morocco's economic engine — maritime and financial gateway", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+  { id: "tunis", name: "TUNIS", x: 50.1, y: 36.5, labelPos: "right", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "Carthage's heir — Mediterranean trade and digital governance", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+  { id: "dubai", name: "DUBAI", x: 62.3, y: 43.9, labelPos: "right", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "Global capital hub — diaspora investment and logistics", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+  { id: "london", name: "LONDON", x: 47.4, y: 27.2, labelPos: "right", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "Financial gateway — capital markets and regulatory bridge", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+];
+
 /* ── Arc Image Paths ── */
 
 export const arcImages: Record<string, string[]> = {
-  "gulf-of-guinea": ["/routes/gulf-of-guinea-1.png"],
-  "sahel-band": ["/routes/sahel-1.png"],
-  "east-african": ["/routes/east-african-1.png"],
-  "central-african": ["/routes/central-african-1.png"],
-  "southern-arc": ["/routes/southern-arc-1.png"],
-  "north-africa-global": ["/routes/north-africa-1.png"],
+  "gulf-of-guinea": [
+    "/routes/gulf-of-guinea-1.png",
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1553729459-uj9p7pk3e2l?auto=format&fit=crop&w=600&q=80",
+  ],
+  "sahel-band": [
+    "/routes/sahel-1.png",
+    "https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=600&q=80",
+  ],
+  "east-african": [
+    "/routes/east-african-1.png",
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80",
+  ],
+  "central-african": [
+    "/routes/central-african-1.png",
+    "https://images.unsplash.com/photo-1565792323902-486ad4b6a110?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+  ],
+  "southern-arc": [
+    "/routes/southern-arc-1.png",
+    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1565792323902-486ad4b6a110?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80",
+  ],
+  "north-africa-global": [
+    "/routes/north-africa-1.png",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80",
+  ],
 };

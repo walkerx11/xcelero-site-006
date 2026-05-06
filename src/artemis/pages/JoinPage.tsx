@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { motion, useInView } from "framer-motion";
 import { Link } from "@/artemis/router";
 import {
@@ -91,7 +91,7 @@ export function JoinPage() {
       <HeroSection />
       <PathwaysSection />
       <ProcessSection />
-      <CTASection />
+      <ApplicationSection />
     </div>
   );
 }
@@ -415,81 +415,488 @@ function ProcessCard({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   CTA SECTION — Dark bg (matching Programs CTA)
+   APPLICATION SECTION — Newlab-style application form
    ══════════════════════════════════════════════════════════════════════════ */
-function CTASection() {
+
+type FormMode = "founder" | "partner";
+
+const LOCATION_OPTIONS = [
+  "Lagos",
+  "Nairobi",
+  "Cape Town",
+  "Cairo",
+  "Kigali",
+  "Accra",
+  "Kinshasa",
+  "Casablanca",
+  "Dubai",
+  "London",
+  "Unsure / Remote",
+];
+
+const FOUNDER_ROLE_OPTIONS = [
+  "CEO",
+  "CTO",
+  "COO",
+  "CFO",
+  "VP Engineering",
+  "VP Product",
+  "Head of Operations",
+  "Head of Partnerships",
+  "Other",
+];
+
+const PARTNER_ROLE_OPTIONS = [
+  "Investor",
+  "Corporate Partner",
+  "Government Agency",
+  "Foundation",
+  "Academic Institution",
+  "Other",
+];
+
+const INTEREST_OPTIONS = [
+  "Co-investing in portfolio ventures",
+  "Hosting an XEmbassy node",
+  "Sponsoring a program cohort",
+  "Providing market access/pilots",
+  "Grant/non-dilutive capital",
+  "Other",
+];
+
+const REFERRAL_OPTIONS = [
+  "LinkedIn",
+  "X/Twitter",
+  "Word of Mouth",
+  "Newsletter",
+  "Event",
+  "Search Engine",
+  "Other",
+];
+
+/* ── Reusable styled components ── */
+
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <label className="text-[10px] font-mono tracking-[0.15em] uppercase text-white/40 mb-2 block">
+      {children}
+    </label>
+  );
+}
+
+function RequiredStar() {
+  return <span className="text-[#FF4D00]"> *</span>;
+}
+
+const inputClasses =
+  "w-full border-b border-white/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-white/20 text-white";
+
+const selectClasses =
+  "w-full border-b border-white/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors text-white appearance-none cursor-pointer";
+
+const textareaClasses =
+  "w-full border-b border-white/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-white/20 text-white min-h-[120px] resize-none";
+
+function CustomSelect({
+  options,
+  placeholder,
+  required,
+  ...props
+}: {
+  options: string[];
+  placeholder?: string;
+  required?: boolean;
+} & React.SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <div className="relative">
+      <select
+        {...props}
+        required={required}
+        className={selectClasses}
+        suppressHydrationWarning
+        defaultValue=""
+      >
+        {placeholder && (
+          <option value="" disabled className="text-[#111111]">
+            {placeholder}
+          </option>
+        )}
+        {options.map((opt) => (
+          <option key={opt} value={opt} className="text-[#111111]">
+            {opt}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
+    </div>
+  );
+}
+
+/* ── Founder Form ── */
+function FounderForm() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="space-y-8"
+    >
+      <p className="text-[15px] md:text-[17px] text-white/50 font-medium leading-[1.7] max-w-2xl">
+        Apply for startup membership at xCelero — unlocking access to office
+        space, community, and potential pilots, capital, and customers via our
+        network.
+      </p>
+      <p className="text-[13px] font-mono tracking-[0.1em] uppercase text-white/30">
+        Tell us what you&apos;re working on.
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <FieldLabel>
+            FIRST NAME <RequiredStar />
+          </FieldLabel>
+          <input
+            type="text"
+            required
+            className={inputClasses}
+            placeholder=""
+            suppressHydrationWarning
+          />
+        </div>
+        <div>
+          <FieldLabel>
+            LAST NAME <RequiredStar />
+          </FieldLabel>
+          <input
+            type="text"
+            required
+            className={inputClasses}
+            placeholder=""
+            suppressHydrationWarning
+          />
+        </div>
+      </div>
+
+      <div>
+        <FieldLabel>
+          FOUNDER(S) LINKEDIN URL <RequiredStar />
+        </FieldLabel>
+        <input
+          type="url"
+          required
+          className={inputClasses}
+          placeholder="www.linkedin.com/in/"
+          suppressHydrationWarning
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <FieldLabel>
+            COMPANY NAME <RequiredStar />
+          </FieldLabel>
+          <input
+            type="text"
+            required
+            className={inputClasses}
+            placeholder=""
+            suppressHydrationWarning
+          />
+        </div>
+        <div>
+          <FieldLabel>COMPANY WEBSITE URL</FieldLabel>
+          <input
+            type="url"
+            className={inputClasses}
+            placeholder=""
+            suppressHydrationWarning
+          />
+        </div>
+      </div>
+
+      <div>
+        <FieldLabel>
+          EMAIL <RequiredStar />
+        </FieldLabel>
+        <input
+          type="email"
+          required
+          className={inputClasses}
+          placeholder=""
+          suppressHydrationWarning
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <FieldLabel>
+            MEMBERSHIP LOCATION <RequiredStar />
+          </FieldLabel>
+          <CustomSelect
+            options={LOCATION_OPTIONS}
+            placeholder="Select location"
+            required
+          />
+        </div>
+        <div>
+          <FieldLabel>
+            YOUR ROLE <RequiredStar />
+          </FieldLabel>
+          <CustomSelect
+            options={FOUNDER_ROLE_OPTIONS}
+            placeholder="Select role"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <FieldLabel>
+          COMPANY PITCH DECK URL (PLEASE ENSURE OPEN ACCESS) <RequiredStar />
+        </FieldLabel>
+        <input
+          type="url"
+          required
+          className={inputClasses}
+          placeholder=""
+          suppressHydrationWarning
+        />
+      </div>
+
+      <div>
+        <FieldLabel>
+          WHY DOES YOUR COMPANY WANT TO JOIN XCELERO? <RequiredStar />
+        </FieldLabel>
+        <textarea
+          required
+          className={textareaClasses}
+          placeholder=""
+          suppressHydrationWarning
+        />
+      </div>
+
+      <div>
+        <FieldLabel>
+          HOW DID YOU HEAR ABOUT XCELERO? <RequiredStar />
+        </FieldLabel>
+        <CustomSelect
+          options={REFERRAL_OPTIONS}
+          placeholder="Select source"
+          required
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Partner Form ── */
+function PartnerForm() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="space-y-8"
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <FieldLabel>
+            FIRST NAME <RequiredStar />
+          </FieldLabel>
+          <input
+            type="text"
+            required
+            className={inputClasses}
+            placeholder=""
+            suppressHydrationWarning
+          />
+        </div>
+        <div>
+          <FieldLabel>
+            LAST NAME <RequiredStar />
+          </FieldLabel>
+          <input
+            type="text"
+            required
+            className={inputClasses}
+            placeholder=""
+            suppressHydrationWarning
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <FieldLabel>
+            ORGANIZATION NAME <RequiredStar />
+          </FieldLabel>
+          <input
+            type="text"
+            required
+            className={inputClasses}
+            placeholder=""
+            suppressHydrationWarning
+          />
+        </div>
+        <div>
+          <FieldLabel>ORGANIZATION WEBSITE URL</FieldLabel>
+          <input
+            type="url"
+            className={inputClasses}
+            placeholder=""
+            suppressHydrationWarning
+          />
+        </div>
+      </div>
+
+      <div>
+        <FieldLabel>
+          EMAIL <RequiredStar />
+        </FieldLabel>
+        <input
+          type="email"
+          required
+          className={inputClasses}
+          placeholder=""
+          suppressHydrationWarning
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <FieldLabel>
+            YOUR ROLE <RequiredStar />
+          </FieldLabel>
+          <CustomSelect
+            options={PARTNER_ROLE_OPTIONS}
+            placeholder="Select role"
+            required
+          />
+        </div>
+        <div>
+          <FieldLabel>
+            INTEREST <RequiredStar />
+          </FieldLabel>
+          <CustomSelect
+            options={INTEREST_OPTIONS}
+            placeholder="Select interest"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <FieldLabel>
+          HOW DID YOU HEAR ABOUT XCELERO? <RequiredStar />
+        </FieldLabel>
+        <CustomSelect
+          options={REFERRAL_OPTIONS}
+          placeholder="Select source"
+          required
+        />
+      </div>
+
+      <div>
+        <FieldLabel>
+          TELL US ABOUT YOUR INTEREST <RequiredStar />
+        </FieldLabel>
+        <textarea
+          required
+          className={textareaClasses}
+          placeholder=""
+          suppressHydrationWarning
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Main Application Section ── */
+function ApplicationSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [mode, setMode] = useState<FormMode>("founder");
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+  };
 
   return (
     <section
       ref={ref}
       className="bg-[#111111] text-white py-16 md:py-24 px-6 md:px-12 lg:px-20"
     >
-      <div className="w-full max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        {/* Left: CTA heading + buttons */}
+      <div className="w-full max-w-5xl mx-auto">
+        {/* Section heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-12 md:mb-16"
         >
-          <h2 className="text-[28px] sm:text-[40px] md:text-[56px] font-display font-medium tracking-[-0.03em] leading-[0.95] mb-6">
-            The map is already drawn.
-            <br />
-            <span className="text-white/40">
-              Walk it.
-            </span>
+          <h2 className="text-[36px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-10">
+            APPLY
           </h2>
-          <p className="text-[15px] md:text-[17px] text-white/50 font-medium leading-[1.6] max-w-md mb-10">
-            The Route connects 190 hubs across 63 countries. Whether
-            you&apos;re building, investing, or operating — there&apos;s a seat
-            with your name on it. Cohort 2026 is forming now.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              to="/programs"
-              className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-[#FF4D00] text-white text-[12px] font-bold tracking-widest uppercase hover:bg-white hover:text-[#111111] transition-colors"
+
+          {/* I AM toggle */}
+          <div className="flex flex-wrap gap-3">
+            <button
               suppressHydrationWarning
+              onClick={() => setMode("founder")}
+              className={`px-6 py-3 text-[11px] font-bold tracking-[0.12em] uppercase transition-colors duration-300 ${
+                mode === "founder"
+                  ? "bg-[#FF4D00] text-white"
+                  : "bg-transparent text-white border border-white/20 hover:border-white/40"
+              }`}
             >
-              Start Application
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              to="/approach"
-              className="inline-flex items-center justify-center px-10 py-5 border border-white/20 text-white text-[12px] font-bold tracking-widest uppercase hover:bg-white hover:text-[#111111] transition-colors"
+              A STARTUP FOUNDER Looking to join xCelero.
+            </button>
+            <button
               suppressHydrationWarning
+              onClick={() => setMode("partner")}
+              className={`px-6 py-3 text-[11px] font-bold tracking-[0.12em] uppercase transition-colors duration-300 ${
+                mode === "partner"
+                  ? "bg-[#FF4D00] text-white"
+                  : "bg-transparent text-white border border-white/20 hover:border-white/40"
+              }`}
             >
-              Request Information
-            </Link>
+              Looking to partner or invest with xCelero.
+            </button>
           </div>
         </motion.div>
 
-        {/* Right: Deadline card */}
+        {/* Form */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-          className="border border-white/10 p-8 md:p-12 bg-white/5 backdrop-blur-sm"
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
         >
-          <div className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] mb-8">
-            Next Deadline
-          </div>
-          <div className="text-3xl md:text-4xl font-display font-medium mb-4 tracking-tight uppercase">
-            May 15th, 2026
-          </div>
-          <p className="text-white/40 font-medium leading-relaxed mb-8 text-[15px]">
-            Applications for the xHansa Fellowship and xCelero Accelerator
-            close on May 15th. Early submissions receive priority review and
-            program placement.
-          </p>
-          <div className="pt-8 border-t border-white/10 flex justify-between items-center">
-            <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-white/30">
-              Positions available
-            </span>
-            <span className="text-xl md:text-2xl font-display font-medium">
-              1,000 Seats
-            </span>
-          </div>
+          <form onSubmit={handleSubmit} suppressHydrationWarning>
+            {mode === "founder" ? <FounderForm /> : <PartnerForm />}
+
+            {/* Privacy disclaimer */}
+            <p className="text-[12px] text-white/30 leading-[1.7] mt-10 max-w-3xl">
+              xCelero needs the contact information you provide to us to contact
+              you about our products and services. You may unsubscribe from these
+              communications at any time. For information on how to unsubscribe,
+              as well as our privacy practices and commitment to protecting your
+              privacy, check out our Privacy Policy.
+            </p>
+
+            {/* Submit button */}
+            <div className="mt-10">
+              <button
+                type="submit"
+                suppressHydrationWarning
+                className="inline-flex items-center gap-3 px-10 py-5 bg-[#FF4D00] text-white text-[12px] uppercase tracking-[0.12em] font-bold hover:bg-white hover:text-[#111111] transition-colors duration-300"
+              >
+                Submit Application
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </form>
         </motion.div>
       </div>
     </section>

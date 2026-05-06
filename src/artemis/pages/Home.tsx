@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { Link } from "@/artemis/router";
 import {
@@ -13,6 +13,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
+import { routeLegs, MAP_LOCATIONS } from "@/artemis/data/routes";
 
 /* ── Data ── */
 
@@ -102,26 +103,6 @@ const pillars = [
     ],
     link: "/capital",
   },
-];
-
-/* Hub cities for the dotted map */
-const mapHubs = [
-  { name: "Lagos", lat: 6.52, lng: 3.38 },
-  { name: "Nairobi", lat: -1.29, lng: 36.82 },
-  { name: "Cape Town", lat: -33.93, lng: 18.42 },
-  { name: "Cairo", lat: 30.04, lng: 31.24 },
-  { name: "Kigali", lat: -1.94, lng: 30.06 },
-  { name: "Accra", lat: 5.56, lng: -0.19 },
-  { name: "Kinshasa", lat: -4.44, lng: 15.27 },
-  { name: "Addis Ababa", lat: 9.02, lng: 38.75 },
-  { name: "Casablanca", lat: 33.57, lng: -7.59 },
-  { name: "Johannesburg", lat: -26.2, lng: 28.05 },
-  { name: "Dubai", lat: 25.2, lng: 55.27 },
-  { name: "London", lat: 51.51, lng: -0.13 },
-  { name: "São Paulo", lat: -23.55, lng: -46.63 },
-  { name: "Mumbai", lat: 19.08, lng: 72.88 },
-  { name: "Singapore", lat: 1.35, lng: 103.82 },
-  { name: "New York", lat: 40.71, lng: -74.01 },
 ];
 
 const routeRegions = [
@@ -460,11 +441,12 @@ function PillarBlock({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   LOCATIONS SECTION — Dotted world map with city labels (NEWLAB style)
+   LOCATIONS SECTION — Interactive Blueprint Map with leg filters
    ══════════════════════════════════════════════════════════════════════════ */
 function LocationsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [activeLeg, setActiveLeg] = useState<string | null>(null);
 
   return (
     <section
@@ -477,7 +459,7 @@ function LocationsSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16 md:mb-24"
+          className="text-center mb-12 md:mb-16"
         >
           <h2 className="text-[36px] sm:text-[56px] md:text-[80px] lg:text-[110px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-4 uppercase">
             The Route
@@ -487,15 +469,80 @@ function LocationsSection() {
           </p>
         </motion.div>
 
-        {/* Dotted World Map */}
+        {/* Leg filter buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12"
+        >
+          <button
+            onClick={() => setActiveLeg(null)}
+            className={`px-3 py-1.5 text-[11px] font-mono font-bold tracking-widest uppercase border transition-colors ${
+              activeLeg === null
+                ? "bg-[#111111] text-white border-[#111111]"
+                : "bg-white text-[#111111]/50 border-[#111111]/15 hover:border-[#111111]/30"
+            }`}
+          >
+            All Legs
+          </button>
+          {routeLegs.map((leg) => (
+            <button
+              key={leg.id}
+              onClick={() => setActiveLeg(activeLeg === leg.id ? null : leg.id)}
+              className={`px-3 py-1.5 text-[11px] font-mono font-bold tracking-widest uppercase border transition-colors ${
+                activeLeg === leg.id
+                  ? "text-white border-transparent"
+                  : "bg-white text-[#111111]/50 border-[#111111]/15 hover:border-[#111111]/30"
+              }`}
+              style={activeLeg === leg.id ? { backgroundColor: leg.color, borderColor: leg.color } : {}}
+            >
+              {leg.legNumber}. {leg.name.split(" ")[0]}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Blueprint Map */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="relative w-full mb-16 md:mb-24"
+          className="relative w-full mb-8 md:mb-12"
         >
-          <DottedWorldMap />
+          <BlueprintMap activeLeg={activeLeg} />
         </motion.div>
+
+        {/* Legend */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[10px] font-mono text-[#111111]/40 mb-8 md:mb-12"
+        >
+          {routeLegs.map((leg) => (
+            <button
+              key={leg.id}
+              onClick={() => setActiveLeg(activeLeg === leg.id ? null : leg.id)}
+              className="flex items-center gap-2 hover:text-[#111111]/70 transition-colors"
+            >
+              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: leg.color }} />
+              <span>
+                Leg {leg.legNumber}: {leg.name}
+              </span>
+            </button>
+          ))}
+        </motion.div>
+
+        {/* View Full Route Map link */}
+        <div className="text-center mb-16 md:mb-24">
+          <Link
+            to="/routes"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-[#111111] text-white text-[12px] uppercase tracking-[0.12em] font-bold hover:bg-[#FF4D00] transition-colors duration-300 group"
+          >
+            View Full Route Map
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
 
         {/* Accordion list of route regions */}
         <div className="max-w-4xl mx-auto">
@@ -508,113 +555,58 @@ function LocationsSection() {
   );
 }
 
-/* ── Dotted World Map — Real map image with dot overlay ── */
-function DottedWorldMap() {
-  const [hoveredHub, setHoveredHub] = useState<string | null>(null);
+/* ── Blueprint Map — Newlab topographic map with color-coded pin markers ── */
+function BlueprintMap({ activeLeg }: { activeLeg: string | null }) {
+  const isAnyActive = activeLeg !== null;
 
-  // Convert lat/lng to percentage positions (Equirectangular)
-  const toPercent = (lat: number, lng: number) => {
-    const left = ((lng + 180) / 360) * 100;
-    const top = ((90 - lat) / 180) * 100;
-    return { left, top };
-  };
+  const visibleLocations = useMemo(
+    () => (isAnyActive ? MAP_LOCATIONS.filter((l) => l.legId === activeLeg) : MAP_LOCATIONS),
+    [isAnyActive, activeLeg]
+  );
 
   return (
-    <div className="relative w-full" style={{ aspectRatio: "2/1" }}>
-      {/* Subtle background dot grid (full area) */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: "radial-gradient(circle, #111111 0.5px, transparent 0.5px)",
-          backgroundSize: "10px 10px",
-          opacity: 0.06,
-        }}
-      />
-
-      {/* World map — land masses shown as dots via the image */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div
-          className="relative w-full h-full"
-          style={{
-            backgroundImage: "url(/world-map.png)",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            filter: "grayscale(100%) brightness(0) contrast(1.5)",
-            opacity: 0.14,
-          }}
+    <div className="w-full relative">
+      <div className="relative w-full overflow-hidden bg-white">
+        {/* World map image — Newlab topographic map */}
+        <img
+          alt="World Map showing xCelero Routes"
+          className="w-full h-auto pointer-events-none select-none opacity-80"
+          src="/routes/newlab-map.avif"
         />
-      </div>
 
-      {/* Dot pattern overlay masked by the world map shape */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <svg
-          className="w-full h-full"
-          viewBox="0 0 1000 500"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <defs>
-            <pattern id="mapDots" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
-              <circle cx="4" cy="4" r="1" fill="#111111" opacity="0.2" />
-            </pattern>
-            {/* Use the world map image as a mask */}
-            <mask id="landMask">
-              <image
-                href="/world-map.png"
-                x="0"
-                y="0"
-                width="1000"
-                height="500"
-                preserveAspectRatio="xMidYMid meet"
-              />
-            </mask>
-          </defs>
-          {/* Dots only appear where the land mask is */}
-          <rect x="0" y="0" width="1000" height="500" fill="url(#mapDots)" mask="url(#landMask)" />
-        </svg>
-      </div>
-
-      {/* Hub markers positioned absolutely */}
-      {mapHubs.map((hub) => {
-        const pos = toPercent(hub.lat, hub.lng);
-        const isHovered = hoveredHub === hub.name;
-        return (
-          <div
-            key={hub.name}
-            className="absolute cursor-pointer group"
-            style={{
-              left: `${pos.left}%`,
-              top: `${pos.top}%`,
-              transform: "translate(-50%, -50%)",
-            }}
-            onMouseEnter={() => setHoveredHub(hub.name)}
-            onMouseLeave={() => setHoveredHub(null)}
+        {/* Pin markers with always-visible labels */}
+        {visibleLocations.map((loc, index) => (
+          <Link
+            key={loc.id}
+            to="/routes"
+            className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10"
+            style={{ left: `${loc.x}%`, top: `${loc.y}%` }}
           >
-            {/* Blue dot marker */}
-            <div
-              className={`rounded-full transition-all duration-300 ${
-                isHovered ? "w-3.5 h-3.5 bg-[#FF4D00]" : "w-2.5 h-2.5 bg-[#2563EB]"
-              }`}
-              style={{ boxShadow: isHovered ? "0 0 10px rgba(255,77,0,0.6)" : "0 0 6px rgba(37,99,235,0.4)" }}
-            />
-            {/* Pulse ring */}
-            <div
-              className={`absolute inset-0 rounded-full animate-ping opacity-25 ${
-                isHovered ? "bg-[#FF4D00]" : "bg-[#2563EB]"
-              }`}
-              style={{ animationDuration: "2s" }}
-            />
-            {/* City label — black rectangle with white text */}
-            <div
-              className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 whitespace-nowrap text-[9px] md:text-[11px] font-mono font-bold tracking-wider uppercase text-white transition-colors duration-300 ${
-                isHovered ? "bg-[#FF4D00]" : "bg-[#111111]"
-              }`}
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 350, damping: 25, delay: index * 0.03 }}
+              className="relative flex items-center justify-center"
             >
-              {hub.name}
-            </div>
-          </div>
-        );
-      })}
+              {/* Colored marker dot */}
+              <span
+                className="relative w-3.5 h-3.5 md:w-4 md:h-4 rounded-full shrink-0 cursor-pointer transition-all duration-200 border-[2.5px] border-transparent hover:border-black/20 hover:scale-110"
+                style={{ backgroundColor: loc.legColor }}
+                aria-label={`View ${loc.name} on Routes page`}
+              />
+
+              {/* Always-visible label */}
+              <div
+                className={`absolute bg-[#111111] text-white font-mono text-[8px] md:text-[10px] font-bold tracking-[0.15em] px-2 py-1 md:px-3 md:py-1.5 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none shadow-sm ${
+                  loc.labelPos === "left" ? "right-full mr-2 md:mr-3" : "left-full ml-2 md:ml-3"
+                }`}
+              >
+                {loc.name}
+              </div>
+            </motion.div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

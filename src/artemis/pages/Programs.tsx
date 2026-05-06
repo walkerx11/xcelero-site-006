@@ -22,6 +22,14 @@ const aggregateStats = [
   { value: "24mo", label: "Longest program deployment cycle" },
 ];
 
+/* ── One-line descriptions for the How It Works timeline ── */
+const timelineDescriptions: Record<string, string> = {
+  "xhansa-fellowship": "24-month human capital deployment across 9 civilizational fields",
+  "xcelero-accelerator": "4-month high-velocity launchpad with $620k funding",
+  "inception-studios": "Co-create market-defining ventures with Fortune 500 partners",
+  "quest-fellowship": "Bridge elite academic research to civilizational prototypes",
+};
+
 /* ══════════════════════════════════════════════════════════════════════════
    PROGRAMS PAGE
    ══════════════════════════════════════════════════════════════════════════ */
@@ -30,6 +38,7 @@ export function Programs() {
     <div className="bg-white text-[#111111]">
       <HeroSection />
       <ProgramShowcase />
+      <HowItWorks />
       <NumbersSection />
       <CTASection />
       <ReviewSection title="Tactical 0-1 breakdowns to help you assemble a better timeline" />
@@ -38,7 +47,7 @@ export function Programs() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO — Light bg, left heading + right stat cards
+   HERO — Light bg, left heading + right stat cards (KEPT AS-IS)
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -103,7 +112,7 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PROGRAM SHOWCASE — Full-width program cards
+   PROGRAM SHOWCASE — BENTO GRID LAYOUT
    ══════════════════════════════════════════════════════════════════════════ */
 function ProgramShowcase() {
   const ref = useRef<HTMLDivElement>(null);
@@ -127,10 +136,16 @@ function ProgramShowcase() {
           </span>
         </motion.div>
 
-        {/* Program cards */}
-        <div className="border-t border-[#111111]/10">
+        {/* Bento grid */}
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
           {programsData.map((program, idx) => (
-            <ProgramCard key={program.id} program={program} index={idx} />
+            <BentoCard
+              key={program.id}
+              program={program}
+              index={idx}
+              isInView={isInView}
+              isFeatured={idx === 0}
+            />
           ))}
         </div>
       </div>
@@ -138,67 +153,104 @@ function ProgramShowcase() {
   );
 }
 
-/* ── Single Program Card (full-width row) ── */
-function ProgramCard({
+/* ── Bento Card — full background image with dark overlay ── */
+function BentoCard({
   program,
   index,
+  isInView,
+  isFeatured,
 }: {
   program: (typeof programsData)[number];
   index: number;
+  isInView: boolean;
+  isFeatured: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-30px" });
   const Icon = program.icon;
-
-  /* Build a compact detail strip string from the details array */
-  const detailStrip = program.details
-    .map((d) => d.value)
-    .join(" \u00B7 ");
+  const stats = program.stats?.slice(0, 3) ?? program.details.slice(0, 3);
 
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-      className="border-b border-[#111111]/10"
+      transition={{
+        duration: 0.6,
+        delay: index * 0.15,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className={`${isFeatured ? "md:col-span-2" : ""}`}
     >
       <Link
         to={`/programs/${program.id}`}
-        className="group block w-full py-8 md:py-12 lg:py-16"
+        className="group relative block w-full overflow-hidden rounded-lg"
       >
-        <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
-          {/* Icon */}
+        {/* Card container with aspect ratio */}
+        <div
+          className={`relative w-full ${
+            isFeatured ? "aspect-[16/9]" : "aspect-[4/3]"
+          }`}
+        >
+          {/* Background image */}
           <div
-            className={`w-14 h-14 md:w-16 md:h-16 rounded-full ${program.color} flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform duration-300`}
-          >
-            <Icon className="w-6 h-6 md:w-7 md:h-7" />
-          </div>
+            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
+            style={{ backgroundImage: `url(${program.image})` }}
+          />
 
-          {/* Title + tagline + description */}
-          <div className="flex-1 min-w-0">
-            <h3 className="text-[24px] md:text-[32px] lg:text-[40px] font-display font-medium tracking-[-0.02em] leading-[1.1] mb-1 group-hover:text-[#FF4D00] transition-colors duration-300">
-              {program.title}
-            </h3>
-            <p className="text-[14px] md:text-[16px] text-[#111111]/40 font-display font-medium tracking-tight mb-4">
-              {program.tagline}
-            </p>
-            <p className="text-[15px] md:text-[17px] text-[#111111]/60 font-medium leading-[1.7] max-w-2xl mb-5">
-              {program.desc}
-            </p>
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 transition-opacity duration-500 group-hover:opacity-80" />
 
-            {/* Detail strip */}
-            <div className="flex items-center gap-1 flex-wrap">
-              <span className="text-[12px] md:text-[13px] font-mono font-bold tracking-widest uppercase text-[#111111]/30">
-                {detailStrip}
+          {/* Content */}
+          <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-8">
+            {/* Top: Icon in colored circle */}
+            <div className="flex items-start justify-between">
+              <div
+                className={`w-12 h-12 md:w-14 md:h-14 rounded-full ${program.color} flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform duration-300`}
+              >
+                <Icon className="w-5 h-5 md:w-6 md:h-6" />
+              </div>
+
+              {/* Step number */}
+              <span className="text-white/20 text-[10px] font-mono font-bold tracking-widest">
+                0{index + 1}
               </span>
             </div>
-          </div>
 
-          {/* Explore arrow */}
-          <div className="shrink-0 self-center lg:self-center hidden sm:flex">
-            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-[#111111]/10 flex items-center justify-center group-hover:bg-[#FF4D00] group-hover:border-[#FF4D00] group-hover:text-white transition-all duration-300 text-[#111111]/40">
-              <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-0.5 transition-transform duration-300" />
+            {/* Bottom: Title, tagline, stats, explore */}
+            <div>
+              {/* Title */}
+              <h3
+                className={`font-display font-medium tracking-[-0.02em] leading-[1.1] text-white mb-2 ${
+                  isFeatured
+                    ? "text-[28px] md:text-[40px] lg:text-[48px]"
+                    : "text-[22px] md:text-[32px]"
+                }`}
+              >
+                {program.title}
+              </h3>
+
+              {/* Tagline */}
+              <p className="text-white/50 text-[13px] md:text-[15px] font-medium mb-5 max-w-md">
+                {program.tagline}
+              </p>
+
+              {/* Stats pills */}
+              <div className="flex flex-wrap gap-2 mb-5">
+                {stats.map((stat, i) => (
+                  <span
+                    key={i}
+                    className="bg-white/10 backdrop-blur-sm px-3 py-1 text-[10px] font-mono tracking-widest uppercase text-white/70"
+                  >
+                    {stat.value}
+                  </span>
+                ))}
+              </div>
+
+              {/* Explore link */}
+              <div className="flex items-center gap-2 text-white/60 group-hover:text-white transition-colors duration-300">
+                <span className="text-[11px] font-mono font-bold tracking-widest uppercase">
+                  Explore
+                </span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+              </div>
             </div>
           </div>
         </div>
@@ -208,7 +260,126 @@ function ProgramCard({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   NUMBERS SECTION — Centered grid of stats
+   HOW IT WORKS — Horizontal timeline / process visualization
+   ══════════════════════════════════════════════════════════════════════════ */
+function HowItWorks() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 bg-[#FAFAFA] border-t border-b border-[#111111]/10"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        {/* Section label */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-12 md:mb-16"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
+            How It Works
+          </span>
+        </motion.div>
+
+        {/* Desktop: Horizontal timeline */}
+        <div className="hidden md:flex items-start justify-between relative">
+          {/* Connecting dotted line */}
+          <div className="absolute top-7 left-[calc(12.5%+28px)] right-[calc(12.5%+28px)] h-[2px] border-t-2 border-dashed border-[#FF4D00]/30" />
+
+          {programsData.map((program, idx) => {
+            const Icon = program.icon;
+            return (
+              <motion.div
+                key={program.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.6,
+                  delay: idx * 0.15,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="flex flex-col items-center text-center w-1/4 relative z-10"
+              >
+                {/* Step number + icon circle */}
+                <div className="relative mb-5">
+                  <div
+                    className={`w-14 h-14 rounded-full ${program.color} flex items-center justify-center text-white`}
+                  >
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#FF4D00] text-white text-[10px] font-mono font-bold flex items-center justify-center">
+                    {idx + 1}
+                  </span>
+                </div>
+
+                {/* Program name */}
+                <h4 className="text-[15px] md:text-[17px] font-display font-medium tracking-tight mb-2">
+                  {program.title}
+                </h4>
+
+                {/* One-line description */}
+                <p className="text-[12px] md:text-[13px] text-[#111111]/50 font-medium leading-relaxed max-w-[200px]">
+                  {timelineDescriptions[program.id]}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Mobile: Vertical timeline */}
+        <div className="md:hidden flex flex-col relative">
+          {/* Vertical connecting line */}
+          <div className="absolute top-0 bottom-0 left-[23px] w-[2px] border-l-2 border-dashed border-[#FF4D00]/30" />
+
+          {programsData.map((program, idx) => {
+            const Icon = program.icon;
+            return (
+              <motion.div
+                key={program.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{
+                  duration: 0.5,
+                  delay: idx * 0.12,
+                  ease: "easeOut",
+                }}
+                className="flex items-start gap-5 relative pb-8 last:pb-0"
+              >
+                {/* Icon circle */}
+                <div className="relative shrink-0 z-10">
+                  <div
+                    className={`w-12 h-12 rounded-full ${program.color} flex items-center justify-center text-white`}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#FF4D00] text-white text-[9px] font-mono font-bold flex items-center justify-center">
+                    {idx + 1}
+                  </span>
+                </div>
+
+                {/* Text */}
+                <div className="pt-1">
+                  <h4 className="text-[15px] font-display font-medium tracking-tight mb-1">
+                    {program.title}
+                  </h4>
+                  <p className="text-[12px] text-[#111111]/50 font-medium leading-relaxed">
+                    {timelineDescriptions[program.id]}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NUMBERS SECTION — Centered grid of stats (KEPT AS-IS)
    ══════════════════════════════════════════════════════════════════════════ */
 function NumbersSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -217,7 +388,7 @@ function NumbersSection() {
   return (
     <section
       ref={ref}
-      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10 bg-[#FAFAFA]"
+      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10 bg-white"
     >
       <div className="w-full max-w-[1400px] mx-auto">
         <motion.div
@@ -261,7 +432,7 @@ function NumbersSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   CTA SECTION — Dark bg, application deadline (no italics)
+   CTA SECTION — Dark bg, application deadline (KEPT AS-IS)
    ══════════════════════════════════════════════════════════════════════════ */
 function CTASection() {
   const ref = useRef<HTMLDivElement>(null);
