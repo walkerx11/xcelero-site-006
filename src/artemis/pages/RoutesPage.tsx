@@ -1,0 +1,1408 @@
+"use client";
+
+import { useRef, useState, useMemo, useCallback } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import {
+  ArrowRight,
+  ChevronDown,
+  ChevronRight,
+  MapPin,
+  Package,
+  Banknote,
+  Database,
+  Users,
+  Clock,
+  Sun,
+  Compass,
+  Flame,
+  Anchor,
+  Check,
+  Route,
+  Sparkles,
+  X,
+} from "lucide-react";
+import { Link } from "@/artemis/router";
+import {
+  routeLegs,
+  annualSchedule,
+  routeMetrics,
+  arcPricing,
+  fullRoutePricing,
+  arcImages,
+} from "@/artemis/data/routes";
+import type { RouteLeg, KeyCity } from "@/artemis/data/routes";
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MAP LOCATION DATA — Calibrated x/y positions against the Newlab map image
+   (677e1de06571eae8d537fc47_map.avif)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+type LabelPos = "left" | "right";
+
+interface MapLocation {
+  id: string;
+  name: string;
+  x: number;       // percentage from left — calibrated for Newlab map image
+  y: number;       // percentage from top — calibrated for Newlab map image
+  labelPos: LabelPos;
+  legId: string;
+  legNumber: number;
+  legColor: string;
+  description: string;
+  countries: string[];
+}
+
+const MAP_LOCATIONS: MapLocation[] = [
+  // Leg 1 — Gulf of Guinea Arc
+  { id: "lagos", name: "LAGOS", x: 48.3, y: 55.7, labelPos: "right", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Africa's commercial nerve center — 20M people, limitless velocity", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  { id: "accra", name: "ACCRA", x: 47.3, y: 56.3, labelPos: "right", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Stable gateway for West African fintech and creative industries", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  { id: "abidjan", name: "ABIDJAN", x: 46.3, y: 56.5, labelPos: "left", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Francophone hub — financial services and cocoa logistics", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  { id: "dakar", name: "DAKAR", x: 42.7, y: 50.5, labelPos: "left", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Westernmost point — maritime gateway and digital arts capital", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  { id: "douala", name: "DOUALA", x: 50.0, y: 57.3, labelPos: "right", legId: "gulf-of-guinea", legNumber: 1, legColor: "#FF4D00", description: "Central African port entry — bilingual trade corridor", countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal", "Cameroon"] },
+  // Leg 2 — Sahel Band
+  { id: "bamako", name: "BAMAKO", x: 45.2, y: 51.8, labelPos: "left", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "Sahel's administrative anchor — music and gold", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  { id: "ouagadougou", name: "OUAGADOUGOU", x: 47.0, y: 52.0, labelPos: "right", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "Burkinabé cultural capital — artisan commerce and resistance", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  { id: "niamey", name: "NIAMEY", x: 48.0, y: 51.3, labelPos: "right", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "Niger River gateway — uranium and pastoral trade", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  { id: "ndjamena", name: "N'DJAMENA", x: 51.4, y: 52.2, labelPos: "right", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "Chad's crossroads — humanitarian logistics hub", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  { id: "timbuktu", name: "TIMBUKTU", x: 46.6, y: 49.2, labelPos: "left", legId: "sahel-band", legNumber: 2, legColor: "#E85D26", description: "The legendary city of knowledge — manuscripts and memory", countries: ["Mali", "Burkina Faso", "Niger", "Chad", "Sudan"] },
+  // Leg 3 — East African Corridor
+  { id: "nairobi", name: "NAIROBI", x: 57.3, y: 60.7, labelPos: "right", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "East Africa's tech capital — M-Pesa, iHub, Silicon Savannah", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  { id: "kigali", name: "KIGALI", x: 55.5, y: 61.0, labelPos: "left", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "The clean protocol — governance innovation and ease-of-doing-business", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  { id: "dar-es-salaam", name: "DAR ES SALAAM", x: 58.0, y: 64.2, labelPos: "right", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "Indian Ocean port — freight gateway to the interior", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  { id: "kampala", name: "KAMPALA", x: 56.2, y: 59.6, labelPos: "left", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "Lake Victoria hub — mobile money and agricultural trade", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  { id: "mombasa", name: "MOMBASA", x: 58.1, y: 62.4, labelPos: "right", legId: "east-african", legNumber: 3, legColor: "#CC6B33", description: "Ancient port city — the Northern Corridor's maritime terminus", countries: ["Kenya", "Tanzania", "Uganda", "Rwanda", "Burundi", "Eastern DRC"] },
+  // Leg 4 — Central African Heartland
+  { id: "kinshasa", name: "KINSHASA", x: 51.5, y: 62.6, labelPos: "left", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "17 million people — the largest francophone city on Earth", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  { id: "lubumbashi", name: "LUBUMBASHI", x: 54.8, y: 67.3, labelPos: "right", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "Copperbelt capital — mineral processing and export", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  { id: "douala-cam", name: "DOUALA", x: 50.0, y: 57.3, labelPos: "left", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "Atlantic port — the River Stack's maritime gateway", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  { id: "brazzaville", name: "BRAZZAVILLE", x: 51.6, y: 62.6, labelPos: "right", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "Pool Malebo — twin city to Kinshasa across the river", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  { id: "yaounde", name: "YAOUNDÉ", x: 50.5, y: 57.4, labelPos: "right", legId: "central-african", legNumber: 4, legColor: "#B37840", description: "Cameroon's administrative capital — bilingual bridge", countries: ["DRC", "Cameroon", "Gabon", "Congo", "CAR"] },
+  // Leg 5 — Southern Arc
+  { id: "harare", name: "HARARE", x: 55.7, y: 71.1, labelPos: "right", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Zimbabwe's capital — agricultural trade and tech emergence", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  { id: "lusaka", name: "LUSAKA", x: 55.0, y: 69.6, labelPos: "left", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Zambia's commercial center — Copperbelt logistics hub", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  { id: "luanda", name: "LUANDA", x: 50.9, y: 65.4, labelPos: "left", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Angola's oil capital — Portuguese-speaking gateway", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  { id: "livingstone", name: "LIVINGSTONE", x: 54.4, y: 71.1, labelPos: "left", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Victoria Falls — tourism and energy infrastructure", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  { id: "bulawayo", name: "BULAWAYO", x: 55.1, y: 72.7, labelPos: "right", legId: "southern-arc", legNumber: 5, legColor: "#99854D", description: "Zimbabwe's second city — rail heritage and industrial base", countries: ["Zimbabwe", "Zambia", "Angola", "Lesotho", "Eswatini", "Malawi"] },
+  // Leg 6 — North Africa & Global Gateways
+  { id: "cairo", name: "CAIRO", x: 55.8, y: 40.8, labelPos: "right", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "20 million people — Africa's largest city and energy corridor", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+  { id: "casablanca", name: "CASABLANCA", x: 45.3, y: 38.5, labelPos: "left", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "Morocco's economic engine — maritime and financial gateway", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+  { id: "tunis", name: "TUNIS", x: 50.1, y: 36.5, labelPos: "right", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "Carthage's heir — Mediterranean trade and digital governance", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+  { id: "dubai", name: "DUBAI", x: 62.3, y: 43.9, labelPos: "right", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "Global capital hub — diaspora investment and logistics", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+  { id: "london", name: "LONDON", x: 47.4, y: 27.2, labelPos: "right", legId: "north-africa-global", legNumber: 6, legColor: "#FF6B2B", description: "Financial gateway — capital markets and regulatory bridge", countries: ["Egypt", "Morocco", "Algeria", "Tunisia", "+ 19 global jurisdictions"] },
+];
+
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ROUTES PAGE
+   ══════════════════════════════════════════════════════════════════════════ */
+export function RoutesPage() {
+  const [activeLeg, setActiveLeg] = useState<string | null>(null);
+  const [expandedLeg, setExpandedLeg] = useState<string | null>(null);
+
+  return (
+    <div className="bg-[#FAFAFA] text-[#111111]">
+      <HeroSection />
+      <PreambleSection />
+      <MapSection
+        activeLeg={activeLeg}
+        setActiveLeg={setActiveLeg}
+      />
+      <ArcAccordion
+        expandedLeg={expandedLeg}
+        setExpandedLeg={setExpandedLeg}
+        activeLeg={activeLeg}
+        setActiveLeg={setActiveLeg}
+      />
+      <JourneySection />
+      <PricingSection />
+      <InvitationSection />
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HERO SECTION
+   ══════════════════════════════════════════════════════════════════════════ */
+function HeroSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  return (
+    <section className="relative bg-[#111111] text-white pt-24 pb-24 md:pt-32 md:pb-32 px-6 md:px-12 lg:px-20 overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0 pointer-events-none">
+        <img
+          src="/routes/world-map-hero.png"
+          alt=""
+          className="w-full h-full object-cover opacity-[0.08]"
+        />
+      </div>
+      {/* Subtle orange glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FF4D00] opacity-[0.06] rounded-full blur-[150px]" />
+      </div>
+
+      <div ref={ref} className="w-full max-w-7xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="w-3 h-3 bg-[#FF4D00] mb-10" />
+          <h1 className="text-[64px] sm:text-[80px] md:text-[100px] lg:text-[130px] leading-[0.85] font-display font-medium tracking-tight mb-8 uppercase">
+            The<br />
+            Routes.
+          </h1>
+          <p className="text-xl md:text-2xl lg:text-3xl leading-relaxed text-white/40 font-medium max-w-2xl mb-16">
+            The Circulatory System of the World.
+          </p>
+
+          <div className="flex flex-wrap gap-4">
+            {[
+              { value: "6", label: "Legs" },
+              { value: "190", label: "Hub Cities" },
+              { value: "35+", label: "Countries" },
+              { value: "100", label: "Xcitizens/yr" },
+            ].map((m) => (
+              <div
+                key={m.label}
+                className="px-6 py-3 border border-white/20 text-center"
+              >
+                <div className="text-2xl md:text-3xl font-display font-medium text-[#FF4D00]">
+                  {m.value}
+                </div>
+                <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-white/40 mt-1">
+                  {m.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PREAMBLE SECTION
+   ══════════════════════════════════════════════════════════════════════════ */
+function PreambleSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10"
+    >
+      <div className="w-full max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-8 block">
+            The Preamble
+          </span>
+
+          <h2 className="text-[32px] sm:text-[44px] md:text-[56px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.95] mb-12">
+            The map of the world is a{" "}
+            <span className="text-[#FF4D00]">lie</span>.
+          </h2>
+
+          <div className="space-y-8 text-lg md:text-xl leading-[1.8] text-[#111111]/60 font-medium">
+            <p>
+              It&apos;s a diagram of political cages. Lines drawn by men who never
+              walked the terrain. The real world doesn&apos;t operate in countries.{" "}
+              <span className="text-[#111111] font-semibold">
+                It operates in Routes.
+              </span>
+            </p>
+            <p>
+              The Hanseatic League understood this in 1356. They didn&apos;t build a
+              nation — they built a network of 190 cities connected by shared
+              protocols for trade, law, and mutual defense. The League lasted 300
+              years and made its member cities the wealthiest in Europe. Not
+              through conquest, but through <span>flow</span>.
+            </p>
+            <p>
+              The Routes are the Hanseatic League, rebuilt for the 21st century.
+              Six legs. 190+ hubs. 63 countries. One circulatory system for the
+              movement of goods, capital, data, and people across the geographies
+              that will define the next century.
+            </p>
+          </div>
+
+          <div className="mt-16 pt-16 border-t border-[#111111]/10">
+            <p className="text-[22px] sm:text-[28px] md:text-[32px] font-display font-medium tracking-[-0.02em] leading-[1.2] text-[#111111]">
+              You can&apos;t change the world if you haven&apos;t seen it.{" "}
+              <span className="text-[#FF4D00]">
+                {routeMetrics.countries} countries.
+              </span>{" "}
+              <span className="text-[#FF4D00]">{routeMetrics.hubs} hubs.</span>{" "}
+              One journey.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MAP SECTION — Blueprint-style: static world map image + positioned pins
+   + dynamic header + slide-in side panel
+   ══════════════════════════════════════════════════════════════════════════ */
+function MapSection({
+  activeLeg,
+  setActiveLeg,
+}: {
+  activeLeg: string | null;
+  setActiveLeg: (id: string | null) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section ref={ref} className="border-b border-[#111111]/10">
+      {/* Section label + filter buttons */}
+      <div className="py-12 md:py-16 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
+        <div className="w-full max-w-7xl mx-auto">
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
+            The Six Legs — Interactive Map
+          </span>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setActiveLeg(null)}
+              className={`px-3 py-1.5 text-[11px] font-mono font-bold tracking-widest uppercase border transition-colors ${
+                activeLeg === null
+                  ? "bg-[#111111] text-white border-[#111111]"
+                  : "bg-white text-[#111111]/50 border-[#111111]/15 hover:border-[#111111]/30"
+              }`}
+            >
+              All Legs
+            </button>
+            {routeLegs.map((leg) => (
+              <button
+                key={leg.id}
+                onClick={() => setActiveLeg(activeLeg === leg.id ? null : leg.id)}
+                className={`px-3 py-1.5 text-[11px] font-mono font-bold tracking-widest uppercase border transition-colors ${
+                  activeLeg === leg.id
+                    ? "text-white border-transparent"
+                    : "bg-white text-[#111111]/50 border-[#111111]/15 hover:border-[#111111]/30"
+                }`}
+                style={activeLeg === leg.id ? { backgroundColor: leg.color, borderColor: leg.color } : {}}
+              >
+                {leg.legNumber}. {leg.name.split(" ")[0]}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Map container */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="py-8 md:py-12 px-6 md:px-12 lg:px-20 bg-white"
+      >
+        <div className="w-full max-w-6xl mx-auto">
+          <BlueprintMap activeLeg={activeLeg} setActiveLeg={setActiveLeg} />
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BLUEPRINT MAP — Newlab-style: static world map image + positioned pin
+   markers with always-visible labels + slide-in detail panel
+   Based on: https://github.com/Questy708/map2-
+   ══════════════════════════════════════════════════════════════════════════ */
+function BlueprintMap({
+  activeLeg,
+  setActiveLeg,
+}: {
+  activeLeg: string | null;
+  setActiveLeg: (id: string | null) => void;
+}) {
+  const [activeLocId, setActiveLocId] = useState<string | null>(null);
+  const isAnyActive = activeLeg !== null;
+
+  const activeLocData = useMemo(
+    () => MAP_LOCATIONS.find((l) => l.id === activeLocId),
+    [activeLocId]
+  );
+
+  const visibleLocations = useMemo(
+    () => (isAnyActive ? MAP_LOCATIONS.filter((l) => l.legId === activeLeg) : MAP_LOCATIONS),
+    [isAnyActive, activeLeg]
+  );
+
+  const legOfActive = activeLocData
+    ? routeLegs.find((l) => l.id === activeLocData.legId)
+    : null;
+
+  const scrollToLeg = useCallback((legId: string) => {
+    const el = document.getElementById(`leg-${legId}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  return (
+    <div className="w-full relative">
+      {/* Map container */}
+      <div
+        className="relative w-full overflow-hidden bg-white"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            setActiveLocId(null);
+          }
+        }}
+      >
+        {/* World map image — Newlab topographic map */}
+        <img
+          alt="World Map showing xCelero Routes"
+          className="w-full h-auto pointer-events-none select-none opacity-80"
+          src="/routes/newlab-map.avif"
+        />
+
+        {/* Pin markers with always-visible labels */}
+        {visibleLocations.map((loc, index) => {
+          const isActive = activeLocId === loc.id;
+          return (
+            <div
+              key={loc.id}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center ${isActive ? "z-40" : "z-10"}`}
+              style={{ left: `${loc.x}%`, top: `${loc.y}%` }}
+            >
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 350, damping: 25, delay: index * 0.05 }}
+                className="relative flex items-center justify-center"
+              >
+                {/* Colored marker dot */}
+                <button
+                  onClick={() => {
+                    setActiveLocId(activeLocId === loc.id ? null : loc.id);
+                    setActiveLeg(loc.legId);
+                  }}
+                  className={`relative w-3.5 h-3.5 md:w-4 md:h-4 rounded-full shrink-0 cursor-pointer transition-all duration-200 border-[2.5px] border-transparent hover:border-black/20 hover:scale-110 ${isActive ? "scale-125 border-black/30" : ""}`}
+                  style={{ backgroundColor: loc.legColor }}
+                  aria-label={`View ${loc.name}`}
+                />
+
+                {/* Always-visible label */}
+                <div
+                  className={`absolute bg-[#111111] text-white font-mono text-[8px] md:text-[10px] font-bold tracking-[0.15em] px-2 py-1 md:px-3 md:py-1.5 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none shadow-sm transition-all duration-200 ${
+                    isActive ? "bg-black" : ""
+                  } ${loc.labelPos === "left" ? "right-full mr-2 md:mr-3" : "left-full ml-2 md:ml-3"}`}
+                >
+                  {loc.name}
+                </div>
+              </motion.div>
+            </div>
+          );
+        })}
+
+        {/* Info Panel Overlay */}
+        <AnimatePresence>
+          {activeLocData && (
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50, transition: { duration: 0.2 } }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute top-4 bottom-4 right-4 w-64 sm:w-72 md:w-80 lg:w-96 bg-white border border-[#111111]/10 shadow-2xl p-6 md:p-8 flex flex-col z-50 overflow-y-auto"
+            >
+              <button
+                onClick={() => setActiveLocId(null)}
+                className="absolute top-4 right-4 p-2 text-[#111111]/30 hover:text-[#111111] transition-colors"
+                aria-label="Close panel"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Leg indicator */}
+              <div className="flex items-center gap-2 mb-4 mt-2">
+                <span
+                  className="w-3 h-3 rounded-full shrink-0"
+                  style={{ backgroundColor: activeLocData.legColor }}
+                />
+                <span className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase" style={{ color: activeLocData.legColor }}>
+                  Leg {activeLocData.legNumber}
+                </span>
+              </div>
+
+              {/* City name */}
+              <h3 className="text-2xl font-display font-medium uppercase tracking-tight text-[#111111] mb-4 pr-8">
+                {activeLocData.name}
+              </h3>
+
+              <div className="w-10 h-1 mb-5" style={{ backgroundColor: activeLocData.legColor }} />
+
+              <div className="space-y-6">
+                {/* About */}
+                <div>
+                  <h4 className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase mb-2" style={{ color: activeLocData.legColor }}>
+                    About
+                  </h4>
+                  <p className="text-[#111111]/60 text-sm leading-relaxed">
+                    {activeLocData.description}
+                  </p>
+                </div>
+
+                {/* Route info */}
+                {legOfActive && (
+                  <div>
+                    <h4 className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase mb-2" style={{ color: activeLocData.legColor }}>
+                      Route
+                    </h4>
+                    <p className="text-sm font-display font-medium text-[#111111]/70">
+                      {legOfActive.name}
+                    </p>
+                    <p className="text-xs text-[#111111]/40 mt-1">
+                      {legOfActive.subtitle} — {legOfActive.hubCount} hubs
+                    </p>
+                  </div>
+                )}
+
+                {/* Countries */}
+                <div>
+                  <h4 className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase mb-3" style={{ color: activeLocData.legColor }}>
+                    Countries
+                  </h4>
+                  <ul className="flex flex-wrap gap-2">
+                    {activeLocData.countries.map((c, i) => (
+                      <li
+                        key={i}
+                        className="bg-[#111111]/[0.06] px-3 py-1.5 text-xs font-medium text-[#111111]/70 rounded-sm"
+                      >
+                        {c}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* View leg details button */}
+              <div className="mt-auto pt-6">
+                <button
+                  className="w-full py-3 text-[11px] font-mono font-bold tracking-widest uppercase text-white transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: activeLocData.legColor }}
+                  onClick={() => {
+                    scrollToLeg(activeLocData.legId);
+                    setActiveLocId(null);
+                  }}
+                >
+                  View Leg {activeLocData.legNumber} Details
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Legend */}
+      <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] font-mono text-[#111111]/40">
+        {routeLegs.map((leg) => (
+          <button
+            key={leg.id}
+            onClick={() => setActiveLeg(activeLeg === leg.id ? null : leg.id)}
+            className="flex items-center gap-2 hover:text-[#111111]/70 transition-colors"
+          >
+            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: leg.color }} />
+            <span>
+              Leg {leg.legNumber}: {leg.name}
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ARC ACCORDION — Expandable sections per leg (no dark bands)
+   ══════════════════════════════════════════════════════════════════════════ */
+function ArcAccordion({
+  expandedLeg,
+  setExpandedLeg,
+  activeLeg,
+  setActiveLeg,
+}: {
+  expandedLeg: string | null;
+  setExpandedLeg: (id: string | null) => void;
+  activeLeg: string | null;
+  setActiveLeg: (id: string | null) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  return (
+    <section ref={ref} className="border-b border-[#111111]/10">
+      <div className="py-12 md:py-16 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
+        <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00]">
+          The Arcs — In Detail
+        </span>
+      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="px-6 md:px-12 lg:px-20 py-6 md:py-8"
+      >
+        <div className="w-full max-w-7xl mx-auto space-y-2">
+          {routeLegs.map((leg) => {
+            const isExpanded = expandedLeg === leg.id;
+            return (
+              <LegAccordionPanel
+                key={leg.id}
+                leg={leg}
+                isExpanded={isExpanded}
+                onToggle={() =>
+                  setExpandedLeg(isExpanded ? null : leg.id)
+                }
+                activeLeg={activeLeg}
+                setActiveLeg={setActiveLeg}
+              />
+            );
+          })}
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LEG ACCORDION PANEL — Single expandable panel per leg
+   ══════════════════════════════════════════════════════════════════════════ */
+function LegAccordionPanel({
+  leg,
+  isExpanded,
+  onToggle,
+  activeLeg,
+  setActiveLeg,
+}: {
+  leg: RouteLeg;
+  isExpanded: boolean;
+  onToggle: () => void;
+  activeLeg: string | null;
+  setActiveLeg: (id: string | null) => void;
+}) {
+  const images = arcImages[leg.id] || [];
+
+  return (
+    <div
+      id={`leg-${leg.id}`}
+      className={`border transition-colors ${
+        isExpanded ? "border-[#111111]/20 bg-white" : "border-[#111111]/10 bg-white hover:border-[#111111]/20"
+      }`}
+    >
+      {/* Header row */}
+      <button
+        suppressHydrationWarning
+        onClick={onToggle}
+        className="w-full px-5 md:px-6 py-5 flex items-center justify-between text-left group gap-4"
+      >
+        <div className="flex items-center gap-4 flex-1 min-w-0">
+          <div
+            className="w-4 h-4 shrink-0 rounded-full"
+            style={{ backgroundColor: leg.color }}
+          />
+          <span
+            className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase shrink-0"
+            style={{ color: leg.color }}
+          >
+            Leg {leg.legNumber}
+          </span>
+          <span className="font-display font-medium text-lg md:text-xl group-hover:text-[#FF4D00] transition-colors truncate">
+            {leg.name}
+          </span>
+          <span className="hidden md:inline text-[11px] font-mono tracking-wide text-[#111111]/30 shrink-0">
+            {leg.subtitle}
+          </span>
+          <span className="hidden sm:inline text-[11px] font-mono tracking-wide text-[#111111]/30 shrink-0">
+            {leg.hubCount} Hubs
+          </span>
+        </div>
+        <ChevronDown
+          className={`w-5 h-5 shrink-0 text-[#111111]/30 transition-transform duration-300 ${
+            isExpanded ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {/* Expandable content */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="px-5 md:px-6 pb-6 border-t border-[#111111]/8 pt-6">
+              {/* Countries as tag pills */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {leg.countries.map((c) => (
+                  <span
+                    key={c}
+                    className="text-[11px] font-mono tracking-wide px-3 py-1 border border-[#111111]/10 text-[#111111]/50"
+                  >
+                    {c}
+                  </span>
+                ))}
+              </div>
+
+              {/* Static image collage */}
+              {images.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-8">
+                  {images.map((img, i) => (
+                    <div
+                      key={i}
+                      className="h-[160px] md:h-[200px] overflow-hidden border border-[#111111]/8"
+                    >
+                      <img
+                        src={img}
+                        alt=""
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Historical Anchor + Core Flows side by side */}
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Anchor className="w-4 h-4" style={{ color: leg.color }} />
+                    <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/40">
+                      Historical Anchor
+                    </span>
+                  </div>
+                  <p className="text-base md:text-lg leading-[1.7] text-[#111111]/70 font-medium">
+                    {leg.historicalAnchor}
+                  </p>
+                  <p className="mt-3 text-sm text-[#111111]/35 font-medium">
+                    {leg.coreGeography}
+                  </p>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Flame className="w-4 h-4" style={{ color: leg.color }} />
+                    <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/40">
+                      Core Flows
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { icon: Package, label: "Goods", value: leg.coreFlows.goods },
+                      { icon: Banknote, label: "Capital", value: leg.coreFlows.capital },
+                      { icon: Database, label: "Data", value: leg.coreFlows.data },
+                      { icon: Users, label: "People", value: leg.coreFlows.people },
+                    ].map((flow) => (
+                      <div key={flow.label} className="p-3 border border-[#111111]/6">
+                        <div className="flex items-center gap-2 mb-2">
+                          <flow.icon className="w-3.5 h-3.5" style={{ color: leg.color }} />
+                          <span className="text-[9px] font-mono font-bold tracking-[0.15em] uppercase text-[#111111]/40">
+                            {flow.label}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#111111]/55 font-medium leading-[1.5]">
+                          {flow.value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Route Deal Thesis */}
+              <div
+                className="border-l-3 pl-5 py-4 mb-8"
+                style={{ borderLeftColor: leg.color, borderLeftWidth: 3 }}
+              >
+                <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-2 block">
+                  Route Deal Thesis
+                </span>
+                <h3 className="text-xl md:text-2xl font-display font-medium mb-3">
+                  {leg.routeDealThesis.title}
+                </h3>
+                <p className="text-sm md:text-base leading-[1.7] text-[#111111]/55 font-medium">
+                  {leg.routeDealThesis.description}
+                </p>
+              </div>
+
+              {/* Friction + Cultural Weaving side by side */}
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-5 h-[2px]" style={{ backgroundColor: leg.color }} />
+                    <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/40">
+                      The Friction
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {leg.friction.map((f, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <span
+                          className="text-[9px] font-mono font-bold mt-1.5 shrink-0 w-4 h-4 flex items-center justify-center"
+                          style={{ backgroundColor: `${leg.color}15`, color: leg.color }}
+                        >
+                          {i + 1}
+                        </span>
+                        <span className="text-sm text-[#111111]/65 font-medium leading-[1.5]">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-5 h-[2px]" style={{ backgroundColor: leg.color }} />
+                    <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/40">
+                      Cultural Weaving
+                    </span>
+                  </div>
+                  <div className="space-y-4">
+                    {[
+                      { label: "Commons Feast", value: leg.culturalWeaving.commonsFeast, icon: Sun },
+                      { label: "Heritage Walk", value: leg.culturalWeaving.heritageWalk, icon: Compass },
+                      { label: "Ritual Closing", value: leg.culturalWeaving.ritualClosing, icon: Sparkles },
+                    ].map((item) => (
+                      <div key={item.label}>
+                        <div className="flex items-center gap-2 mb-1">
+                          <item.icon className="w-3 h-3" style={{ color: leg.color }} />
+                          <span className="text-[9px] font-mono font-bold tracking-[0.15em] uppercase text-[#FF4D00]">
+                            {item.label}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#111111]/50 font-medium leading-[1.6] pl-5">
+                          {item.value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Signature Route Deals */}
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-5 h-[2px]" style={{ backgroundColor: leg.color }} />
+                  <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/40">
+                    Signature Route Deals
+                  </span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {leg.signatureDeals.map((deal, i) => (
+                    <DealCard key={i} deal={deal} legColor={leg.color} index={i} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Key Cities as tag pills */}
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <MapPin className="w-4 h-4" style={{ color: leg.color }} />
+                  <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/40">
+                    Key Cities
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {leg.keyCities.map((city) => (
+                    <span
+                      key={city.name}
+                      className="text-[11px] font-mono px-3 py-1.5 border text-[#111111]/60"
+                      style={{ borderColor: `${leg.color}30` }}
+                    >
+                      <MapPin className="w-3 h-3 inline mr-1" style={{ color: leg.color }} />
+                      {city.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DEAL CARD (expandable)
+   ══════════════════════════════════════════════════════════════════════════ */
+function DealCard({
+  deal,
+  legColor,
+  index,
+}: {
+  deal: RouteLeg["signatureDeals"][number];
+  legColor: string;
+  index: number;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="border border-[#111111]/10">
+      <button
+        suppressHydrationWarning
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-5 py-4 flex items-center justify-between text-left group gap-4"
+      >
+        <div className="flex items-center gap-4">
+          <span
+            className="text-[10px] font-mono font-bold tracking-widest shrink-0"
+            style={{ color: legColor }}
+          >
+            {deal.duration}
+          </span>
+          <span className="font-display font-medium text-base md:text-lg group-hover:text-[#FF4D00] transition-colors">
+            {deal.name}
+          </span>
+        </div>
+        <ChevronDown
+          className={`w-4 h-4 shrink-0 text-[#111111]/30 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="px-5 pb-5 border-t border-[#111111]/5 pt-4">
+              <p className="text-sm text-[#111111]/60 font-medium mb-3">
+                {deal.focus}
+              </p>
+              <div className="space-y-1">
+                {deal.inclusions.map((inc, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 text-sm text-[#111111]/50"
+                  >
+                    <ChevronRight className="w-3 h-3 text-[#FF4D00] shrink-0" />
+                    <span>{inc}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE JOURNEY SECTION
+   ══════════════════════════════════════════════════════════════════════════ */
+function JourneySection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10"
+    >
+      <div className="w-full max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
+            The Journey
+          </span>
+          <h2 className="text-[32px] sm:text-[44px] md:text-[56px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.95] mb-6">
+            Annual Cohort
+            <br />
+            <span className="text-[#111111]/40">Architecture</span>
+          </h2>
+          <p className="text-lg md:text-xl text-[#111111]/50 font-medium leading-relaxed max-w-2xl mb-16">
+            The Routes run on climate, not calendar. Each leg is timed to
+            seasonal windows that maximize mobility and minimize friction.
+          </p>
+        </motion.div>
+
+        {/* Schedule Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="mb-20"
+        >
+          {/* Desktop table */}
+          <div className="hidden md:block border border-[#111111]/10">
+            <div className="grid grid-cols-12 gap-0 bg-[#111111] text-white px-6 py-3">
+              <div className="col-span-2 text-[10px] font-mono font-bold tracking-[0.15em] uppercase">
+                Period
+              </div>
+              <div className="col-span-4 text-[10px] font-mono font-bold tracking-[0.15em] uppercase">
+                Leg
+              </div>
+              <div className="col-span-2 text-[10px] font-mono font-bold tracking-[0.15em] uppercase">
+                Hubs
+              </div>
+              <div className="col-span-4 text-[10px] font-mono font-bold tracking-[0.15em] uppercase">
+                Climate Note
+              </div>
+            </div>
+            {annualSchedule.map((s, i) => (
+              <div
+                key={s.legId}
+                className={`grid grid-cols-12 gap-0 px-6 py-4 border-t border-[#111111]/10 ${
+                  i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"
+                }`}
+              >
+                <div className="col-span-2 text-sm font-mono font-bold text-[#111111]/50">
+                  {s.period}
+                </div>
+                <div className="col-span-4 text-base font-display font-medium">
+                  {s.leg}
+                </div>
+                <div className="col-span-2 text-sm font-mono text-[#111111]/50">
+                  {s.hubs}
+                </div>
+                <div className="col-span-4 text-sm text-[#111111]/50 flex items-center gap-2">
+                  <Sun className="w-3.5 h-3.5 text-[#FF4D00] shrink-0" />
+                  {s.climateNote}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {annualSchedule.map((s) => (
+              <div
+                key={s.legId}
+                className="border border-[#111111]/10 p-4"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-[#FF4D00]">
+                    {s.period}
+                  </span>
+                  <span className="text-[10px] font-mono text-[#111111]/40">
+                    {s.hubs}
+                  </span>
+                </div>
+                <div className="font-display font-medium text-lg mb-2">
+                  {s.leg}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#111111]/50">
+                  <Sun className="w-3.5 h-3.5 text-[#FF4D00] shrink-0" />
+                  {s.climateNote}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Daily Rhythm + What You Leave With */}
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+          >
+            <div className="flex items-center gap-2 mb-6">
+              <Clock className="w-4 h-4 text-[#FF4D00]" />
+              <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/40">
+                Daily Rhythm Per Hub
+              </span>
+            </div>
+            <div className="space-y-4">
+              {[
+                {
+                  time: "06:00",
+                  desc: "Dawn patrol — market visit, port walk, or field deployment",
+                },
+                {
+                  time: "09:00",
+                  desc: "Deal room — structured sprint on the signature route deal",
+                },
+                {
+                  time: "12:00",
+                  desc: "Commons feast — shared meal with local operators and partners",
+                },
+                {
+                  time: "14:00",
+                  desc: "Deep work — prototyping, API integration, or regulatory mapping",
+                },
+                {
+                  time: "17:00",
+                  desc: "Heritage walk — curated walk through the hub's trade history",
+                },
+                {
+                  time: "19:00",
+                  desc: "Ritual closing — reflection, documentation, and intention setting",
+                },
+              ].map((r) => (
+                <div key={r.time} className="flex items-start gap-4">
+                  <span className="text-[11px] font-mono font-bold text-[#FF4D00] shrink-0 w-12 pt-0.5">
+                    {r.time}
+                  </span>
+                  <span className="text-sm text-[#111111]/60 font-medium leading-[1.6]">
+                    {r.desc}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+          >
+            <div className="flex items-center gap-2 mb-6">
+              <Compass className="w-4 h-4 text-[#FF4D00]" />
+              <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/40">
+                What You Leave With
+              </span>
+            </div>
+            <div className="space-y-4">
+              {[
+                "A signed Route Deal — a commercial agreement with at least one counterparty across the leg",
+                "A Playbook — codified operating procedures for every friction point encountered",
+                "A Network — direct relationships with operators, regulators, and capital sources across the leg",
+                "A Worldview — firsthand understanding of how 80% of global trade actually moves",
+                "A Covenant — membership in the Routes alumni network, with lifelong access to every hub",
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <span className="text-[#FF4D00] font-mono text-sm mt-0.5">
+                    →
+                  </span>
+                  <span className="text-sm text-[#111111]/60 font-medium leading-[1.6]">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRICING SECTION
+   ══════════════════════════════════════════════════════════════════════════ */
+function PricingSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10 bg-white"
+    >
+      <div className="w-full max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-16"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
+            Pricing
+          </span>
+          <h2 className="text-[32px] sm:text-[44px] md:text-[56px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.95] mb-6">
+            Invest in the Journey
+          </h2>
+          <p className="text-lg md:text-xl text-[#111111]/50 font-medium leading-relaxed max-w-2xl">
+            Each arc is a complete journey. The full route is a transformation.
+            Choose your entry point.
+          </p>
+        </motion.div>
+
+        {/* 6 per-arc pricing cards in 2x3 / 3x2 grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
+          {arcPricing.map((pricing, i) => {
+            const leg = routeLegs.find((l) => l.id === pricing.legId);
+            if (!leg) return null;
+            return (
+              <motion.div
+                key={pricing.legId}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.05 * i, ease: "easeOut" }}
+                className="border border-[#111111]/10 p-6 hover:border-[#111111]/20 transition-colors flex flex-col"
+              >
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="w-3 h-3 shrink-0"
+                    style={{ backgroundColor: leg.color }}
+                  />
+                  <span className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-[#FF4D00]">
+                    Leg {leg.legNumber}
+                  </span>
+                </div>
+                <h3 className="text-xl font-display font-medium mb-1">
+                  {leg.name}
+                </h3>
+                <p className="text-sm text-[#111111]/40 font-medium mb-6">
+                  {leg.subtitle}
+                </p>
+
+                {/* Price */}
+                <div className="mb-4">
+                  <div className="text-3xl font-display font-medium">
+                    ${pricing.pricePerPerson.toLocaleString()}
+                  </div>
+                  <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-[#111111]/40 mt-1">
+                    Per Person
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <div
+                    className="text-lg font-display font-medium"
+                    style={{ color: leg.color }}
+                  >
+                    ${pricing.solidarityRate.toLocaleString()}
+                  </div>
+                  <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-[#111111]/40 mt-0.5">
+                    Solidarity Rate (Groups)
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div className="flex gap-4 mb-6 text-sm">
+                  <div>
+                    <span className="font-display font-medium">
+                      {pricing.durationWeeks}
+                    </span>{" "}
+                    <span className="text-[#111111]/40">weeks</span>
+                  </div>
+                  <div>
+                    <span className="font-display font-medium">
+                      {pricing.scholarshipsPerDeparture}
+                    </span>{" "}
+                    <span className="text-[#111111]/40">scholarships</span>
+                  </div>
+                </div>
+
+                {/* Inclusions */}
+                <div className="space-y-2 mb-6 flex-1">
+                  {pricing.inclusions.map((inc, j) => (
+                    <div
+                      key={j}
+                      className="flex items-start gap-2 text-sm text-[#111111]/60"
+                    >
+                      <Check
+                        className="w-3.5 h-3.5 shrink-0 mt-0.5"
+                        style={{ color: leg.color }}
+                      />
+                      <span>{inc}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <a
+                  href={`#leg-${leg.id}`}
+                  className="inline-flex items-center justify-center gap-2 border px-6 py-3 text-sm font-mono font-bold tracking-wider uppercase transition-colors hover:bg-[#111111] hover:text-white"
+                  style={{ borderColor: leg.color, color: leg.color }}
+                >
+                  Explore This Arc
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Featured Full Route Package */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          className="bg-[#1B1C1E] text-white p-8 md:p-12 border border-[#1B1C1E]"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <Sparkles className="w-5 h-5 text-[#FF4D00]" />
+            <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00]">
+              Full Route Package
+            </span>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+            <div>
+              <h3 className="text-[28px] sm:text-[36px] md:text-[48px] font-display font-medium tracking-[-0.02em] leading-[0.95] mb-4">
+                The Full Circumnavigation
+              </h3>
+              <p className="text-base md:text-lg text-white/40 font-medium leading-[1.7] mb-8">
+                All six arcs. Twelve months. The complete journey from Lagos to
+                Cairo, from the Gulf of Guinea to the Mediterranean gateways.
+                One continuous route that builds on itself with every leg.
+              </p>
+
+              <div className="flex flex-wrap gap-8 mb-8">
+                <div>
+                  <div className="text-4xl md:text-5xl font-display font-medium text-[#FF4D00]">
+                    ${fullRoutePricing.pricePerPerson.toLocaleString()}
+                  </div>
+                  <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 mt-1">
+                    Per Person
+                  </div>
+                </div>
+                <div>
+                  <div className="text-3xl md:text-4xl font-display font-medium text-[#FF4D00]/80">
+                    ${fullRoutePricing.solidarityRate.toLocaleString()}
+                  </div>
+                  <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 mt-1">
+                    Solidarity Rate
+                  </div>
+                </div>
+                <div>
+                  <div className="text-3xl md:text-4xl font-display font-medium text-white">
+                    {fullRoutePricing.durationMonths}
+                  </div>
+                  <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 mt-1">
+                    Months
+                  </div>
+                </div>
+              </div>
+
+              <button
+                suppressHydrationWarning
+                className="inline-flex items-center gap-2 bg-[#FF4D00] hover:bg-[#FF4D00]/90 text-white px-8 py-4 text-sm font-mono font-bold tracking-wider uppercase transition-colors"
+              >
+                Book for the Full Route
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 mb-4">
+                Inclusions
+              </div>
+              <div className="space-y-3">
+                {fullRoutePricing.inclusions.map((inc, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-3 text-sm text-white/60"
+                  >
+                    <Check className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[#FF4D00]" />
+                    <span>{inc}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE INVITATION (CTA)
+   ══════════════════════════════════════════════════════════════════════════ */
+function InvitationSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-[#111111] text-white"
+    >
+      <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] inline-block mb-6">
+            The Invitation
+          </span>
+          <h2 className="text-[36px] sm:text-[48px] md:text-[60px] lg:text-[72px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-8 uppercase">
+            The Routes is not a program.
+            <br />
+            <span className="text-[#FF4D00]">It is a covenant.</span>
+          </h2>
+          <p className="text-lg md:text-xl text-white/40 font-medium leading-[1.6] max-w-lg">
+            Whether you&apos;re a founder, investor, or sovereign partner —
+            there&apos;s a place on the Route for those who refuse to build in
+            isolation. For those who understand that the next frontier isn&apos;t
+            a metaphor. It&apos;s a map.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+          className="flex flex-col gap-6"
+        >
+          <Link
+            to="/programs"
+            className="group flex items-center justify-between border border-white/20 px-8 py-6 hover:bg-white/5 transition-colors"
+          >
+            <div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 mb-2">
+                For Founders
+              </div>
+              <div className="text-lg md:text-xl font-display font-medium">
+                Explore Programs
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#FF4D00] group-hover:border-[#FF4D00] transition-all">
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            to="/capital"
+            className="group flex items-center justify-between border border-white/20 px-8 py-6 hover:bg-white/5 transition-colors"
+          >
+            <div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 mb-2">
+                For Investors
+              </div>
+              <div className="text-lg md:text-xl font-display font-medium">
+                Deploy Capital
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#FF4D00] group-hover:border-[#FF4D00] transition-all">
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            to="/join"
+            className="group flex items-center justify-between border border-white/20 px-8 py-6 hover:bg-white/5 transition-colors"
+          >
+            <div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 mb-2">
+                For Sovereign Partners
+              </div>
+              <div className="text-lg md:text-xl font-display font-medium">
+                Build With Us
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-[#FF4D00] group-hover:border-[#FF4D00] transition-all">
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  );
+}

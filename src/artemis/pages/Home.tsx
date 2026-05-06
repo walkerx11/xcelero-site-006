@@ -1,0 +1,777 @@
+"use client";
+
+import { useRef, useState, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import { Link } from "@/artemis/router";
+import {
+  ArrowRight,
+  ChevronDown,
+  ChevronUp,
+  Building2,
+  Rocket,
+  Coins,
+  MapPin,
+} from "lucide-react";
+import { ReviewSection } from "@/artemis/components/ReviewSection";
+
+/* ── Data ── */
+
+const heroImages = [
+  {
+    src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+    alt: "Laboratory",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1200&q=80",
+    alt: "Tech workspace",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
+    alt: "Earth from space",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1565792323902-486ad4b6a110?auto=format&fit=crop&w=1200&q=80",
+    alt: "Industrial infrastructure",
+  },
+];
+
+const stats = [
+  { value: "$14.5B+", label: "Target valuation growth of portfolio ventures" },
+  { value: "264", label: "Days quicker to revenue milestone" },
+  { value: "$4B", label: "Capital mobilization target" },
+  { value: "190", label: "Hub locations across the Route" },
+];
+
+const pillars = [
+  {
+    id: "infrastructure",
+    icon: Building2,
+    heading: "Infrastructure",
+    subtext:
+      "M1 Core campuses, XEmbassy nodes, & distributed living labs",
+    description:
+      "We build and operate the physical and digital infrastructure that ventures need to move from prototype to production. M1 Core campuses provide 50,000+ sq ft of lab, maker, and co-working space in prime hub cities. XEmbassy nodes — compact 5,000 sq ft drop-in studios — extend reach into secondary markets. Distributed living labs connect field testing sites across the Route, giving ventures access to real-world validation environments from day one.",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1565792323902-486ad4b6a110?auto=format&fit=crop&w=1200&q=80",
+        alt: "Factory infrastructure",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+        alt: "Research laboratory",
+      },
+    ],
+    link: "/platform",
+  },
+  {
+    id: "projects",
+    icon: Rocket,
+    heading: "Projects",
+    subtext:
+      "Startup commercialization programs with industry & government partners",
+    description:
+      "We run structured commercialization programs that take ventures from idea to revenue. Each program is co-designed with industry and government partners who provide market access, pilot opportunities, and first-customer contracts. The Quest Fellowship — our flagship semester-long program run in collaboration with DDQIC at Queen's University — uses MIT's Disciplined Entrepreneurship framework to guide founders through 24 steps of validated learning. Programs run on the Route, connecting cohorts across hub cities for shared deal flow and peer support.",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1200&q=80",
+        alt: "Collaborative workspace",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+        alt: "Modern office space",
+      },
+    ],
+    link: "/programs",
+  },
+  {
+    id: "capital",
+    icon: Coins,
+    heading: "Capital",
+    subtext: "Aligned network of venture & non-dilutive capital",
+    description:
+      "We mobilize capital that matches the realities of building in the Global South. Our network includes venture funds, sovereign wealth allocators, development finance institutions, and non-dilutive grant programs. Solidarity pricing ensures that founders in early-stage markets access the same quality of support at a fraction of Silicon Valley costs. We also operate a non-dilutive capital desk that matches ventures with grants, prizes, and government incentives across 39+ countries on the Route.",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+        alt: "Financial analytics",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
+        alt: "Global network",
+      },
+    ],
+    link: "/capital",
+  },
+];
+
+/* Hub cities for the dotted map */
+const mapHubs = [
+  { name: "Lagos", lat: 6.52, lng: 3.38 },
+  { name: "Nairobi", lat: -1.29, lng: 36.82 },
+  { name: "Cape Town", lat: -33.93, lng: 18.42 },
+  { name: "Cairo", lat: 30.04, lng: 31.24 },
+  { name: "Kigali", lat: -1.94, lng: 30.06 },
+  { name: "Accra", lat: 5.56, lng: -0.19 },
+  { name: "Kinshasa", lat: -4.44, lng: 15.27 },
+  { name: "Addis Ababa", lat: 9.02, lng: 38.75 },
+  { name: "Casablanca", lat: 33.57, lng: -7.59 },
+  { name: "Johannesburg", lat: -26.2, lng: 28.05 },
+  { name: "Dubai", lat: 25.2, lng: 55.27 },
+  { name: "London", lat: 51.51, lng: -0.13 },
+  { name: "São Paulo", lat: -23.55, lng: -46.63 },
+  { name: "Mumbai", lat: 19.08, lng: 72.88 },
+  { name: "Singapore", lat: 1.35, lng: 103.82 },
+  { name: "New York", lat: 40.71, lng: -74.01 },
+];
+
+const routeRegions = [
+  {
+    name: "Gulf of Guinea Arc",
+    description: "Lagos, Accra, Abidjan, Dakar — the commercial backbone of West Africa",
+  },
+  {
+    name: "East Africa Corridor",
+    description:
+      "Nairobi, Kampala, Kigali, Addis Ababa — innovation hubs of East Africa",
+  },
+  {
+    name: "Southern Africa Arc",
+    description:
+      "Cape Town, Johannesburg, Harare, Maputo — mining, manufacturing, and finance",
+  },
+  {
+    name: "Mediterranean Bridge",
+    description: "Cairo, Tunis, Casablanca — Mediterranean gateway to the continent",
+  },
+  {
+    name: "Sahel Band",
+    description: "Bamako, Ouagadougou, Niamey, N'Djamena — climate adaptation frontier",
+  },
+  {
+    name: "Central African Heartland",
+    description:
+      "Kinshasa, Brazzaville, Douala — mineral-rich, infrastructure-poor corridor",
+  },
+];
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HOME
+   ══════════════════════════════════════════════════════════════════════════ */
+export function Home() {
+  return (
+    <div className="bg-white text-[#111111]">
+      <Hero />
+      <ImageCards />
+      <IntroSection />
+      <NumbersSection />
+      <ThreePillarsSection />
+      <LocationsSection />
+      <ReviewSection title="Field notes on critical technology, venture infrastructure, and the routes that connect them" />
+      <NewsletterSection />
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HERO — Contained image with heading below (NEWLAB style)
+   ══════════════════════════════════════════════════════════════════════════ */
+function Hero() {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section className="relative w-full px-6 md:px-12 lg:px-20 pt-4 md:pt-6">
+      {/* Contained image — not full-bleed */}
+      <div className="relative w-full max-w-[1400px] mx-auto h-[50vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] overflow-hidden">
+        {heroImages.map((img, i) => (
+          <motion.div
+            key={i}
+            initial={false}
+            animate={{
+              opacity: i === currentImage ? 1 : 0,
+              scale: i === currentImage ? 1 : 1.03,
+            }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            <img
+              src={img.src}
+              alt={img.alt}
+              className="w-full h-full object-cover"
+              loading={i === 0 ? "eager" : "lazy"}
+            />
+          </motion.div>
+        ))}
+        {/* Gradient overlay from bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent" />
+
+        {/* Image indicators */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          {heroImages.map((_, i) => (
+            <button
+              key={i}
+              suppressHydrationWarning
+              onClick={() => setCurrentImage(i)}
+              className={`h-[2px] transition-all duration-500 ${
+                i === currentImage ? "bg-[#FF4D00] w-10" : "bg-black/30 w-6"
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Large centered heading below the image (NEWLAB style) */}
+      <div className="w-full max-w-[1400px] mx-auto pt-8 md:pt-12 pb-12 md:pb-20">
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+          className="text-[28px] sm:text-[44px] md:text-[64px] lg:text-[86px] xl:text-[104px] leading-[0.9] font-display font-medium tracking-[-0.03em] text-center uppercase"
+        >
+          Venture platform
+          <br />
+          for critical
+          <br />
+          technology
+        </motion.h1>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   IMAGE CARDS — 4 side-by-side images (hidden on mobile)
+   ══════════════════════════════════════════════════════════════════════════ */
+function ImageCards() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  return (
+    <section ref={ref} className="px-6 md:px-12 lg:px-20 border-t border-[#111111]/10">
+      <div className="w-full max-w-[1400px] mx-auto py-0">
+        {/* Desktop: 4 images in a row */}
+        <div className="hidden md:grid md:grid-cols-4 gap-0">
+          {heroImages.map((img, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: i * 0.12, ease: "easeOut" }}
+              className="aspect-[3/4] overflow-hidden group"
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INTRO SECTION — Centered text
+   ══════════════════════════════════════════════════════════════════════════ */
+function IntroSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-3xl mx-auto text-center"
+        >
+          <p className="text-[20px] sm:text-[24px] md:text-[28px] leading-[1.5] font-medium text-[#111111]/80 text-balance">
+            Ventures are building the critical technologies that will define our
+            future — but across the Global South, 90% never make it past the
+            starting line.{" "}
+            <span className="text-[#111111]">
+              xCelero unblocks commercialization through infrastructure,
+              projects, and capital in the geographies that need it most
+            </span>{" "}
+            — so the right ideas don&apos;t just survive, they scale.
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NUMBERS SECTION — 4 big stat cards with motion
+   ══════════════════════════════════════════════════════════════════════════ */
+function NumbersSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10 bg-[#FAFAFA]"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6 }}
+          className="mb-16 md:mb-24"
+        >
+          <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#FF4D00]">
+            By the numbers
+          </span>
+        </motion.div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-0">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                duration: 0.7,
+                delay: i * 0.15,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className={`border-t border-[#111111]/10 pt-8 pb-8 ${
+                i > 0 ? "lg:border-l lg:pl-8" : ""
+              } ${i % 2 === 1 ? "pl-6 sm:pl-8" : ""}`}
+            >
+              <div className="text-[48px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-display font-medium tracking-[-0.03em] leading-[1] mb-4">
+                {stat.value}
+              </div>
+              <div className="text-[13px] md:text-[15px] leading-[1.5] text-[#111111]/50 font-medium max-w-[200px]">
+                {stat.label}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THREE PILLARS SECTION — Each pillar: heading + subtext left, 2 images right
+   ══════════════════════════════════════════════════════════════════════════ */
+function ThreePillarsSection() {
+  return (
+    <section className="border-t border-[#111111]/10">
+      {pillars.map((pillar, idx) => (
+        <PillarBlock key={pillar.id} pillar={pillar} index={idx} />
+      ))}
+    </section>
+  );
+}
+
+function PillarBlock({
+  pillar,
+  index,
+}: {
+  pillar: (typeof pillars)[number];
+  index: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const Icon = pillar.icon;
+
+  return (
+    <div
+      ref={ref}
+      className={`py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10`}
+    >
+      <div className="w-full max-w-[1400px] mx-auto grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        {/* Left: heading + subtext + description */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="lg:col-span-5"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full border border-[#111111]/10 flex items-center justify-center">
+              <Icon className="w-4 h-4 text-[#FF4D00]" strokeWidth={1.5} />
+            </div>
+            <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#111111]/40">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+          </div>
+
+          <h2 className="text-[36px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-4">
+            {pillar.heading}
+          </h2>
+
+          <p className="text-[16px] md:text-[18px] leading-[1.6] text-[#111111]/80 font-medium max-w-md mb-4">
+            {pillar.subtext}
+          </p>
+
+          <p className="text-[14px] md:text-[15px] leading-[1.7] text-[#111111]/50 font-medium max-w-md mb-8">
+            {pillar.description}
+          </p>
+
+          <Link
+            to={pillar.link}
+            className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.12em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
+          >
+            Explore {pillar.heading}
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </motion.div>
+
+        {/* Right: 2 image cards side by side */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="lg:col-span-7 grid grid-cols-2 gap-4"
+        >
+          {pillar.images.map((img, i) => (
+            <div
+              key={i}
+              className="aspect-[3/4] overflow-hidden group"
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              />
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOCATIONS SECTION — Dotted world map with city labels (NEWLAB style)
+   ══════════════════════════════════════════════════════════════════════════ */
+function LocationsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10 bg-white"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        {/* Header — centered, NEWLAB style */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-16 md:mb-24"
+        >
+          <h2 className="text-[36px] sm:text-[56px] md:text-[80px] lg:text-[110px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-4 uppercase">
+            The Route
+          </h2>
+          <p className="text-[14px] md:text-[16px] text-[#111111]/40 font-medium tracking-[0.1em] uppercase max-w-2xl mx-auto">
+            Global hubs in geographies prioritizing reindustrialization
+          </p>
+        </motion.div>
+
+        {/* Dotted World Map */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="relative w-full mb-16 md:mb-24"
+        >
+          <DottedWorldMap />
+        </motion.div>
+
+        {/* Accordion list of route regions */}
+        <div className="max-w-4xl mx-auto">
+          {routeRegions.map((region, i) => (
+            <LocationAccordion key={i} region={region} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Dotted World Map — Real map image with dot overlay ── */
+function DottedWorldMap() {
+  const [hoveredHub, setHoveredHub] = useState<string | null>(null);
+
+  // Convert lat/lng to percentage positions (Equirectangular)
+  const toPercent = (lat: number, lng: number) => {
+    const left = ((lng + 180) / 360) * 100;
+    const top = ((90 - lat) / 180) * 100;
+    return { left, top };
+  };
+
+  return (
+    <div className="relative w-full" style={{ aspectRatio: "2/1" }}>
+      {/* Subtle background dot grid (full area) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "radial-gradient(circle, #111111 0.5px, transparent 0.5px)",
+          backgroundSize: "10px 10px",
+          opacity: 0.06,
+        }}
+      />
+
+      {/* World map — land masses shown as dots via the image */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          className="relative w-full h-full"
+          style={{
+            backgroundImage: "url(/world-map.png)",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            filter: "grayscale(100%) brightness(0) contrast(1.5)",
+            opacity: 0.14,
+          }}
+        />
+      </div>
+
+      {/* Dot pattern overlay masked by the world map shape */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 1000 500"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            <pattern id="mapDots" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+              <circle cx="4" cy="4" r="1" fill="#111111" opacity="0.2" />
+            </pattern>
+            {/* Use the world map image as a mask */}
+            <mask id="landMask">
+              <image
+                href="/world-map.png"
+                x="0"
+                y="0"
+                width="1000"
+                height="500"
+                preserveAspectRatio="xMidYMid meet"
+              />
+            </mask>
+          </defs>
+          {/* Dots only appear where the land mask is */}
+          <rect x="0" y="0" width="1000" height="500" fill="url(#mapDots)" mask="url(#landMask)" />
+        </svg>
+      </div>
+
+      {/* Hub markers positioned absolutely */}
+      {mapHubs.map((hub) => {
+        const pos = toPercent(hub.lat, hub.lng);
+        const isHovered = hoveredHub === hub.name;
+        return (
+          <div
+            key={hub.name}
+            className="absolute cursor-pointer group"
+            style={{
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
+              transform: "translate(-50%, -50%)",
+            }}
+            onMouseEnter={() => setHoveredHub(hub.name)}
+            onMouseLeave={() => setHoveredHub(null)}
+          >
+            {/* Blue dot marker */}
+            <div
+              className={`rounded-full transition-all duration-300 ${
+                isHovered ? "w-3.5 h-3.5 bg-[#FF4D00]" : "w-2.5 h-2.5 bg-[#2563EB]"
+              }`}
+              style={{ boxShadow: isHovered ? "0 0 10px rgba(255,77,0,0.6)" : "0 0 6px rgba(37,99,235,0.4)" }}
+            />
+            {/* Pulse ring */}
+            <div
+              className={`absolute inset-0 rounded-full animate-ping opacity-25 ${
+                isHovered ? "bg-[#FF4D00]" : "bg-[#2563EB]"
+              }`}
+              style={{ animationDuration: "2s" }}
+            />
+            {/* City label — black rectangle with white text */}
+            <div
+              className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 whitespace-nowrap text-[9px] md:text-[11px] font-mono font-bold tracking-wider uppercase text-white transition-colors duration-300 ${
+                isHovered ? "bg-[#FF4D00]" : "bg-[#111111]"
+              }`}
+            >
+              {hub.name}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ── Location Accordion ── */
+function LocationAccordion({
+  region,
+  index,
+}: {
+  region: (typeof routeRegions)[number];
+  index: number;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      className="border-t border-[#111111]/10"
+    >
+      <button
+        suppressHydrationWarning
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between py-5 md:py-6 text-left group"
+      >
+        <div className="flex items-center gap-4">
+          <MapPin className="w-4 h-4 text-[#FF4D00]/60 group-hover:text-[#FF4D00] transition-colors" />
+          <span className="text-[18px] md:text-[22px] font-display font-medium tracking-tight">
+            {region.name}
+          </span>
+        </div>
+        <div className="text-[#111111]/30 group-hover:text-[#111111]/60 transition-colors">
+          {isOpen ? (
+            <ChevronUp className="w-5 h-5" />
+          ) : (
+            <ChevronDown className="w-5 h-5" />
+          )}
+        </div>
+      </button>
+      <motion.div
+        initial={false}
+        animate={{
+          height: isOpen ? "auto" : 0,
+          opacity: isOpen ? 1 : 0,
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="overflow-hidden"
+      >
+        <p className="pb-5 md:pb-6 pl-8 text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.6]">
+          {region.description}
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NEWSLETTER SECTION — Two-column: heading + form
+   ══════════════════════════════════════════════════════════════════════════ */
+function NewsletterSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="border-t border-[#111111]/10"
+    >
+      <div className="py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-white">
+        <div className="w-full max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20">
+          {/* Left: Heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <h2 className="text-[28px] sm:text-[40px] md:text-[56px] font-display font-medium tracking-[-0.03em] leading-[0.95] uppercase mb-6">
+              Subscribe to the
+              <br />
+              xCelero Letter
+            </h2>
+            <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.6] max-w-md">
+              Quarterly dispatches on critical technology commercialization,
+              Route Deal insights, and venture infrastructure across the Global South.
+            </p>
+          </motion.div>
+
+          {/* Right: Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="flex flex-col justify-center"
+          >
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+              className="space-y-6"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    suppressHydrationWarning
+                    type="text"
+                    required
+                    className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
+                    placeholder="First name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    suppressHydrationWarning
+                    type="text"
+                    required
+                    className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
+                    placeholder="Last name"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
+                  Email *
+                </label>
+                <input
+                  suppressHydrationWarning
+                  type="email"
+                  required
+                  className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
+                  placeholder="you@email.com"
+                />
+              </div>
+              <p className="text-[11px] text-[#111111]/30 leading-[1.5]">
+                By subscribing you agree to our{" "}
+                <span className="text-[#2563EB] underline cursor-pointer">Privacy Policy</span>.
+                We respect your data. Unsubscribe anytime.
+              </p>
+              <button
+                suppressHydrationWarning
+                type="submit"
+                className="inline-flex items-center gap-3 px-10 py-4 bg-[#111111] text-white text-[12px] uppercase tracking-[0.12em] font-bold hover:bg-[#FF4D00] transition-colors duration-300"
+              >
+                Submit
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
