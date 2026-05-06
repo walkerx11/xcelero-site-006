@@ -160,7 +160,7 @@ function Footer() {
           </div>
         </div>
         
-        <div className="pt-8 border-t border-white/10 text-[10px] text-white/30 uppercase tracking-widest font-mono">
+        <div className="pt-8 border-t border-white/10 text-[10px] text-white/30 uppercase tracking-widest font-mono" suppressHydrationWarning>
           © {new Date().getFullYear()} xCelero Labs.
         </div>
       </div>

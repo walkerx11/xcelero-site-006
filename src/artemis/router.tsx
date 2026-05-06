@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
+import React, { createContext, useContext, useCallback, useEffect } from "react";
 
 interface RouterContextType {
   path: string;
@@ -18,26 +18,25 @@ export function useRouter() {
   return useContext(RouterContext);
 }
 
-function getInitialPath(): string {
-  if (typeof window !== "undefined") {
-    return window.location.hash.slice(1) || "/";
-  }
+function subscribeToHash(callback: () => void) {
+  window.addEventListener("hashchange", callback);
+  return () => window.removeEventListener("hashchange", callback);
+}
+
+function getHashSnapshot() {
+  return window.location.hash.slice(1) || "/";
+}
+
+function getServerSnapshot() {
   return "/";
 }
 
 export function RouterProvider({ children }: { children: React.ReactNode }) {
-  const [path, setPath] = useState(getInitialPath);
+  const path = React.useSyncExternalStore(subscribeToHash, getHashSnapshot, getServerSnapshot);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const newHash = window.location.hash.slice(1) || "/";
-      setPath(newHash);
-      window.scrollTo(0, 0);
-    };
-
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+    window.scrollTo(0, 0);
+  }, [path]);
 
   const navigate = useCallback((newPath: string) => {
     window.location.hash = newPath;
