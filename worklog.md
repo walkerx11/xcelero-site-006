@@ -23,3 +23,24 @@ Stage Summary:
 - All pages accessible via hash-based routing (e.g., #/manifesto, #/approach, #/programs)
 - No lint errors, dev server running successfully on port 3000
 - Key architecture: Single-page app with custom hash router, no Next.js routing conflicts
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix hydration and lint issues, stabilize dev server
+
+Work Log:
+- Pulled latest changes from GitHub repo (Layout.tsx, router.tsx updates)
+- Synced updated files to project directory
+- Fixed lint error in router.tsx: replaced useState+useEffect hash sync with React.useSyncExternalStore for proper SSR hydration
+- Removed unused imports (useState, useRef) from router.tsx
+- Fixed dev script in package.json: removed `2>&1 | tee dev.log` pipeline that caused process to crash
+- Resolved persistent dev server crashes: used start-stop-daemon to create proper daemon process
+- Verified lint passes clean
+- Verified dev server stable and responding with 72KB+ HTML content
+
+Stage Summary:
+- Router hydration fix: useSyncExternalStore instead of setState in effect
+- Dev server stabilized using start-stop-daemon for proper daemonization
+- Server running on port 3000, all pages accessible
+- Lint: 0 errors, 0 warnings
