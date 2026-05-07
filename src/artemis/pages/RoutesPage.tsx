@@ -64,68 +64,55 @@ export function RoutesPage() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO SECTION — Centered, dramatic
+   HERO SECTION — Editorial, centered, clean
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section className="relative bg-[#111111] text-white pt-28 pb-28 md:pt-40 md:pb-36 px-6 md:px-12 lg:px-20 overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0 pointer-events-none">
-        <img
-          src="/routes/world-map-hero.png"
-          alt=""
-          className="w-full h-full object-cover opacity-[0.08]"
-        />
-      </div>
-      {/* Subtle orange glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FF4D00] opacity-[0.06] rounded-full blur-[150px]" />
-      </div>
-
-      <div ref={ref} className="w-full max-w-5xl mx-auto relative z-10 text-center">
+    <section className="relative bg-white text-[#111111] pt-32 pb-20 md:pt-44 md:pb-28 px-6 md:px-12 lg:px-20">
+      <div ref={ref} className="w-full max-w-4xl mx-auto text-center">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col items-center"
         >
-          {/* Orange accent line */}
-          <motion.div
-            initial={{ width: 0 }}
-            animate={isInView ? { width: 48 } : {}}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="h-[3px] bg-[#FF4D00] mb-10 md:mb-14"
-          />
+          {/* Small label */}
+          <span className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-[#FF4D00] mb-8 md:mb-12">
+            The Routes
+          </span>
 
-          <h1 className="text-[64px] sm:text-[88px] md:text-[110px] lg:text-[140px] leading-[0.85] font-display font-medium tracking-[-0.03em] mb-8 uppercase">
-            The Routes.
+          <h1 className="text-[36px] sm:text-[48px] md:text-[60px] lg:text-[72px] leading-[1.05] font-display font-medium tracking-[-0.02em] mb-8 md:mb-10">
+            The map of the world is a{" "}
+            <span className="italic font-serif text-[#FF4D00]">lie</span>.
           </h1>
 
-          <p className="text-xl md:text-2xl lg:text-[28px] leading-relaxed text-white/40 font-medium max-w-xl mb-16 md:mb-20">
-            The Circulatory System of the World.
+          <p className="text-lg md:text-xl lg:text-[22px] leading-[1.6] text-[#111111]/50 font-medium max-w-2xl mb-14 md:mb-20">
+            The real world doesn&apos;t operate in countries. It operates in Routes.
+            Six legs. 190+ hubs. 35+ countries. One circulatory system for the
+            movement of goods, capital, data, and people.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+          <div className="flex flex-wrap justify-center gap-x-10 gap-y-6 md:gap-x-16">
             {[
               { value: "6", label: "Legs" },
-              { value: "190", label: "Hub Cities" },
+              { value: "190+", label: "Hub Cities" },
               { value: "35+", label: "Countries" },
               { value: "100", label: "Xcitizens/yr" },
             ].map((m, i) => (
               <motion.div
                 key={m.label}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.5 + i * 0.1, ease: "easeOut" }}
-                className="px-6 py-4 md:px-8 md:py-5 border border-white/15 text-center min-w-[100px]"
+                transition={{ duration: 0.5, delay: 0.4 + i * 0.08, ease: "easeOut" }}
+                className="text-center"
               >
-                <div className="text-2xl md:text-3xl font-display font-medium text-[#FF4D00]">
+                <div className="text-[32px] md:text-[40px] font-display font-medium tracking-[-0.02em] text-[#111111]">
                   {m.value}
                 </div>
-                <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-white/35 mt-1.5">
+                <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/35 mt-1">
                   {m.label}
                 </div>
               </motion.div>
@@ -138,7 +125,7 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PREAMBLE SECTION
+   PREAMBLE SECTION — Continuation of the hero thesis
    ══════════════════════════════════════════════════════════════════════════ */
 function PreambleSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -147,48 +134,36 @@ function PreambleSection() {
   return (
     <section
       ref={ref}
-      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10"
+      className="py-20 md:py-28 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10"
     >
-      <div className="w-full max-w-4xl mx-auto">
+      <div className="w-full max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-8 block">
-            The Preamble
-          </span>
-
-          <h2 className="text-[32px] sm:text-[44px] md:text-[56px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.95] mb-12">
-            The map of the world is a{" "}
-            <span className="text-[#FF4D00]">lie</span>.
-          </h2>
-
           <div className="space-y-8 text-lg md:text-xl leading-[1.8] text-[#111111]/60 font-medium">
             <p>
               It&apos;s a diagram of political cages. Lines drawn by men who never
-              walked the terrain. The real world doesn&apos;t operate in countries.{" "}
-              <span className="text-[#111111] font-semibold">
-                It operates in Routes.
-              </span>
+              walked the terrain.
             </p>
             <p>
               The Hanseatic League understood this in 1356. They didn&apos;t build a
               nation — they built a network of 190 cities connected by shared
               protocols for trade, law, and mutual defense. The League lasted 300
               years and made its member cities the wealthiest in Europe. Not
-              through conquest, but through <span>flow</span>.
+              through conquest, but through <span className="text-[#111111] font-semibold">flow</span>.
             </p>
             <p>
               The Routes are the Hanseatic League, rebuilt for the 21st century.
-              Six legs. 190+ hubs. 63 countries. One circulatory system for the
+              Six legs. 190+ hubs. {routeMetrics.countries} countries. One circulatory system for the
               movement of goods, capital, data, and people across the geographies
               that will define the next century.
             </p>
           </div>
 
-          <div className="mt-16 pt-16 border-t border-[#111111]/10">
-            <p className="text-[22px] sm:text-[28px] md:text-[32px] font-display font-medium tracking-[-0.02em] leading-[1.2] text-[#111111]">
+          <div className="mt-14 pt-14 border-t border-[#111111]/10">
+            <p className="text-[22px] sm:text-[26px] md:text-[30px] font-display font-medium tracking-[-0.02em] leading-[1.25] text-[#111111]">
               You can&apos;t change the world if you haven&apos;t seen it.{" "}
               <span className="text-[#FF4D00]">
                 {routeMetrics.countries} countries.
