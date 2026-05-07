@@ -16,6 +16,8 @@ const staticPages = [
   { id: "programs", title: "Programs", path: "/programs", type: "Page", desc: "High-intensity pathways for civilizational architects and founders." },
   { id: "insights", title: "Insights", path: "/insights", type: "Page", desc: "News, dispatches, and perspectives from the frontier of civilizational technology." },
   { id: "ventures", title: "Our Ventures", path: "/ventures", type: "Page", desc: "We back builders tackling civilization-level challenges." },
+  { id: "careers", title: "Careers", path: "/careers", type: "Page", desc: "Join the ventures shaping Africa's infrastructure. Open roles across portfolio companies." },
+  { id: "join", title: "Join xCelero Labs", path: "/join", type: "Page", desc: "Apply to join the xCelero network as a founder, investor, partner, or talent." },
 ];
 
 export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {

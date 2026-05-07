@@ -15,6 +15,7 @@ import { Insights } from "@/artemis/pages/Insights";
 import { InsightDetail } from "@/artemis/pages/InsightDetail";
 import { Capital } from "@/artemis/pages/Capital";
 import { JoinPage } from "@/artemis/pages/JoinPage";
+import { CareersPage } from "@/artemis/pages/CareersPage";
 
 function Router() {
   const { path } = useRouter();
@@ -34,6 +35,7 @@ function Router() {
     if (path.startsWith("/insights/")) return <InsightDetail />;
     if (path === "/capital") return <Capital />;
     if (path === "/join") return <JoinPage />;
+    if (path === "/careers") return <CareersPage />;
     
     // 404 fallback
     return (

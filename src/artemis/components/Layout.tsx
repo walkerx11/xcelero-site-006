@@ -57,6 +57,7 @@ function Nav() {
               { name: "programs", path: "/programs" },
               { name: "ventures", path: "/ventures" },
               { name: "capital", path: "/capital" },
+              { name: "careers", path: "/careers" },
               { name: "join", path: "/join" },
               { name: "insights", path: "/insights" }
             ].map((item) => (
@@ -134,6 +135,7 @@ function Footer() {
             <div className="flex flex-col gap-4">
               <span className="text-[10px] font-bold tracking-widest uppercase text-white/30">xCelero Labs</span>
               <Link to="/ventures" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Companies</Link>
+              <Link to="/careers" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Careers</Link>
               <Link to="/approach" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Who we back</Link>
               <Link to="/insights" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">News</Link>
             </div>
