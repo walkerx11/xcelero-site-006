@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { Plus, Minus, ArrowRight, ChevronDown } from "lucide-react";
+import { Plus, Minus, ArrowRight, ChevronDown, Building2, Rocket, Coins } from "lucide-react";
 import { Link } from "@/artemis/router";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
 
@@ -13,8 +13,49 @@ const heroMetrics = [
   { value: "$1-7M", label: "Initial Investment Range" },
 ];
 
-/* ── Data ── */
+/* ── The 3 Engines ── */
+const engines = [
+  {
+    num: "01",
+    title: "Infrastructure",
+    icon: Building2,
+    desc: "A distributed constellation of 190 XHansa Hubs spanning every African nation and 19 global cities. M1 Cores, XEmbassies, and living labs for real-world testing — the physical and digital operating system for civilization-building.",
+    link: "/platform",
+  },
+  {
+    num: "02",
+    title: "Projects",
+    icon: Rocket,
+    desc: "Convening industry, government, and entrepreneurs to run real-world pilots. Structured commercialization programs — from the Quest Fellowship to industry sprints — transforming ideas into tangible change at civilizational scale.",
+    link: "/programs",
+  },
+  {
+    num: "03",
+    title: "Capital",
+    icon: Coins,
+    desc: "Mobilizing capital through dedicated funds and SPVs. Blending grants, risk capital, and project finance to ensure transformative tech scales. Solidarity pricing so founders in early-stage markets access the same quality at a fraction of Silicon Valley costs.",
+    link: "/capital",
+  },
+];
 
+/* ── The 13 Critical Domains ── */
+const criticalDomains = [
+  { name: "Energy (Generation & Transmission)", desc: "Microgrids, non-lithium storage, low-temp geothermal, small modular nuclear / fusion pathways." },
+  { name: "Water & Aquatic Systems", desc: "Distributed desalination, atmospheric H₂O harvesting, aquaculture optimization, open-source water grids." },
+  { name: "Food & Algorithmic Agriculture", desc: "Climate resilient crop genetics, vertical protein farming, algorithmic harvest optimization." },
+  { name: "Materials & Computation", desc: "Ethical refining architectures, bio-plastics, mycelium composites, semi-conductor material sovereignty." },
+  { name: "Mobility & Logistics", desc: "Electric mass transit retrofits, heavy-lift drone logistics for remote delivery, autonomous port management." },
+  { name: "Cognitive Systems & Data Sovereignty", desc: "Edge AI, decentralized identity, indigenous language LLMs, private sovereign clouds." },
+  { name: "Built Environments & Circularity", desc: "Algorithmic urban planning, cooling architectures, waste-to-energy syndicates." },
+  { name: "Earth Systems & Biometrics", desc: "Real-time planetary monitoring, early warning sensors, programmable conservation efforts." },
+  { name: "Space & Deep Sea Tech", desc: "Micro-satellite constellations for climate tracking, deep sea non-extractive resource mapping." },
+  { name: "Industrial Biotech", desc: "Programmable biology, synthetic enzymes, and microbial factories." },
+  { name: "Hypersonics", desc: "Next-generation high-speed atmospheric transit." },
+  { name: "Quantum Technologies", desc: "Quantum sensing and unbreakable sovereign encryption architectures." },
+  { name: "Semiconductors", desc: "Sovereign fabrication capabilities and novel chip design." },
+];
+
+/* ── Traits ── */
 const traits = [
   {
     title: "Believe in the art of the pick",
@@ -79,8 +120,10 @@ export function Approach() {
   return (
     <div className="bg-white text-[#111111]">
       <HeroSection />
+      <ThreeEnginesSection />
       <WhoWeBackSection />
       <HowWeWorkSection />
+      <CriticalDomainsSection />
       <FaqSection />
       <ReviewSection title="Hard-won wisdom from xCelero founders:" />
     </div>
@@ -118,7 +161,7 @@ function HeroSection() {
           </h1>
 
           <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#111111]/60 font-medium max-w-lg">
-            We back founders who go unreasonably deep to get their beginnings right.
+            We back founders who go unreasonably deep to get their beginnings right — and we provide the infrastructure, projects, and capital to make it work.
           </p>
         </motion.div>
 
@@ -151,7 +194,80 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   WHO WE BACK — Split Screen Layout (NEW)
+   3 ENGINES — Moved from Infrastructure page
+   ══════════════════════════════════════════════════════════════════════════ */
+function ThreeEnginesSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-3xl mb-16 md:mb-24"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
+            The 3 Engines
+          </span>
+          <h2 className="text-[32px] md:text-[48px] lg:text-[60px] font-display font-medium tracking-tight leading-[1.05] mb-6">
+            Three engines, <span className="text-[#111111]/40">one machine.</span>
+          </h2>
+          <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
+            xCelero operates through three integrated engines — Infrastructure, Projects, and Capital — each reinforcing the others to unblock commercialization at civilizational scale.
+          </p>
+        </motion.div>
+
+        {/* Engine cards */}
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          {engines.map((engine, i) => {
+            const Icon = engine.icon;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                className="group"
+              >
+                <div className="border border-[#111111]/10 bg-white p-8 md:p-10 hover:border-[#FF4D00] transition-all duration-300 min-h-[340px] flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-12 h-12 border border-[#111111]/10 flex items-center justify-center group-hover:border-[#FF4D00] group-hover:bg-[#FF4D00]/5 transition-all">
+                        <Icon className="w-5 h-5 text-[#FF4D00]" strokeWidth={1.5} />
+                      </div>
+                      <span className="text-[11px] font-mono font-bold text-[#FF4D00]">Engine {engine.num}</span>
+                    </div>
+                    <h3 className="text-[24px] md:text-[28px] font-display font-medium tracking-tight mb-4">{engine.title}</h3>
+                    <p className="text-[14px] md:text-[15px] text-[#111111]/55 font-medium leading-[1.7]">{engine.desc}</p>
+                  </div>
+                  <div className="mt-8 pt-6 border-t border-[#111111]/5">
+                    <Link
+                      to={engine.link}
+                      className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#FF4D00] hover:text-[#111111] transition-colors group/link"
+                    >
+                      Explore {engine.title}
+                      <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   WHO WE BACK — Split Screen Layout
    ══════════════════════════════════════════════════════════════════════════ */
 function WhoWeBackSection() {
   const [activeTrait, setActiveTrait] = useState(0);
@@ -282,7 +398,7 @@ function WhoWeBackSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HOW WE WORK — Card Carousel Layout (NEW)
+   HOW WE WORK — Card Carousel Layout
    ══════════════════════════════════════════════════════════════════════════ */
 function HowWeWorkSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -399,6 +515,58 @@ function HowWeWorkCard({ step, index }: { step: typeof howWeWork[number]; index:
         </div>
       </div>
     </motion.div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13 CRITICAL DOMAINS — Moved from Infrastructure page
+   ══════════════════════════════════════════════════════════════════════════ */
+function CriticalDomainsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-3xl mb-16 md:mb-24"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
+            The 13 Critical Domains
+          </span>
+          <h2 className="text-[32px] md:text-[48px] lg:text-[60px] font-display font-medium tracking-tight leading-[1.05] mb-6">
+            Where we focus <span className="text-[#111111]/40">our conviction.</span>
+          </h2>
+          <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
+            These are the domains where sovereignty is technological — the ability to generate electricity, secure food, purify water, and defend networks on one&apos;s own terms.
+          </p>
+        </motion.div>
+
+        {/* Domain grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+          {criticalDomains.map((field, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.05, ease: "easeOut" }}
+              className="border-t border-[#111111]/10 pt-6 group"
+            >
+              <div className="text-[11px] font-mono font-bold text-[#FF4D00] mb-4">{(i + 1).toString().padStart(2, '0')}</div>
+              <h3 className="text-[17px] md:text-[18px] font-bold tracking-tight mb-3 text-[#111111] group-hover:text-[#FF4D00] transition-colors">{field.name}</h3>
+              <p className="text-[13px] md:text-[14px] leading-[1.6] text-[#111111]/55 font-medium">{field.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
