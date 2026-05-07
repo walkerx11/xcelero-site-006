@@ -64,14 +64,14 @@ export function RoutesPage() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO SECTION
+   HERO SECTION — Centered, dramatic
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section className="relative bg-[#111111] text-white pt-24 pb-24 md:pt-32 md:pb-32 px-6 md:px-12 lg:px-20 overflow-hidden">
+    <section className="relative bg-[#111111] text-white pt-28 pb-28 md:pt-40 md:pb-36 px-6 md:px-12 lg:px-20 overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0 pointer-events-none">
         <img
@@ -85,39 +85,50 @@ function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FF4D00] opacity-[0.06] rounded-full blur-[150px]" />
       </div>
 
-      <div ref={ref} className="w-full max-w-7xl mx-auto relative z-10">
+      <div ref={ref} className="w-full max-w-5xl mx-auto relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col items-center"
         >
-          <div className="w-3 h-3 bg-[#FF4D00] mb-10" />
-          <h1 className="text-[64px] sm:text-[80px] md:text-[100px] lg:text-[130px] leading-[0.85] font-display font-medium tracking-tight mb-8 uppercase">
-            The<br />
-            Routes.
+          {/* Orange accent line */}
+          <motion.div
+            initial={{ width: 0 }}
+            animate={isInView ? { width: 48 } : {}}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="h-[3px] bg-[#FF4D00] mb-10 md:mb-14"
+          />
+
+          <h1 className="text-[64px] sm:text-[88px] md:text-[110px] lg:text-[140px] leading-[0.85] font-display font-medium tracking-[-0.03em] mb-8 uppercase">
+            The Routes.
           </h1>
-          <p className="text-xl md:text-2xl lg:text-3xl leading-relaxed text-white/40 font-medium max-w-2xl mb-16">
+
+          <p className="text-xl md:text-2xl lg:text-[28px] leading-relaxed text-white/40 font-medium max-w-xl mb-16 md:mb-20">
             The Circulatory System of the World.
           </p>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {[
               { value: "6", label: "Legs" },
               { value: "190", label: "Hub Cities" },
               { value: "35+", label: "Countries" },
               { value: "100", label: "Xcitizens/yr" },
-            ].map((m) => (
-              <div
+            ].map((m, i) => (
+              <motion.div
                 key={m.label}
-                className="px-6 py-3 border border-white/20 text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.5 + i * 0.1, ease: "easeOut" }}
+                className="px-6 py-4 md:px-8 md:py-5 border border-white/15 text-center min-w-[100px]"
               >
                 <div className="text-2xl md:text-3xl font-display font-medium text-[#FF4D00]">
                   {m.value}
                 </div>
-                <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-white/40 mt-1">
+                <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-white/35 mt-1.5">
                   {m.label}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
