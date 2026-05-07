@@ -467,11 +467,11 @@ export function CareersPage() {
               xCelero Careers
             </p>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-medium tracking-tight leading-[0.95] mb-4">
-              Build the future<br />
-              <span className="text-[#FF4D00]">of Africa.</span>
+              A leap in<br />
+              <span className="text-[#FF4D00]">human progress.</span>
             </h1>
             <p className="text-white/50 text-[15px] max-w-xl leading-relaxed mt-6">
-              Join the ventures shaping the continent&apos;s infrastructure — from energy and housing to AI and space. Open roles across {careersData.length} portfolio companies.
+              For humanity. A new epoch of civilization — built by the ventures redefining energy, housing, AI, space, and every system that matters. Open roles across {careersData.length} portfolio companies.
             </p>
 
             {/* Nav tabs */}
@@ -691,10 +691,10 @@ export function CareersPage() {
               Don&apos;t see your role?
             </p>
             <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight mb-6">
-              Build it from scratch.
+              Forge the next epoch.
             </h2>
             <p className="text-white/40 text-[14px] max-w-lg mx-auto leading-relaxed mb-10">
-              xCelero is always looking for extraordinary builders. If you don&apos;t see a fit, submit your profile and we&apos;ll reach out when the right venture launches.
+              xCelero is always looking for extraordinary builders who work for humanity. If you don&apos;t see a fit, submit your profile and we&apos;ll reach out when the right venture launches.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
