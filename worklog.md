@@ -32,3 +32,28 @@ Stage Summary:
 - Modeled after Bessemer Ventures jobs.bvp.com blueprint
 - 10 portfolio companies with 31 job listings across diverse verticals
 - Full search, filter, and grouped company results functionality
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Redesign Routes page hero header — centered editorial style
+
+Work Log:
+- Analyzed user screenshot via VLM — identified clean editorial style (light bg, centered typography, italic serif accent on key phrase, minimal stats)
+- Replaced dark background hero with clean white editorial layout
+- Centered all content: title, subtitle, stats
+- Changed title from giant uppercase "THE ROUTES." to editorial "The map of the world is a lie." with italic serif + orange accent on "lie"
+- Removed boxed stat badges → clean inline stats (numbers + labels, no borders)
+- Added small orange mono label at top
+- Updated Preamble section to remove redundant headline (now lives in hero)
+- All lint checks pass
+
+Stage Summary:
+- Routes hero redesigned to editorial centered style
+- Clean white background, centered typography, serif italic accent
+
+---
+## ⚡ AUTO-SAVE RULE
+After every completed task, always run:
+  git add -A && git commit -m "<task description>" && git push origin main
+GitHub repo: https://github.com/walkerx11/xcelero-site-006
