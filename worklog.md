@@ -688,3 +688,47 @@ Stage Summary:
 - Roles organized into 5 groups matching Newlab/YC blended approach
 - Manifesto removed from timeline thread, exists only as horizontal cards below
 - Clean 3-section flow: Timeline → How We Work → What We Believe
+
+---
+Task ID: 7
+Agent: Main Agent
+Task: Restore team card layout with updated role titles (user clarified they wanted titles changed, not layout redesigned)
+
+Work Log:
+- User clarified: keep the previous card layout (photos, bios, filter tabs) and just update the role titles
+- Updated team.ts with new role titles from user's list (Newlab/YC blend):
+  - Amina Osei-Mensah: Managing Partner (was CEO & Co-Founder)
+  - Kwame Asante: General Partner (was Chief Strategy Officer)
+  - Ngozi Eze: General Partner (was Partner, Ventures & Commercialization)
+  - Camilo Adeyemi: Partner Emeritus (was Partner, Commercialization)
+  - David Kamau: Head of Product (was Chief Product Officer)
+  - Fatima Al-Rashid: Head of Programs (was Chief Operating Officer)
+  - Liya Tadesse: Product Engineer (was Lead Engineer, Product Realization)
+  - Isata Bangura: Global Head of Business (was Partner, Strategic Growth)
+  - Adaeze Nwosu: Membership & Community (was Head of Community & Membership)
+  - Samuel Mengistu: Fund Controller (was Partner, Capital & Finance)
+  - Emeka Obi: Finance (was Head of Platform)
+  - Blessing Okonkwo: Legal Analyst (was Infrastructure & Operations Manager)
+  - Thandiwe Moyo: Writer & Researcher (was Head of Venture Building)
+  - Yusuf Hassan: Associates (was Accelerator Lead)
+  - Marie-Claire Uwimana: Associates (was Fellowship Director)
+  - Dr. Adebayo Ogunlesi: Partner Emeritus (was Senior Advisor, Infrastructure & Capital)
+  - Dr. Wangari Mwangi: Associates (was Senior Advisor, Policy & Government)
+- Updated categories in team.ts from 5 old categories to 5 new categories:
+  - investment (was leadership + partners)
+  - product-programs (was venture-building + platform partial)
+  - business-community (new)
+  - finance-operations (was operations + platform partial)
+  - research (new, for Writer & Researcher + Associates)
+- Restored About.tsx with full card layout: photos, bios, expandable cards, filter tabs
+- Section header renamed to "How we work" with "Not a hierarchy. An operating system." tagline
+- Updated Team.tsx categories to match new data structure
+- All lint checks pass clean
+- Pushed to GitHub
+
+Stage Summary:
+- Team card layout restored with photos, bios, locations, expandable bios, filter tabs
+- All 17 role titles updated to Newlab/YC blend from user's title list
+- Section renamed "How we work" instead of "Who we are"
+- Categories updated across both About.tsx and Team.tsx
+- Manifesto remains as horizontal cards below team section
