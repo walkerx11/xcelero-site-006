@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Link } from "@/artemis/router";
 import {
   ArrowRight,
+  MapPin,
+  ChevronDown,
   Flame,
   Wheat,
   Anchor,
@@ -14,12 +16,8 @@ import {
   Globe,
   Lightbulb,
   Users,
-  Briefcase,
-  Cpu,
-  TrendingUp,
-  Shield,
-  PenTool,
 } from "lucide-react";
+import { teamData, TeamMember } from "@/artemis/data/team";
 
 /* ── Timeline Data ── */
 const timelineEras = [
@@ -128,56 +126,14 @@ const manifestoPoints = [
   },
 ];
 
-/* ── How We Work: Role Groups (Newlab + YC blend) ── */
-const roleGroups = [
-  {
-    label: "Investment & Governance",
-    icon: Briefcase,
-    roles: [
-      "Managing Partner(s)",
-      "General Partner(s)",
-      "Partner Emeritus",
-      "Associates",
-    ],
-    description: "Capital allocation, deal flow, and portfolio governance across the Route.",
-  },
-  {
-    label: "Product & Programs",
-    icon: Cpu,
-    roles: [
-      "Head of Product",
-      "Head of Programs",
-      "Product Engineer",
-    ],
-    description: "Building the platform, designing the programs, shipping the tools founders need.",
-  },
-  {
-    label: "Business & Community",
-    icon: TrendingUp,
-    roles: [
-      "Global Head of Business",
-      "Membership & Community",
-    ],
-    description: "Commercial partnerships, member experience, and the XCitizen network across 190 hubs.",
-  },
-  {
-    label: "Capital & Operations",
-    icon: Shield,
-    roles: [
-      "Fund Controller",
-      "Finance",
-      "Legal Analyst",
-    ],
-    description: "Fund administration, compliance, financial controls, and legal architecture.",
-  },
-  {
-    label: "Research & Insight",
-    icon: PenTool,
-    roles: [
-      "Writer & Researcher",
-    ],
-    description: "Thought leadership, thesis development, and the intellectual infrastructure of the platform.",
-  },
+/* ── Team categories ── */
+const categories = [
+  { key: "all", label: "All" },
+  { key: "investment", label: "Investment" },
+  { key: "product-programs", label: "Product & Programs" },
+  { key: "business-community", label: "Business & Community" },
+  { key: "finance-operations", label: "Finance & Operations" },
+  { key: "research", label: "Research & Associates" },
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -329,11 +285,18 @@ function TimelineEntry({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HOW WE WORK — Functional role groups (Newlab + YC blend)
+   HOW WE WORK — Card grid with photos, bios, filter tabs
    ══════════════════════════════════════════════════════════════════════════ */
 function HowWeWorkSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const filteredMembers =
+    activeCategory === "all"
+      ? teamData
+      : teamData.filter((m) => m.category === activeCategory);
 
   return (
     <section
@@ -346,7 +309,7 @@ function HowWeWorkSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="mb-12 md:mb-16"
+          className="mb-10 md:mb-14"
         >
           <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-4 block">
             How we work
@@ -357,78 +320,154 @@ function HowWeWorkSection() {
           </h2>
           <p className="text-[15px] md:text-[17px] text-[#111111]/40 font-medium leading-[1.6] max-w-xl">
             Part venture studio, part accelerator, part infrastructure platform.
-            Every function exists to compound founder outcomes. Here is how the
-            roles are structured.
+            Every function exists to compound founder outcomes.
           </p>
         </motion.div>
 
-        {/* Role groups grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {roleGroups.map((group, i) => {
-            const Icon = group.icon;
-            return (
-              <motion.div
-                key={group.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
-                className="border border-[#111111]/8 p-6 md:p-7 bg-white group hover:border-[#FF4D00]/20 transition-colors"
-              >
-                {/* Group icon + label */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 flex items-center justify-center bg-[#FF4D00]/8 text-[#FF4D00] group-hover:bg-[#FF4D00] group-hover:text-white transition-colors">
-                    <Icon className="w-4 h-4" strokeWidth={1.5} />
-                  </div>
-                  <h3 className="text-[14px] md:text-[15px] font-display font-medium tracking-tight">
-                    {group.label}
-                  </h3>
-                </div>
-
-                {/* Description */}
-                <p className="text-[12px] md:text-[13px] text-[#111111]/40 leading-[1.6] font-medium mb-5">
-                  {group.description}
-                </p>
-
-                {/* Roles list */}
-                <div className="space-y-2.5 pt-4 border-t border-[#111111]/6">
-                  {group.roles.map((role) => (
-                    <div
-                      key={role}
-                      className="flex items-center gap-2"
-                    >
-                      <div className="w-1 h-1 rounded-full bg-[#FF4D00]/40" />
-                      <span className="text-[12px] md:text-[13px] font-medium text-[#111111]/60 group-hover:text-[#111111]/80 transition-colors">
-                        {role}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Note about joining */}
+        {/* Filter tabs */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-8 md:mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-6 border-t border-[#111111]/8"
+          initial={{ opacity: 0, y: 10 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex flex-wrap gap-1.5 mb-8"
         >
-          <p className="text-[13px] md:text-[14px] text-[#111111]/35 font-medium leading-[1.5]">
-            We hire operators, not administrators. If you think in systems and
-            build in cycles, this architecture is for you.
-          </p>
-          <Link
-            to="/careers"
-            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-[#FF4D00] hover:text-[#111111] transition-colors group shrink-0"
-          >
-            View Open Roles
-            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          {categories.map((cat) => (
+            <button
+              key={cat.key}
+              suppressHydrationWarning
+              onClick={() => {
+                setActiveCategory(cat.key);
+                setExpandedId(null);
+              }}
+              className={`px-3 py-1.5 text-[10px] font-mono font-bold tracking-widest uppercase border transition-all ${
+                activeCategory === cat.key
+                  ? "bg-[#111111] text-white border-[#111111]"
+                  : "bg-white text-[#111111]/40 border-[#111111]/10 hover:border-[#111111]/20 hover:text-[#111111]/60"
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
         </motion.div>
+
+        {/* Team grid */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCategory}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"
+          >
+            {filteredMembers.map((member, i) => (
+              <TeamCard
+                key={member.id}
+                member={member}
+                index={i}
+                isExpanded={expandedId === member.id}
+                onToggle={() =>
+                  setExpandedId(expandedId === member.id ? null : member.id)
+                }
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
+  );
+}
+
+/* ── Team Card ── */
+function TeamCard({
+  member,
+  index,
+  isExpanded,
+  onToggle,
+}: {
+  member: TeamMember;
+  index: number;
+  isExpanded: boolean;
+  onToggle: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const cardInView = useInView(ref, { once: true, margin: "-20px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 15 }}
+      animate={cardInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.4, delay: index * 0.04, ease: "easeOut" }}
+      className={`border p-5 md:p-6 bg-white transition-all duration-300 cursor-pointer group ${
+        isExpanded
+          ? "border-[#FF4D00]/30"
+          : "border-[#111111]/8 hover:border-[#FF4D00]/25"
+      }`}
+      onClick={onToggle}
+    >
+      {/* Photo + Name */}
+      <div className="flex items-start gap-4 mb-3">
+        <div className="shrink-0 w-12 h-12 md:w-14 md:h-14 overflow-hidden bg-[#F5F5F5]">
+          <img
+            src={member.image}
+            alt={member.name}
+            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h4 className="text-[16px] md:text-[18px] font-display font-medium tracking-tight leading-[1.2] mb-0.5">
+            {member.name}
+          </h4>
+          <p className="text-[12px] md:text-[13px] text-[#FF4D00] font-medium leading-[1.4]">
+            {member.role}
+          </p>
+        </div>
+      </div>
+
+      {/* Location */}
+      <div className="flex items-center gap-1.5 mb-3">
+        <MapPin className="w-3 h-3 text-[#111111]/25" />
+        <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/30">
+          {member.location}
+        </span>
+      </div>
+
+      {/* Category tag */}
+      <span className="inline-block px-2 py-0.5 bg-[#F5F5F5] text-[9px] font-mono font-bold tracking-widest uppercase text-[#111111]/30 mb-1">
+        {member.category}
+      </span>
+
+      {/* Expandable bio */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <div className="pt-3 mt-3 border-t border-[#111111]/8">
+              <p className="text-[13px] md:text-[14px] text-[#111111]/50 leading-[1.7] font-medium">
+                {member.bio}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Expand hint */}
+      <div className="flex items-center gap-1.5 mt-3 pt-2 border-t border-[#111111]/5">
+        <span className="text-[9px] font-mono font-bold tracking-widest uppercase text-[#111111]/15 group-hover:text-[#FF4D00]/50 transition-colors">
+          {isExpanded ? "Close" : "Bio"}
+        </span>
+        <ChevronDown
+          className={`w-3 h-3 text-[#111111]/15 group-hover:text-[#FF4D00]/50 transition-all duration-300 ${
+            isExpanded ? "rotate-180" : ""
+          }`}
+        />
+      </div>
+    </motion.div>
   );
 }
 

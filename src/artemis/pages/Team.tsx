@@ -9,11 +9,11 @@ import { teamData, TeamMember } from "@/artemis/data/team";
 /* ── Category definitions ── */
 const categories = [
   { key: "all", label: "All" },
-  { key: "leadership", label: "Leadership" },
-  { key: "partners", label: "Partners" },
-  { key: "venture-building", label: "Venture Building" },
-  { key: "platform", label: "Platform" },
-  { key: "operations", label: "Operations" },
+  { key: "investment", label: "Investment" },
+  { key: "product-programs", label: "Product & Programs" },
+  { key: "business-community", label: "Business & Community" },
+  { key: "finance-operations", label: "Finance & Operations" },
+  { key: "research", label: "Research & Associates" },
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
