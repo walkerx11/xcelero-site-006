@@ -900,18 +900,18 @@ function PortfolioSectors() {
     return { name: vertical, count };
   });
 
-  const sectorIcons: Record<string, string> = {
-    Energy: "\u26A1",
-    Water: "\uD83D\uDCA7",
-    "Food & Agriculture": "\uD83C\uDF3E",
-    "Materials & Manufacturing": "\u2699\uFE0F",
-    "Mobility & Logistics": "\uD83D\uDE80",
-    "Data & Intelligence": "\uD83E\uDDE0",
-    "Built Environments": "\uD83C\uDFD7\uFE0F",
-    "Life Sciences": "\uD83E\uDDEC",
-    "Digital Finance": "\uD83D\uDCB0",
-    "Education & Cognitive Infrastructure": "\uD83D\uDCDA",
-    "Space & Off-World Industrialization": "\uD83C\uDF0C",
+  const sectorImages: Record<string, string> = {
+    Energy: "/sectors/energy.png",
+    Water: "/sectors/water.png",
+    "Food & Agriculture": "/sectors/food-agriculture.png",
+    "Materials & Manufacturing": "/sectors/materials-manufacturing.png",
+    "Mobility & Logistics": "/sectors/mobility-logistics.png",
+    "Data & Intelligence": "/sectors/data-intelligence.png",
+    "Built Environments": "/sectors/built-environments.png",
+    "Life Sciences": "/sectors/life-sciences.png",
+    "Digital Finance": "/sectors/digital-finance.png",
+    "Education & Cognitive Infrastructure": "/sectors/education-cognitive.png",
+    "Space & Off-World Industrialization": "/sectors/space-industrialization.png",
   };
 
   return (
@@ -939,24 +939,39 @@ function PortfolioSectors() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-5">
           {sectorData.map((sector, i) => (
             <motion.div
               key={sector.name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="border border-white/10 p-4 md:p-5 hover:border-[#FF4D00]/40 hover:bg-white/5 transition-all text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              className="group relative overflow-hidden cursor-pointer"
             >
-              <span className="text-[24px] md:text-[32px] block mb-2">
-                {sectorIcons[sector.name] || "\uD83D\uDD2C"}
-              </span>
-              <span className="text-[11px] md:text-[12px] font-bold text-white/80 block mb-1 leading-tight">
-                {sector.name}
-              </span>
-              <span className="text-[20px] md:text-[24px] font-display font-medium text-[#FF4D00]">
-                {sector.count}
-              </span>
+              {/* Photo */}
+              <div className="aspect-[4/5] relative">
+                <img
+                  src={sectorImages[sector.name] || "/sectors/energy.png"}
+                  alt={sector.name}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 group-hover:from-black/90 group-hover:via-black/40 transition-colors duration-500" />
+              </div>
+              {/* Content overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                <span className="text-[28px] md:text-[36px] font-display font-medium text-[#FF4D00] leading-none block mb-1">
+                  {sector.count}
+                </span>
+                <span className="text-[11px] md:text-[13px] font-bold text-white/90 block leading-tight">
+                  {sector.name}
+                </span>
+                <span className="text-[9px] md:text-[10px] font-mono font-bold tracking-widest uppercase text-white/40 block mt-1">
+                  ventures
+                </span>
+              </div>
+              {/* Hover accent line */}
+              <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#FF4D00] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </motion.div>
           ))}
         </div>
