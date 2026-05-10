@@ -509,3 +509,89 @@ Stage Summary:
 - City markers pulse when their leg is active (radius + pulse ring animations)
 - All animations use framer-motion for smooth transitions
 
+---
+Task ID: 4-b
+Agent: Sub Agent
+Task: Overhaul mobile navigation — categorized design with visual improvements
+
+Work Log:
+- Read worklog and current Layout.tsx (414 lines) to understand existing mobile menu structure
+- Current mobile menu: flat vertical list of 13 nav links with no categorization, centered layout, individual stagger animation per link
+- **Added `useRouter()` to Nav component** to access `path` for active link detection
+- **Created `mobileNavGroups` data structure** with 4 categories:
+  - "The Platform": manifesto, approach, infrastructure, route
+  - "Programs & Ventures": programs, ventures, case studies
+  - "Capital": capital, dashboard
+  - "Network": community, team, careers, insights
+- **Replaced flat mobile menu with categorized design:**
+  - Category labels: `text-[10px] font-mono tracking-[0.25em] uppercase` in #FF4D00, with thin white/10 line extending to the right (`flex-1 h-px bg-white/10`)
+  - Links within category: `text-2xl sm:text-3xl` (down from `text-3xl sm:text-4xl`), `font-display font-medium tracking-tight text-white/60 hover:text-[#FF4D00]`
+  - Tighter link spacing: `gap-2` within categories (down from `gap-6`)
+  - Category spacing: `mb-8 md:mb-10` between groups
+  - Active link highlighting: current route shown in #FF4D00 with small dot indicator (`w-1.5 h-1.5 rounded-full bg-[#FF4D00]`) before the link name
+  - Staggered animation per group instead of per link: `delay: groupIdx * 0.1, duration: 0.4`
+  - Left-aligned layout with `px-8 md:px-16 lg:px-24` padding and `overflow-y-auto` for scrollability
+- **Preserved unchanged:**
+  - Dark full-screen overlay (`bg-black/95 backdrop-blur-md`)
+  - Header with xCelero logo and close button
+  - Bottom CTAs ("Invest Now" and "Join" buttons)
+  - Desktop navigation
+  - SearchModal
+  - All other Layout functionality (StickyInvestBar, ScrollToTopButton, Footer)
+  - `navLinks` array for desktop navigation
+- All lint checks pass clean
+- Dev server running on port 3000
+
+Stage Summary:
+- Mobile menu transformed from flat 13-link list to categorized 4-group navigation
+- Category labels with extending lines provide visual structure
+- Active route shown with orange text + dot indicator
+- Smaller link text and tighter spacing improve mobile UX
+- Group-level staggered animation replaces per-link animation
+- Desktop navigation and all other functionality preserved
+
+---
+Task ID: 4-a
+Agent: Sub Agent
+Task: Enhance Careers page with Culture Values section and Stats Banner between masthead and Life at xCelero
+
+Work Log:
+- Read worklog at `/home/z/my-project/worklog.md` and current `/src/artemis/src/artemis/pages/CareersPage.tsx` (799 lines)
+- Added **Culture Values Section** between the dark masthead and existing "Life at xCelero" section:
+  - White background section with `border-b border-[#111111]/10`
+  - "Our Values" mono uppercase orange label (10px, tracking-[0.4em], font-bold)
+  - Heading: "The principles that compound over decades" with italic serif orange accent on "compound"
+  - 6 core values in horizontal scrollable row (mobile) / 3x2 grid (desktop):
+    - 01: "Unreasonable Depth" — "We go deeper than anyone thinks is necessary. Surface insights don't build microgrids."
+    - 02: "Civilizational Thinking" — "Every decision is measured against a 100-year horizon, not a quarterly cycle."
+    - 03: "The Art of the Pick" — "We take beginnings seriously. The right technology, the right market, the right architecture."
+    - 04: "Solidarity, Not Charity" — "Equal quality of support regardless of geography. Nairobi gets New York caliber."
+    - 05: "Hub, Not HQ" — "Distributed by design. Our strength is in 190 hubs, not one headquarters."
+    - 06: "Compound Returns" — "Every investment in people, infrastructure, and community compounds over decades."
+  - Each value card: `border-t border-[#111111]/15 pt-6`, mono number in orange (#FF4D00), display font title, 13px description
+  - Mobile: `flex overflow-x-auto snap-x snap-mandatory` with `min-w-[280px]` cards
+  - Desktop: `md:grid md:grid-cols-3` with `md:overflow-visible`
+  - All values use `whileInView` with `viewport={{ once: true }}` and staggered delay (0.08s per item)
+
+- Added **Stats Banner** below the values section:
+  - Dark `bg-[#111111]` background strip
+  - 4 stats in 2x2 grid (mobile) / 4-column with dividers (desktop):
+    - "75%" / "Internal Promotion Rate"
+    - "39" / "Countries"
+    - "4.2 yrs" / "Avg. Tenure"
+    - "190" / "Hubs"
+  - Display font (`font-display font-medium`) for numbers (text-3xl mobile, text-4xl desktop)
+  - Mono uppercase (`font-mono tracking-[0.25em] text-white/50`) for labels
+  - Desktop uses `md:divide-x md:divide-white/10` for vertical dividers
+  - Staggered `whileInView` animations with 0.1s delay per stat
+
+- Existing "Life at xCelero" section preserved completely unchanged
+- All lint checks pass clean
+- Dev server running on port 3000
+
+Stage Summary:
+- Careers page enhanced with Culture Values section (6 values in responsive grid) and Stats Banner (4 key metrics)
+- New sections positioned between masthead and existing "Life at xCelero" culture section
+- Design consistent with xCelero language: font-display, font-mono, #FF4D00 accent, #111111 text, opacity variants
+- Mobile-first responsive: horizontal scroll on mobile, grid on desktop for values; 2-col to 4-col for stats
+

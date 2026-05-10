@@ -494,6 +494,111 @@ export function CareersPage() {
         </div>
       </section>
 
+      {/* ── Culture Values Section ────────────────────────────── */}
+      <section className="bg-white border-b border-[#111111]/10">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="text-[10px] font-mono tracking-[0.4em] text-[#FF4D00] mb-4 uppercase font-bold">
+              Our Values
+            </p>
+            <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight leading-[1.05] mb-16">
+              The principles that<br />
+              <em className="italic font-serif text-[#FF4D00]">compound</em> over decades
+            </h2>
+          </motion.div>
+
+          {/* Values Grid: horizontal scroll on mobile, 3x2 grid on desktop */}
+          <div className="flex gap-6 overflow-x-auto md:overflow-visible md:grid md:grid-cols-3 pb-4 md:pb-0 scrollbar-hide snap-x snap-mandatory md:snap-none">
+            {[
+              {
+                num: "01",
+                title: "Unreasonable Depth",
+                description: "We go deeper than anyone thinks is necessary. Surface insights don't build microgrids.",
+              },
+              {
+                num: "02",
+                title: "Civilizational Thinking",
+                description: "Every decision is measured against a 100-year horizon, not a quarterly cycle.",
+              },
+              {
+                num: "03",
+                title: "The Art of the Pick",
+                description: "We take beginnings seriously. The right technology, the right market, the right architecture.",
+              },
+              {
+                num: "04",
+                title: "Solidarity, Not Charity",
+                description: "Equal quality of support regardless of geography. Nairobi gets New York caliber.",
+              },
+              {
+                num: "05",
+                title: "Hub, Not HQ",
+                description: "Distributed by design. Our strength is in 190 hubs, not one headquarters.",
+              },
+              {
+                num: "06",
+                title: "Compound Returns",
+                description: "Every investment in people, infrastructure, and community compounds over decades.",
+              },
+            ].map((value, i) => (
+              <motion.div
+                key={value.num}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="border-t border-[#111111]/15 pt-6 min-w-[280px] md:min-w-0 snap-start"
+              >
+                <span className="text-[11px] font-mono tracking-[0.3em] text-[#FF4D00] mb-3 block">
+                  {value.num}
+                </span>
+                <h3 className="text-lg font-display font-medium tracking-tight mb-3 text-[#111111]">
+                  {value.title}
+                </h3>
+                <p className="text-[13px] text-[#111111]/55 leading-[1.65] font-medium">
+                  {value.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Stats Banner ────────────────────────────────────── */}
+      <section className="bg-[#111111]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-10 md:py-14">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x md:divide-white/10">
+            {[
+              { value: "75%", label: "Internal Promotion Rate" },
+              { value: "39", label: "Countries" },
+              { value: "4.2 yrs", label: "Avg. Tenure" },
+              { value: "190", label: "Hubs" },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="md:px-8 first:md:pl-0 last:md:pr-0"
+              >
+                <span className="text-3xl md:text-4xl font-display font-medium tracking-tight text-white block mb-1">
+                  {stat.value}
+                </span>
+                <span className="text-[10px] font-mono tracking-[0.25em] text-white/50 uppercase">
+                  {stat.label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Life at xCelero Culture Section ────────────────────── */}
       <section className="bg-[#FAFAFA] border-t border-b border-[#111111]/10">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24">

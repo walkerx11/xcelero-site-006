@@ -42,6 +42,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 function Nav() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { path } = useRouter();
 
   // Close mobile menu on route change (handled via Link onClick in mobile menu)
 
@@ -85,6 +86,42 @@ function Nav() {
     { name: "case studies", path: "/case-studies" },
     { name: "community", path: "/community" },
     { name: "insights", path: "/insights" },
+  ];
+
+  const mobileNavGroups = [
+    {
+      label: "The Platform",
+      links: [
+        { name: "manifesto", path: "/manifesto" },
+        { name: "approach", path: "/approach" },
+        { name: "infrastructure", path: "/platform" },
+        { name: "route", path: "/routes" },
+      ],
+    },
+    {
+      label: "Programs & Ventures",
+      links: [
+        { name: "programs", path: "/programs" },
+        { name: "ventures", path: "/ventures" },
+        { name: "case studies", path: "/case-studies" },
+      ],
+    },
+    {
+      label: "Capital",
+      links: [
+        { name: "capital", path: "/capital" },
+        { name: "dashboard", path: "/dashboard" },
+      ],
+    },
+    {
+      label: "Network",
+      links: [
+        { name: "community", path: "/community" },
+        { name: "team", path: "/team" },
+        { name: "careers", path: "/careers" },
+        { name: "insights", path: "/insights" },
+      ],
+    },
   ];
 
   return (
@@ -172,22 +209,47 @@ function Nav() {
               </button>
             </div>
 
-            {/* Nav links — centered vertically */}
-            <div className="flex-1 flex flex-col items-center justify-center gap-6">
-              {navLinks.map((item, i) => (
+            {/* Categorized nav links — centered vertically */}
+            <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 overflow-y-auto">
+              {mobileNavGroups.map((group, groupIdx) => (
                 <motion.div
-                  key={item.name}
+                  key={group.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.3 }}
+                  transition={{ delay: groupIdx * 0.1, duration: 0.4 }}
+                  className={groupIdx < mobileNavGroups.length - 1 ? "mb-8 md:mb-10" : ""}
                 >
-                  <Link
-                    to={item.path}
-                    className="text-3xl sm:text-4xl font-display font-medium tracking-tight text-white/70 hover:text-[#FF4D00] transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
+                  {/* Category label with extending line */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-[#FF4D00] whitespace-nowrap">
+                      {group.label}
+                    </span>
+                    <div className="flex-1 h-px bg-white/10" />
+                  </div>
+
+                  {/* Links within category */}
+                  <div className="flex flex-col gap-2">
+                    {group.links.map((item) => {
+                      const isActive = path === item.path;
+                      return (
+                        <Link
+                          key={item.name}
+                          to={item.path}
+                          className={`text-2xl sm:text-3xl font-display font-medium tracking-tight transition-colors flex items-center gap-2 ${
+                            isActive
+                              ? "text-[#FF4D00]"
+                              : "text-white/60 hover:text-[#FF4D00]"
+                          }`}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {isActive && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#FF4D00] flex-shrink-0" />
+                          )}
+                          {item.name}
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </motion.div>
               ))}
             </div>
