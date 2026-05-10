@@ -494,171 +494,223 @@ export function CareersPage() {
         </div>
       </section>
 
-      {/* ── Culture Values Section ────────────────────────────── */}
+      {/* ── Editorial Values Section ──────────────────────────── */}
       <section className="bg-white border-b border-[#111111]/10">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="max-w-3xl mb-16 md:mb-24"
           >
-            <p className="text-[10px] font-mono tracking-[0.4em] text-[#FF4D00] mb-4 uppercase font-bold">
+            <p className="text-[10px] font-mono tracking-[0.4em] text-[#FF4D00] mb-6 uppercase font-bold">
               Our Values
             </p>
-            <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight leading-[1.05] mb-16">
-              The principles that<br />
-              <em className="italic font-serif text-[#FF4D00]">compound</em> over decades
+            <h2 className="text-[32px] md:text-[48px] lg:text-[60px] font-display font-medium tracking-tight leading-[1.05] mb-6">
+              The principles that{" "}
+              <em className="italic font-serif text-[#FF4D00]">compound</em>{" "}
+              over decades.
             </h2>
+            <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-[1.7]">
+              Six convictions that shape how we hire, how we work, and how we
+              measure success. Not posters on a wall. Operating principles.
+            </p>
           </motion.div>
 
-          {/* Values Grid: horizontal scroll on mobile, 3x2 grid on desktop */}
-          <div className="flex gap-6 overflow-x-auto md:overflow-visible md:grid md:grid-cols-3 pb-4 md:pb-0 scrollbar-hide snap-x snap-mandatory md:snap-none">
+          {/* Values as manifesto-style rows */}
+          <div className="space-y-0">
             {[
               {
                 num: "01",
                 title: "Unreasonable Depth",
-                description: "We go deeper than anyone thinks is necessary. Surface insights don't build microgrids.",
+                description:
+                  "We go deeper than anyone thinks is necessary. Surface insights don't build microgrids. The founder who spends three months on the factory floor before writing a line of code is our kind of founder.",
               },
               {
                 num: "02",
                 title: "Civilizational Thinking",
-                description: "Every decision is measured against a 100-year horizon, not a quarterly cycle.",
+                description:
+                  "Every decision is measured against a 100-year horizon, not a quarterly cycle. We build infrastructure, not apps. The time horizon changes everything: how you hire, how you invest, how you ship.",
               },
               {
                 num: "03",
                 title: "The Art of the Pick",
-                description: "We take beginnings seriously. The right technology, the right market, the right architecture.",
+                description:
+                  "We take beginnings seriously. The right technology, the right market, the right architecture. A high degree of startup mortality is baked in at the beginning. Being a good picker is vastly underrated.",
               },
               {
                 num: "04",
                 title: "Solidarity, Not Charity",
-                description: "Equal quality of support regardless of geography. Nairobi gets New York caliber.",
+                description:
+                  "Equal quality of support regardless of geography. Nairobi gets New York caliber. Lagos gets London attention. Not out of generosity, but because the best founders are everywhere.",
               },
               {
                 num: "05",
                 title: "Hub, Not HQ",
-                description: "Distributed by design. Our strength is in 190 hubs, not one headquarters.",
+                description:
+                  "Distributed by design. Our strength is in 190 hubs, not one headquarters. Every hub is a prototyping lab, a co-working space, and a node in the Route. Your office is wherever the work needs to happen.",
               },
               {
                 num: "06",
                 title: "Compound Returns",
-                description: "Every investment in people, infrastructure, and community compounds over decades.",
+                description:
+                  "Every investment in people, infrastructure, and community compounds over decades. The first cohort mentors the second. The first hub enables the tenth. We play infinite games.",
               },
             ].map((value, i) => (
               <motion.div
                 key={value.num}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="border-t border-[#111111]/15 pt-6 min-w-[280px] md:min-w-0 snap-start"
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.6, delay: i * 0.05, ease: "easeOut" }}
+                className="group"
               >
-                <span className="text-[11px] font-mono tracking-[0.3em] text-[#FF4D00] mb-3 block">
-                  {value.num}
-                </span>
-                <h3 className="text-lg font-display font-medium tracking-tight mb-3 text-[#111111]">
-                  {value.title}
-                </h3>
-                <p className="text-[13px] text-[#111111]/55 leading-[1.65] font-medium">
-                  {value.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Stats Banner ────────────────────────────────────── */}
-      <section className="bg-[#111111]">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-10 md:py-14">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x md:divide-white/10">
-            {[
-              { value: "75%", label: "Internal Promotion Rate" },
-              { value: "39", label: "Countries" },
-              { value: "4.2 yrs", label: "Avg. Tenure" },
-              { value: "190", label: "Hubs" },
-            ].map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="md:px-8 first:md:pl-0 last:md:pr-0"
-              >
-                <span className="text-3xl md:text-4xl font-display font-medium tracking-tight text-white block mb-1">
-                  {stat.value}
-                </span>
-                <span className="text-[10px] font-mono tracking-[0.25em] text-white/50 uppercase">
-                  {stat.label}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Life at xCelero Culture Section ────────────────────── */}
-      <section className="bg-[#FAFAFA] border-t border-b border-[#111111]/10">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-[10px] font-mono tracking-[0.4em] text-[#FF4D00] mb-4 uppercase font-bold">
-              Life at xCelero
-            </p>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-medium tracking-tight leading-[1.05] mb-16">
-              Build the infrastructure the next century{" "}
-              <em className="italic font-serif text-[#FF4D00]">needs</em>
-            </h2>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Scale,
-                title: "Solidarity Pricing",
-                description: "We believe geography shouldn't determine the quality of support. Founders in Nairobi get the same caliber of mentorship as founders in New York, at a fraction of the cost.",
-              },
-              {
-                icon: Building,
-                title: "Hub-First Work",
-                description: "Our teams work from XHansa Hubs across 39 countries. CNC machines, prototyping labs, and co-working spaces are your office.",
-              },
-              {
-                icon: Network,
-                title: "Route Network",
-                description: "Every team member is connected to 190 hubs, 1,000+ operators, and a global community of builders. You're never working alone.",
-              },
-              {
-                icon: TrendingUp,
-                title: "Growth Paths",
-                description: "From operator to program director. From analyst to partner. We promote from within and invest in your development.",
-              },
-            ].map((card, i) => (
-              <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="border border-[#111111]/10 bg-white p-6 hover:border-[#111111]/20 transition-colors group"
-              >
-                <div className="w-10 h-10 border border-[#111111]/10 flex items-center justify-center mb-5 group-hover:border-[#FF4D00] group-hover:text-[#FF4D00] transition-colors">
-                  <card.icon className="w-5 h-5" />
+                <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 py-10 md:py-14 border-t border-[#111111]/10 items-start">
+                  {/* Number */}
+                  <div className="lg:col-span-2">
+                    <span className="text-[48px] md:text-[64px] lg:text-[80px] font-display font-medium leading-none tracking-tighter text-[#FF4D00]/15 group-hover:text-[#FF4D00]/40 transition-colors duration-500">
+                      {value.num}
+                    </span>
+                  </div>
+                  {/* Title */}
+                  <div className="lg:col-span-3">
+                    <h3 className="text-[22px] md:text-[28px] font-display font-medium tracking-tight leading-[1.15] text-[#111111] group-hover:text-[#FF4D00] transition-colors duration-300">
+                      {value.title}
+                    </h3>
+                  </div>
+                  {/* Description */}
+                  <div className="lg:col-span-7">
+                    <p className="text-[15px] md:text-[17px] text-[#111111]/55 leading-[1.7] font-medium group-hover:text-[#111111]/70 transition-colors duration-300">
+                      {value.description}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-lg font-display font-medium tracking-tight mb-3">
-                  {card.title}
-                </h3>
-                <p className="text-[13px] text-[#111111]/55 leading-[1.65] font-medium">
-                  {card.description}
-                </p>
               </motion.div>
             ))}
+            {/* Closing border */}
+            <div className="border-t border-[#111111]/10" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Dark Culture Section: Stats + Perks ───────────────── */}
+      <section className="bg-[#111111] text-white">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          {/* Stats Row */}
+          <div className="py-12 md:py-16 border-b border-white/10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[
+                { value: "75%", label: "Promoted from within" },
+                { value: "39", label: "Countries" },
+                { value: "4.2 yrs", label: "Avg. tenure" },
+                { value: "190", label: "Hubs worldwide" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                >
+                  <span className="text-[36px] md:text-[48px] font-display font-medium tracking-[-0.02em] text-white block leading-none mb-2">
+                    {stat.value}
+                  </span>
+                  <span className="text-[10px] font-mono tracking-[0.25em] text-white/40 uppercase">
+                    {stat.label}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Life at xCelero: Image-backed perk cards */}
+          <div className="py-16 md:py-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mb-12 md:mb-16"
+            >
+              <p className="text-[10px] font-mono tracking-[0.4em] text-[#FF4D00] mb-4 uppercase font-bold">
+                Life at xCelero
+              </p>
+              <h2 className="text-[28px] md:text-[40px] lg:text-[52px] font-display font-medium tracking-tight leading-[1.05]">
+                Build the infrastructure the next century{" "}
+                <em className="italic font-serif text-[#FF4D00]">needs</em>
+              </h2>
+            </motion.div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {[
+                {
+                  icon: Scale,
+                  title: "Solidarity Pricing",
+                  description:
+                    "Geography shouldn't determine quality. Nairobi gets New York caliber at a fraction of the cost.",
+                  image:
+                    "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                  icon: Building,
+                  title: "Hub-First Work",
+                  description:
+                    "190 XHansa Hubs across 39 countries. CNC machines, prototyping labs, and co-working spaces are your office.",
+                  image:
+                    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                  icon: Network,
+                  title: "Route Network",
+                  description:
+                    "1,000+ operators and a global community of builders. Every hub, every cohort strengthens the connective tissue.",
+                  image:
+                    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                  icon: TrendingUp,
+                  title: "Growth Paths",
+                  description:
+                    "From operator to program director. From analyst to partner. We promote from within and invest in your development.",
+                  image:
+                    "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80",
+                },
+              ].map((card, i) => (
+                <motion.div
+                  key={card.title}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="group relative overflow-hidden border border-white/10 hover:border-[#FF4D00]/30 transition-all duration-500 aspect-[3/4]"
+                >
+                  {/* Background image */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${card.image})` }}
+                  />
+                  {/* Dark overlay */}
+                  <div className="absolute inset-0 bg-[#111111]/70 group-hover:bg-[#111111]/60 transition-colors duration-500" />
+                  {/* Content */}
+                  <div className="relative h-full flex flex-col justify-between p-6 md:p-8">
+                    <div className="w-10 h-10 border border-white/20 flex items-center justify-center group-hover:border-[#FF4D00] group-hover:bg-[#FF4D00]/10 transition-all duration-300">
+                      <card.icon className="w-5 h-5 text-white/60 group-hover:text-[#FF4D00] transition-colors" />
+                    </div>
+                    <div>
+                      <h3 className="text-[18px] md:text-[20px] font-display font-medium tracking-tight mb-3 text-white group-hover:text-[#FF4D00] transition-colors duration-300">
+                        {card.title}
+                      </h3>
+                      <p className="text-[13px] text-white/50 leading-[1.65] font-medium group-hover:text-white/70 transition-colors duration-300">
+                        {card.description}
+                      </p>
+                      <div className="mt-4 h-[2px] w-8 bg-white/10 group-hover:w-full group-hover:bg-[#FF4D00]/40 transition-all duration-500" />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
