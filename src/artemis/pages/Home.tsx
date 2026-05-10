@@ -91,7 +91,7 @@ const pillars = [
     heading: "Capital",
     subtext: "Aligned network of venture & non-dilutive capital",
     description:
-      "We mobilize capital that matches the realities of building in the Global South. Our network includes venture funds, sovereign wealth allocators, development finance institutions, and non-dilutive grant programs. Solidarity pricing ensures that founders in early-stage markets access the same quality of support at a fraction of Silicon Valley costs. We also operate a non-dilutive capital desk that matches ventures with grants, prizes, and government incentives across 39+ countries on the Route.",
+      "We mobilize capital that matches the realities of building in the Global South. Our network includes venture funds, national development allocators, development finance institutions, and non-dilutive grant programs. Solidarity pricing ensures that founders in early-stage markets access the same quality of support at a fraction of Silicon Valley costs. We also operate a non-dilutive capital desk that matches ventures with grants, prizes, and government incentives across 39+ countries on the Route.",
     images: [
       {
         src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",

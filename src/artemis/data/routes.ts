@@ -414,7 +414,7 @@ export const routeLegs: RouteLeg[] = [
     primaryFlow: "Copper, cobalt, rail freight, hydro energy",
     coreFlows: {
       goods: "Copper cathodes, cobalt, tobacco, cotton, rail freight",
-      capital: "Mining royalties, commodity derivatives, sovereign wealth, hydro energy revenue",
+      capital: "Mining royalties, commodity derivatives, national investment funds, hydro energy revenue",
       data: "Mining geology, energy grid telemetry, rail tracking, commodity pricing",
       people: "Miners, railway workers, agricultural labor, energy engineers, artisans",
     },
@@ -485,7 +485,7 @@ export const routeLegs: RouteLeg[] = [
     primaryFlow: "Energy transit, maritime logistics, diaspora capital",
     coreFlows: {
       goods: "Energy (solar, natural gas), maritime freight, manufactured goods",
-      capital: "Diaspora remittances, sovereign wealth, development finance, trade finance",
+      capital: "Diaspora remittances, national investment funds, development finance, trade finance",
       data: "Regulatory data, maritime tracking, energy grid data, financial intelligence",
       people: "Diaspora networks, regulatory experts, maritime operators, energy engineers",
     },

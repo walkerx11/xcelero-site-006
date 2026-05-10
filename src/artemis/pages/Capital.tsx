@@ -49,6 +49,21 @@ const investmentVehicles = [
     ],
     bestFor: "First-time venture investors, portfolio diversification, passive exposure to critical tech",
     color: "#FF4D00",
+    howItWorks: [
+      "Open your account online with $500 minimum and complete KYC verification",
+      "Capital is deployed across the full xCelero venture portfolio automatically",
+      "Receive quarterly NAV reports, portfolio updates, and capital call notices",
+      "Request redemptions during quarterly liquidity windows (up to 5% of NAV)",
+      "Reinvest returns or withdraw as your strategy evolves",
+    ],
+    keyFeatures: [
+      "Zero carry: investors keep 100% of returns above management fee",
+      "Quarterly liquidity windows provide regular redemption access",
+      "Broad diversification across energy, food, defense, manufacturing, digital finance",
+      "Transparent NAV reporting with independent annual audit",
+      "Mobile money and local agent deposit options in select African jurisdictions",
+    ],
+    riskNote: "Venture investments are illiquid and involve substantial risk of loss. The Fund's quarterly liquidity windows are subject to gate provisions and may be suspended in market stress events.",
   },
   {
     id: "spv-syndicates",
@@ -68,6 +83,21 @@ const investmentVehicles = [
     ],
     bestFor: "Experienced investors seeking deal-level selection, co-investment rights with institutional partners",
     color: "#FF4D00",
+    howItWorks: [
+      "Review deal memos for breakout ventures in the xCelero portfolio",
+      "Select individual SPV opportunities aligned with your conviction",
+      "Invest with full transparency: valuation, cap table, use of proceeds disclosed upfront",
+      "Hold alongside institutional co-investors with identical economic terms",
+      "Receive proceeds at exit event (acquisition, IPO, secondary sale)",
+    ],
+    keyFeatures: [
+      "Single-asset transparency: know exactly where every dollar is deployed",
+      "Side-by-side economics with institutional lead investors",
+      "Deal-level selection: invest only in ventures that match your thesis",
+      "Defined carry structure with hurdle rate protection",
+      "Access to xCelero deal flow typically reserved for institutional allocators",
+    ],
+    riskNote: "SPV investments are illiquid until exit event. Single-asset concentration increases idiosyncratic risk. Carry applies to returns above the preferred return hurdle.",
   },
   {
     id: "thematic-funds",
@@ -76,7 +106,7 @@ const investmentVehicles = [
     icon: PiggyBank,
     tagline: "Concentrated bets on critical technology verticals.",
     description:
-      "Commingled closed-end funds targeting specific verticals: Energy, Food Systems, Critical Tech, Digital Finance. Each fund concentrates capital in 8–15 ventures within a single domain, giving investors targeted exposure to the sectors they believe in most.",
+      "Commingled closed-end funds targeting specific verticals: Energy, Food Systems, Critical Tech, Digital Finance. Each fund concentrates capital in 8 to 15 ventures within a single domain, giving investors targeted exposure to the sectors they believe in most.",
     details: [
       { label: "Structure", value: "7-year closed-end fund" },
       { label: "Min entry", value: "$50,000" },
@@ -87,6 +117,21 @@ const investmentVehicles = [
     ],
     bestFor: "Institutional allocators, family offices, sector-conviction investors, impact-mandated capital",
     color: "#FF4D00",
+    howItWorks: [
+      "Select your vertical: Energy, Food Systems, Critical Tech, or Digital Finance",
+      "Capital is deployed across 8 to 15 ventures within that single domain",
+      "Monthly reporting with custom data room access for deeper due diligence",
+      "Semi-annual tender offers provide structured liquidity opportunities",
+      "At fund maturity (7 years), remaining positions are distributed or liquidated",
+    ],
+    keyFeatures: [
+      "Concentrated portfolio: 8 to 15 ventures per fund for high-conviction exposure",
+      "Four verticals aligned with xCelero's core thesis of critical technology",
+      "20% carry above 8% hurdle aligns GP and LP incentives",
+      "Impact reporting meets institutional mandates for measurable outcomes",
+      "Board observer seats available for Anchor-tier allocations",
+    ],
+    riskNote: "Closed-end funds are subject to J-curve dynamics with early negative returns typical. Sector concentration amplifies market-specific risks. Semi-annual tender offers are at Board discretion and not guaranteed.",
   },
   {
     id: "catalyst-notes",
@@ -99,13 +144,28 @@ const investmentVehicles = [
     details: [
       { label: "Structure", value: "Revenue-linked note" },
       { label: "Min entry", value: "$10,000" },
-      { label: "Return target", value: "1.5–2.5x multiple" },
-      { label: "Duration", value: "24–48 months" },
+      { label: "Return target", value: "1.5 to 2.5x multiple" },
+      { label: "Duration", value: "24 to 48 months" },
       { label: "Security", value: "Revenue assignment" },
       { label: "Reporting", value: "Monthly revenue reports" },
     ],
     bestFor: "Yield-oriented investors, revenue-stage venture exposure, non-dilutive capital supporters",
     color: "#111111",
+    howItWorks: [
+      "Select revenue-stage ventures from the xCelero portfolio with proven traction",
+      "Invest via a revenue-linked note with a defined return multiple (1.5 to 2.5x)",
+      "Venture remits a percentage of monthly revenue until the return cap is reached",
+      "Monthly revenue reports provide real-time visibility into repayment progress",
+      "At maturity, note is retired regardless of whether the return cap was achieved",
+    ],
+    keyFeatures: [
+      "No equity dilution for founders: capital that preserves ownership",
+      "Defined return target: no valuation negotiations or exit dependency",
+      "Revenue-linked: returns accelerate when the venture grows faster",
+      "Monthly reporting with real-time repayment tracking",
+      "Shorter duration (24 to 48 months) vs. traditional venture timelines",
+    ],
+    riskNote: "Revenue-linked notes depend on venture revenue performance. If the venture's revenue declines, repayment slows and the full return target may not be achieved. No equity upside beyond the defined return multiple.",
   },
   {
     id: "non-dilutive-desk",
@@ -118,13 +178,28 @@ const investmentVehicles = [
     details: [
       { label: "Structure", value: "Advisory + placement" },
       { label: "Min entry", value: "N/A (venture-side)" },
-      { label: "Fee", value: "8–12% success fee" },
+      { label: "Fee", value: "8 to 12% success fee" },
       { label: "Avg raise", value: "$180K per venture" },
       { label: "Pipeline", value: "2,400+ active programs" },
       { label: "Geographies", value: "39 countries" },
     ],
     bestFor: "Ventures seeking working capital without dilution; grant-mandated organizations seeking pipeline",
     color: "#111111",
+    howItWorks: [
+      "xcelero assesses your venture against 2,400+ active grant and incentive programs",
+      "We match your technology, geography, and stage to the highest-probability opportunities",
+      "Our team writes and submits applications on your behalf",
+      "We manage compliance, reporting, and milestone documentation post-award",
+      "Success fee is charged only on capital secured: no win, no fee",
+    ],
+    keyFeatures: [
+      "2,400+ active programs across 39 countries on the Route",
+      "Average $180K raised per venture with zero equity cost",
+      "Full-service: application, compliance, and post-award management",
+      "Success-fee only model: aligned incentives with founders",
+      "Deep relationships with DFIs, government agencies, and development finance institutions",
+    ],
+    riskNote: "Grant timelines are subject to government and institutional review cycles. Success fees apply only to awarded capital. This is an advisory service, not an investment vehicle.",
   },
   {
     id: "anchor-mandate",
@@ -142,8 +217,23 @@ const investmentVehicles = [
       { label: "Liquidity", value: "Custom terms" },
       { label: "Reporting", value: "Real-time dashboard" },
     ],
-    bestFor: "Sovereign wealth funds, DFIs, endowments, ultra-high-net-worth, family offices with strategic mandates",
+    bestFor: "National development funds, DFIs, endowments, ultra-high-net-worth, family offices with strategic mandates",
     color: "#111111",
+    howItWorks: [
+      "Collaborate with xCelero's investment team to define your strategic priorities and constraints",
+      "We construct a bespoke portfolio across vehicles, sectors, and geographies",
+      "Advisory board participation gives you direct input on venture selection",
+      "Custom SPVs are formed for your targeted co-investment opportunities",
+      "Real-time dashboard provides live portfolio analytics and reporting",
+    ],
+    keyFeatures: [
+      "Bespoke portfolio construction with sector, geography, and stage allocation",
+      "Advisory board seat with direct venture selection input",
+      "Custom SPV formation for targeted co-investment",
+      "GP carry participation: share in the economics of the fund management",
+      "Real-time dashboard with live NAV, cash flow projections, and impact metrics",
+    ],
+    riskNote: "Anchor Mandates are fully customizable and subject to negotiated terms. Minimum commitment of $250K. Investment terms, fees, and carry are determined through direct negotiation.",
   },
 ];
 
@@ -276,7 +366,6 @@ export function Capital() {
       <InvestmentVehicles />
       <InvestmentTiers />
       <FAQSection />
-      <InvestCTA onSubscribe={() => setShowSubscribe(true)} />
       <SubscribeModal
         isOpen={showSubscribe}
         onClose={() => setShowSubscribe(false)}
@@ -419,12 +508,15 @@ function StatsBar() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   INVESTMENT VEHICLES, Expandable detail cards
+   INVESTMENT VEHICLES, Expandable detail cards with full-page expansion
    ══════════════════════════════════════════════════════════════════════════ */
 function InvestmentVehicles() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const [expanded, setExpanded] = useState<string | null>(null);
+  const detailRef = useRef<HTMLDivElement>(null);
+
+  const selectedVehicle = investmentVehicles.find((v) => v.id === expanded);
 
   return (
     <section
@@ -456,7 +548,7 @@ function InvestmentVehicles() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {investmentVehicles.map((vehicle, i) => {
             const Icon = vehicle.icon;
-            const isExpanded = expanded === vehicle.id;
+            const isSelected = expanded === vehicle.id;
             return (
               <motion.div
                 key={vehicle.id}
@@ -464,25 +556,32 @@ function InvestmentVehicles() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 className={`border p-6 md:p-8 bg-white transition-all flex flex-col cursor-pointer group ${
-                  isExpanded
-                    ? "border-[#FF4D00] ring-1 ring-[#FF4D00]/20 md:col-span-1"
+                  isSelected
+                    ? "border-[#FF4D00] ring-1 ring-[#FF4D00]/20"
                     : "border-[#111111]/10 hover:border-[#FF4D00]/30"
                 }`}
-                onClick={() => setExpanded(isExpanded ? null : vehicle.id)}
+                onClick={() => {
+                  setExpanded(isSelected ? null : vehicle.id);
+                  if (!isSelected) {
+                    setTimeout(() => {
+                      detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 100);
+                  }
+                }}
               >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                        isExpanded
+                        isSelected
                           ? "bg-[#FF4D00]"
                           : "border border-[#111111]/10 group-hover:border-[#FF4D00]/30"
                       }`}
                     >
                       <Icon
                         className={`w-4 h-4 transition-colors ${
-                          isExpanded ? "text-white" : "text-[#FF4D00]"
+                          isSelected ? "text-white" : "text-[#FF4D00]"
                         }`}
                         strokeWidth={1.5}
                       />
@@ -495,7 +594,7 @@ function InvestmentVehicles() {
                   </div>
                   <ChevronDown
                     className={`w-5 h-5 text-[#111111]/30 transition-transform duration-300 ${
-                      isExpanded ? "rotate-180" : ""
+                      isSelected ? "rotate-180" : ""
                     }`}
                   />
                 </div>
@@ -513,7 +612,7 @@ function InvestmentVehicles() {
                   {vehicle.description}
                 </p>
 
-                {/* Details Grid, always visible */}
+                {/* Details Grid */}
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
                   {vehicle.details.map((detail, di) => (
                     <div key={di} className="flex flex-col">
@@ -527,31 +626,173 @@ function InvestmentVehicles() {
                   ))}
                 </div>
 
-                {/* Best For, expandable */}
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
-                    >
-                      <div className="border-t border-[#111111]/10 pt-4 mt-auto">
-                        <span className="text-[9px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-1">
-                          Best for
-                        </span>
-                        <p className="text-[12px] md:text-[13px] text-[#111111]/60 font-medium leading-[1.6]">
-                          {vehicle.bestFor}
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* Click hint */}
+                <div className="mt-auto pt-4 border-t border-[#111111]/5 flex items-center gap-2 text-[11px] font-mono font-bold tracking-widest uppercase text-[#111111]/20 group-hover:text-[#FF4D00]/60 transition-colors">
+                  <span>{isSelected ? "Close details" : "View details"}</span>
+                  <ArrowRight className={`w-3 h-3 transition-transform ${isSelected ? "rotate-90" : ""}`} />
+                </div>
               </motion.div>
             );
           })}
         </div>
+
+        {/* Full Detail Expansion */}
+        <AnimatePresence>
+          {selectedVehicle && (
+            <motion.div
+              ref={detailRef}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-8 md:mt-12 border border-[#111111]/10 bg-white"
+            >
+              {/* Detail Header */}
+              <div className="p-8 md:p-12 lg:p-16 border-b border-[#111111]/10 bg-[#FAFAFA]">
+                <div className="flex items-start justify-between mb-8">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-[#FF4D00] flex items-center justify-center">
+                      <selectedVehicle.icon className="w-6 h-6 text-white" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/30 block">
+                        {selectedVehicle.shortName}
+                      </span>
+                      <h3 className="text-[28px] md:text-[40px] font-display font-medium tracking-[-0.02em]">
+                        {selectedVehicle.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setExpanded(null)}
+                    className="p-3 border border-[#111111]/10 hover:border-[#111111] hover:bg-[#111111] hover:text-white transition-all"
+                    aria-label="Close details"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <p className="text-[17px] md:text-[20px] text-[#FF4D00] font-medium leading-[1.5] mb-4">
+                  {selectedVehicle.tagline}
+                </p>
+                <p className="text-[15px] md:text-[17px] text-[#111111]/60 font-medium leading-[1.7] max-w-3xl">
+                  {selectedVehicle.description}
+                </p>
+              </div>
+
+              <div className="p-8 md:p-12 lg:p-16">
+                <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+                  {/* Left Column: Details + Best For */}
+                  <div className="lg:col-span-5">
+                    {/* Details Table */}
+                    <div className="mb-10">
+                      <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-4">
+                        Key Terms
+                      </span>
+                      <div className="space-y-0">
+                        {selectedVehicle.details.map((detail, i) => (
+                          <div
+                            key={i}
+                            className={`flex justify-between items-center py-3 ${
+                              i > 0 ? "border-t border-[#111111]/5" : ""
+                            }`}
+                          >
+                            <span className="text-[12px] font-mono font-bold tracking-widest uppercase text-[#111111]/40">
+                              {detail.label}
+                            </span>
+                            <span className="text-[14px] font-medium text-[#111111]/80">
+                              {detail.value}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Best For */}
+                    <div>
+                      <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-3">
+                        Best For
+                      </span>
+                      <p className="text-[14px] md:text-[15px] text-[#111111]/60 font-medium leading-[1.7]">
+                        {selectedVehicle.bestFor}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Right Column: How It Works + Key Features */}
+                  <div className="lg:col-span-7">
+                    {/* How It Works */}
+                    <div className="mb-10">
+                      <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-5">
+                        How It Works
+                      </span>
+                      <div className="space-y-4">
+                        {selectedVehicle.howItWorks.map((step, i) => (
+                          <div key={i} className="flex gap-4">
+                            <div className="shrink-0 w-8 h-8 rounded-full border border-[#111111]/10 flex items-center justify-center text-[11px] font-mono font-bold text-[#111111]/30">
+                              {String(i + 1).padStart(2, "0")}
+                            </div>
+                            <p className="text-[14px] md:text-[15px] text-[#111111]/60 font-medium leading-[1.6] pt-1">
+                              {step}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Key Features */}
+                    <div className="mb-10">
+                      <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-5">
+                        Key Features
+                      </span>
+                      <div className="space-y-3">
+                        {selectedVehicle.keyFeatures.map((feature, i) => (
+                          <div key={i} className="flex items-start gap-3">
+                            <Check className="w-4 h-4 text-[#FF4D00] shrink-0 mt-0.5" strokeWidth={2} />
+                            <span className="text-[14px] md:text-[15px] text-[#111111]/60 font-medium leading-[1.6]">
+                              {feature}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Risk Note */}
+                    <div className="border-l-2 border-[#FF4D00]/20 pl-4">
+                      <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/30 block mb-2">
+                        Risk Consideration
+                      </span>
+                      <p className="text-[13px] text-[#111111]/40 font-medium leading-[1.6] italic">
+                        {selectedVehicle.riskNote}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA Bar */}
+                <div className="mt-12 pt-8 border-t border-[#111111]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <p className="text-[13px] text-[#111111]/40 font-medium">
+                    Ready to invest? Select your tier below or get updates on new opportunities.
+                  </p>
+                  <div className="flex gap-3">
+                    <Link
+                      to="#invest-tiers"
+                      onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                        e.preventDefault();
+                        document
+                          .getElementById("invest-tiers")
+                          ?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#111111] text-white text-[11px] font-bold uppercase tracking-[0.1em] hover:bg-[#FF4D00] transition-colors"
+                    >
+                      Invest Now
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
@@ -992,58 +1233,6 @@ function FAQSection() {
             ))}
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   INVEST CTA, Bottom call-to-action
-   ══════════════════════════════════════════════════════════════════════════ */
-function InvestCTA({ onSubscribe }: { onSubscribe: () => void }) {
-  return (
-    <section className="py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-[#111111] text-white border-t border-white/10">
-      <div className="w-full max-w-[1400px] mx-auto text-center">
-        <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] mb-6 block">
-          Start Today
-        </span>
-        <h2 className="text-[36px] md:text-[56px] lg:text-[72px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-6">
-          The next century is being{" "}
-          <em className="font-serif italic text-[#FF4D00]">built</em>
-          <br />
-          right now. Will you fund it?
-        </h2>
-        <p className="text-[15px] md:text-[17px] text-white/50 font-medium leading-[1.7] max-w-xl mx-auto mb-10">
-          From $500 in the xCelero Fund to custom Anchor Mandates, six
-          vehicles, one thesis, 39 countries of deal flow.
-        </p>
-        <div className="flex flex-wrap gap-4 items-center justify-center">
-          <Link
-            to="#invest-tiers"
-            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.preventDefault();
-              document
-                .getElementById("invest-tiers")
-                ?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="inline-flex items-center gap-2 px-10 py-5 bg-[#FF4D00] text-white text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-white hover:text-[#111111] transition-colors"
-          >
-            Invest Now
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <button
-            onClick={onSubscribe}
-            className="inline-flex items-center gap-2 px-10 py-5 border border-white/20 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-white hover:text-[#111111] transition-all"
-          >
-            Get Updates
-            <Mail className="w-4 h-4" />
-          </button>
-        </div>
-        <p className="text-[10px] text-white/20 font-medium text-center leading-[1.6] mt-8 max-w-lg mx-auto">
-          This is not an offer to sell securities. Investment inquiries are
-          subject to eligibility verification and offering document review.
-          Past performance does not guarantee future results.
-        </p>
       </div>
     </section>
   );

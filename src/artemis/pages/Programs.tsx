@@ -14,14 +14,6 @@ const heroMetrics = [
   { value: "9", label: "Civilizational Fields" },
 ];
 
-/* ── Aggregate stats for centered numbers section ── */
-const aggregateStats = [
-  { value: "$620K", label: "Max funding package per company" },
-  { value: "75%", label: "Follow-on funding success rate" },
-  { value: "190", label: "Hub locations on the Route" },
-  { value: "24mo", label: "Longest program deployment cycle" },
-];
-
 /* ── Program Impact metrics ── */
 const impactMetrics = [
   {
@@ -65,7 +57,6 @@ export function Programs() {
       <HeroSection />
       <ProgramShowcase />
       <ProgramImpact />
-      <NumbersSection />
       <CTASection />
       <ReviewSection title="Tactical 0-1 breakdowns to help you assemble a better timeline" />
     </div>
@@ -345,59 +336,6 @@ function ProgramImpact() {
 
               {/* Bottom accent line */}
               <div className="mt-6 h-[2px] bg-[#111111]/5 group-hover:bg-[#FF4D00]/30 transition-colors" />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   NUMBERS SECTION, Centered grid of stats (KEPT AS-IS)
-   ══════════════════════════════════════════════════════════════════════════ */
-function NumbersSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <section
-      ref={ref}
-      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10 bg-white"
-    >
-      <div className="w-full max-w-[1400px] mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
-            By the numbers
-          </span>
-        </motion.div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-0">
-          {aggregateStats.map((stat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.7,
-                delay: i * 0.12,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className={`border-t border-[#111111]/10 pt-8 pb-8 ${
-                i > 0 ? "lg:border-l lg:pl-8" : ""
-              } ${i % 2 === 1 ? "pl-6 sm:pl-8" : ""}`}
-            >
-              <div className="text-[36px] sm:text-[48px] md:text-[56px] lg:text-[72px] font-display font-medium tracking-[-0.03em] leading-[1] mb-3">
-                {stat.value}
-              </div>
-              <div className="text-[13px] md:text-[15px] leading-[1.5] text-[#111111]/50 font-medium max-w-[200px]">
-                {stat.label}
-              </div>
             </motion.div>
           ))}
         </div>

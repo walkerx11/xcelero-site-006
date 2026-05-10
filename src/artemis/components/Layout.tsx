@@ -96,29 +96,29 @@ function Footer() {
           <Link to="/programs" className="group block">
             <div className="border border-white/10 p-10 md:p-12 aspect-[16/9] md:aspect-auto md:h-[300px] flex flex-col justify-between hover:bg-white/5 transition-colors relative overflow-hidden">
                <div className="flex justify-between items-start">
-                  <div className="text-[10px] font-bold tracking-widest uppercase text-white/50">Blueprint Method</div>
+                  <div className="text-[10px] font-bold tracking-widest uppercase text-white/50">xCelero Accelerator</div>
                   <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
                     <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform" />
                   </div>
                </div>
                <div>
-                  <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight mb-4">Not quite ready to raise yet?</h2>
-                  <p className="text-white/50 font-medium">Get on the path to architectural product-market fit early.</p>
+                  <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight mb-4">From thesis to operating company in 24 months.</h2>
+                  <p className="text-white/50 font-medium">High-intensity venture building with funding, mentorship, and Route infrastructure built in.</p>
                </div>
             </div>
           </Link>
           
-          <Link to="/programs" className="group block">
+          <Link to="/capital" className="group block">
             <div className="border border-white/10 p-10 md:p-12 aspect-[16/9] md:aspect-auto md:h-[300px] flex flex-col justify-between hover:bg-white/5 transition-colors relative overflow-hidden">
                <div className="flex justify-between items-start">
-                  <div className="text-[10px] font-bold tracking-widest uppercase text-white/50">XHansa Network</div>
+                  <div className="text-[10px] font-bold tracking-widest uppercase text-white/50">xCelero Capital</div>
                   <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
                     <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform" />
                   </div>
                </div>
                <div>
-                  <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight mb-4">A global engine of progress.</h2>
-                  <p className="text-white/50 font-medium">Coordinate across 190 hubs with specialized hardware and talent.</p>
+                  <h2 className="text-3xl md:text-5xl font-display font-medium tracking-tight mb-4">Invest in critical technology from $500.</h2>
+                  <p className="text-white/50 font-medium">Six vehicles, one thesis: back the technology the next century needs, in the markets that need it most.</p>
                </div>
             </div>
           </Link>
