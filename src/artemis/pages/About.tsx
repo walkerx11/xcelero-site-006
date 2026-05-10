@@ -147,7 +147,6 @@ export function About() {
       <FlowingContent />
       <HowWeWorkSection />
       <ManifestoCardsSection />
-      <ClosingCTA />
     </div>
   );
 }
@@ -577,49 +576,4 @@ function ManifestoCardsSection() {
   );
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   CLOSING CTA — Minimal, not a separate "dark page"
-   ══════════════════════════════════════════════════════════════════════════ */
-function ClosingCTA() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
 
-  return (
-    <section
-      ref={ref}
-      className="bg-[#0A0A0A] text-white py-16 md:py-24 px-5 sm:px-6 md:px-12 lg:px-20"
-    >
-      <div className="w-full max-w-3xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        >
-          <h2 className="text-[28px] sm:text-[36px] md:text-[48px] font-display font-medium tracking-[-0.02em] leading-[1.08] mb-5">
-            The next chapter is{" "}
-            <em className="italic font-serif text-[#FF4D00]">yours</em>.
-          </h2>
-          <p className="text-[14px] sm:text-[15px] md:text-[17px] leading-[1.6] text-white/40 font-medium max-w-lg mx-auto mb-8">
-            200,000 years of cooperation led here. The Route is built. The
-            engines are running.
-          </p>
-          <div className="flex flex-wrap gap-3 items-center justify-center">
-            <Link
-              to="/join"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#FF4D00] text-white text-[11px] font-bold uppercase tracking-[0.1em] hover:bg-[#FF4D00]/90 transition-colors"
-            >
-              Apply Now
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-            <Link
-              to="/careers"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-white/15 text-white/70 text-[11px] font-bold uppercase tracking-[0.1em] hover:bg-white hover:text-[#111111] transition-all"
-            >
-              View Open Roles
-            </Link>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
