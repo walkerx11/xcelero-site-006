@@ -617,7 +617,7 @@ export function Ventures() {
 
       <CaseStudiesSection />
 
-      <ReviewSection title="Field notes on critical technology, venture infrastructure, and the routes that connect them" />
+      <ReviewSection title="Dispatches from the field" />
     </div>
   );
 }

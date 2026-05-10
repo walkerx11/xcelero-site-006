@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Link } from "../router";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { insightsData } from "../data/insights";
 
 interface ReviewSectionProps {
@@ -11,161 +11,176 @@ interface ReviewSectionProps {
   backgroundColor?: string;
 }
 
-const categoryBadge: Record<string, string> = {
-  Energy: "bg-[#FF4D00]/10 text-[#FF4D00]",
-  "Food Systems": "bg-green-500/10 text-green-600",
-  Infrastructure: "bg-[#111111]/10 text-[#111111]",
-  Capital: "bg-amber-500/10 text-amber-600",
+const categoryColor: Record<string, string> = {
+  Energy: "text-[#FF4D00]",
+  "Food Systems": "text-green-500",
+  Infrastructure: "text-white/70",
+  Capital: "text-amber-400",
 };
 
-function getCategoryClass(category: string): string {
-  return categoryBadge[category] || "bg-[#111111]/5 text-[#111111]/60";
+const categoryDot: Record<string, string> = {
+  Energy: "bg-[#FF4D00]",
+  "Food Systems": "bg-green-500",
+  Infrastructure: "bg-white/40",
+  Capital: "bg-amber-400",
+};
+
+function getCatColor(category: string): string {
+  return categoryColor[category] || "text-white/50";
+}
+
+function getCatDot(category: string): string {
+  return categoryDot[category] || "bg-white/30";
 }
 
 export function ReviewSection({
-  title = "Tactical 0-1 breakdowns to help you assemble a better timeline",
-  backgroundColor = "bg-[#FAFAFA]",
+  title = "Dispatches from the field",
+  backgroundColor,
 }: ReviewSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   const featured = insightsData[0];
-  const secondary = insightsData.slice(1, 4);
+  const rest = insightsData.slice(1, 4);
 
   return (
     <section
       ref={ref}
-      className={`${backgroundColor} py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10`}
+      className="bg-[#0A0A0A] text-white border-t border-[#111111]/10"
     >
       <div className="w-full max-w-[1400px] mx-auto">
-        {/* Title */}
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-[40px] md:text-[60px] lg:text-[72px] font-display font-medium tracking-tight leading-[1.05] mb-16 md:mb-24 text-center max-w-4xl mx-auto text-balance"
-        >
-          {title}
-        </motion.h2>
-
-        {/* Featured Card: full-width, image left, content right */}
+        {/* ── Header row ── */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="px-6 md:px-12 lg:px-20 pt-16 md:pt-24 pb-10 md:pb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+        >
+          <div>
+            <span className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-[#FF4D00] mb-4 block">
+              Field Notes
+            </span>
+            <h2 className="text-[32px] sm:text-[44px] md:text-[56px] lg:text-[64px] font-display font-medium tracking-[-0.02em] leading-[0.95]">
+              {title}
+            </h2>
+          </div>
+          <Link
+            to="/insights"
+            className="inline-flex items-center gap-2 text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 hover:text-[#FF4D00] transition-colors group flex-shrink-0"
+          >
+            All dispatches
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </motion.div>
+
+        {/* ── Featured: cinematic hero image with overlay ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+          className="px-6 md:px-12 lg:px-20"
         >
           <Link
             to={`/insights/${featured.id}`}
-            className="group block border border-[#111111]/10 bg-white hover:border-[#111111]/25 transition-colors duration-300"
+            className="group block relative overflow-hidden"
           >
-            <div className="grid lg:grid-cols-12">
-              {/* Image */}
-              <div className="lg:col-span-5 aspect-[4/3] lg:aspect-auto overflow-hidden bg-[#111111]">
-                <img
-                  src={
-                    featured.imageCover ||
-                    featured.image ||
-                    "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=80"
-                  }
-                  alt={featured.title}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                />
-              </div>
-              {/* Content */}
-              <div className="lg:col-span-7 p-6 md:p-10 lg:p-14 flex flex-col justify-center">
-                <span
-                  className={`inline-block self-start px-3 py-1 text-[10px] font-mono font-bold tracking-[0.15em] uppercase mb-6 ${getCategoryClass(featured.category)}`}
-                >
+            {/* Image */}
+            <div className="relative aspect-[16/7] md:aspect-[16/6] lg:aspect-[21/7]">
+              <img
+                src={
+                  featured.imageCover ||
+                  featured.image ||
+                  "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1400&q=80"
+                }
+                alt={featured.title}
+                className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/60 via-transparent to-transparent" />
+            </div>
+
+            {/* Text overlay, pinned to bottom-left */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-14">
+              <div className="flex items-center gap-2 mb-4">
+                <span className={`w-2 h-2 rounded-full ${getCatDot(featured.category)}`} />
+                <span className={`text-[10px] font-mono font-bold tracking-[0.15em] uppercase ${getCatColor(featured.category)}`}>
                   {featured.category}
                 </span>
-                <h3 className="text-3xl md:text-4xl lg:text-[44px] font-display font-medium tracking-tight leading-[1.1] mb-5 group-hover:text-[#FF4D00] transition-colors">
-                  {featured.title}
-                </h3>
-                <p className="text-[17px] md:text-[19px] text-[#111111]/60 leading-relaxed mb-8 max-w-xl">
-                  {featured.summary}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-[12px] font-mono tracking-[0.05em] text-[#111111]/40">
-                    {featured.author} &middot; {featured.date}
-                  </span>
-                  <div className="w-10 h-10 flex items-center justify-center border border-[#111111]/15 text-[#111111] group-hover:bg-[#111111] group-hover:text-white transition-colors">
-                    <ArrowUpRight
-                      className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                      strokeWidth={1.5}
-                    />
-                  </div>
-                </div>
+                <span className="text-white/20 mx-2">|</span>
+                <span className="text-[10px] font-mono tracking-[0.08em] text-white/30">
+                  {featured.author}
+                </span>
               </div>
+              <h3 className="text-[24px] sm:text-[32px] md:text-[40px] lg:text-[48px] font-display font-medium tracking-tight leading-[1.1] mb-4 max-w-3xl group-hover:text-[#FF4D00] transition-colors">
+                {featured.title}
+              </h3>
+              <p className="text-[14px] md:text-[16px] text-white/50 font-medium leading-[1.6] max-w-xl line-clamp-2">
+                {featured.summary}
+              </p>
             </div>
           </Link>
         </motion.div>
 
-        {/* Secondary Cards: 3-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mt-5 md:mt-6">
-          {secondary.map((post, i) => (
+        {/* ── Secondary: clean text rows ── */}
+        <div className="px-6 md:px-12 lg:px-20 mt-2">
+          {rest.map((post, i) => (
             <motion.div
               key={post.id}
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.6,
-                delay: 0.2 + i * 0.1,
-                ease: "easeOut",
-              }}
+              transition={{ duration: 0.5, delay: 0.25 + i * 0.08, ease: "easeOut" }}
             >
               <Link
                 to={`/insights/${post.id}`}
-                className="group block border border-[#111111]/10 bg-white hover:border-[#111111]/25 transition-colors duration-300"
+                className="group block py-6 md:py-8 border-t border-white/8 hover:border-white/15 transition-colors"
               >
-                {/* Image on top */}
-                <div className="aspect-[16/9] overflow-hidden bg-[#111111]">
-                  <img
-                    src={
-                      post.imageCover ||
-                      post.image ||
-                      "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80"
-                    }
-                    alt={post.title}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                  />
-                </div>
-                {/* Content below */}
-                <div className="p-5 md:p-6">
-                  <span
-                    className={`inline-block px-3 py-1 text-[10px] font-mono font-bold tracking-[0.15em] uppercase mb-4 ${getCategoryClass(post.category)}`}
-                  >
-                    {post.category}
-                  </span>
-                  <h3 className="text-[20px] md:text-[22px] font-display font-medium tracking-tight leading-[1.2] mb-3 group-hover:text-[#FF4D00] transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-[14px] text-[#111111]/55 leading-[1.6] mb-5 line-clamp-3">
-                    {post.summary}
-                  </p>
-                  <span className="text-[11px] font-mono tracking-[0.05em] text-[#111111]/35">
-                    {post.author} &middot; {post.date}
-                  </span>
+                <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-8">
+                  {/* Thumbnail */}
+                  <div className="w-full md:w-[200px] lg:w-[260px] shrink-0 aspect-[16/9] md:aspect-[3/2] overflow-hidden bg-white/5">
+                    <img
+                      src={
+                        post.image ||
+                        post.imageCover ||
+                        "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&q=80"
+                      }
+                      alt={post.title}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                    />
+                  </div>
+
+                  {/* Text */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className={`w-1.5 h-1.5 rounded-full ${getCatDot(post.category)}`} />
+                      <span className={`text-[9px] font-mono font-bold tracking-[0.15em] uppercase ${getCatColor(post.category)}`}>
+                        {post.category}
+                      </span>
+                      <span className="text-white/15 mx-1">|</span>
+                      <span className="text-[9px] font-mono tracking-[0.08em] text-white/25">
+                        {post.author} &middot; {post.date}
+                      </span>
+                    </div>
+                    <h3 className="text-[18px] md:text-[22px] lg:text-[26px] font-display font-medium tracking-tight leading-[1.2] mb-3 group-hover:text-[#FF4D00] transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="text-[13px] md:text-[14px] text-white/40 font-medium leading-[1.6] line-clamp-2 max-w-xl">
+                      {post.summary}
+                    </p>
+                  </div>
+
+                  {/* Arrow */}
+                  <div className="hidden md:flex items-center justify-center w-10 h-10 shrink-0 border border-white/10 text-white/20 group-hover:border-[#FF4D00] group-hover:text-[#FF4D00] transition-colors mt-1">
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+                  </div>
                 </div>
               </Link>
             </motion.div>
           ))}
         </div>
 
-        {/* View All Field Notes */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-12 md:mt-16 text-center"
-        >
-          <Link
-            to="/insights"
-            className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.12em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
-          >
-            View All Field Notes
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
+        {/* Bottom padding */}
+        <div className="h-16 md:h-24" />
       </div>
     </section>
   );
