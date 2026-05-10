@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -18,6 +18,7 @@ import {
   Handshake,
   Lightbulb,
   Heart,
+  X,
 } from "lucide-react";
 import { Link } from "@/artemis/router";
 
@@ -274,6 +275,34 @@ const communityPillars = [
   },
 ];
 
+/* ── Rhythm Items (Community cadence) ── */
+const rhythmItems = [
+  {
+    cadence: "Weekly",
+    title: "Office Hours & Peer Circles",
+    description: "XCitizens join thematic peer circles: energy founders with energy founders, investors with investors. Office hours with partners and mentors. Informal, high-signal, low-friction.",
+    icon: Clock,
+  },
+  {
+    cadence: "Monthly",
+    title: "Deal Flow Sessions & Masterclasses",
+    description: "Curated deal flow presentations for investors. Domain masterclasses led by operators who have scaled on the Route. Every session produces actionable output, not just slides.",
+    icon: Calendar,
+  },
+  {
+    cadence: "Quarterly",
+    title: "Demo Days & Route Summits",
+    description: "Accelerator cohorts present to investors and partners. Route Summits convene cross-hub operators for deal sharing, mentorship, and flywheel acceleration. The highest-signal events in emerging market tech.",
+    icon: Star,
+  },
+  {
+    cadence: "Annually",
+    title: "xCitizen Assembly",
+    description: "The full network convenes. Strategy reviews, venture showcases, LP meetings, and the annual State of the Route address. Where the next year's thesis gets debated and ratified.",
+    icon: Globe,
+  },
+];
+
 /* ── Past Event Highlights ── */
 const pastHighlights = [
   {
@@ -309,6 +338,7 @@ export function Community() {
       <UpcomingEventsSection />
       <TestimonialsSection />
       <CommunityPillarsSection />
+      <CommunityRhythmSection />
       <PastHighlightsSection />
       <CTASection />
     </div>
@@ -592,11 +622,114 @@ function FeaturedMembersSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   EVENT DETAIL MODAL, Full-screen overlay with event details
+   ══════════════════════════════════════════════════════════════════════════ */
+function EventDetailModal({
+  event,
+  onClose,
+}: {
+  event: (typeof upcomingEvents)[number];
+  onClose: () => void;
+}) {
+  const eventTypeColor: Record<string, string> = {
+    "Demo Day": "bg-[#FF4D00] text-white",
+    Summit: "bg-[#111111] text-white",
+    Masterclass: "bg-[#FF4D00]/10 text-[#FF4D00]",
+    Fellowship: "bg-[#111111]/10 text-[#111111]",
+    "Investor Event": "bg-[#FF4D00] text-white",
+    "Town Hall": "bg-[#111111]/10 text-[#111111]",
+  };
+
+  /* ESC key to close */
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.92 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="bg-white text-[#111111] max-w-lg w-full max-h-[90vh] overflow-y-auto relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-[#111111]/40 hover:text-[#111111] transition-colors z-10"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="p-6 md:p-8">
+          {/* Type badge */}
+          <span className={`inline-block text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2.5 py-1 mb-5 ${eventTypeColor[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
+            {event.type}
+          </span>
+
+          {/* Title */}
+          <h2 className="text-[24px] md:text-[28px] font-display font-medium tracking-tight leading-[1.15] mb-6 pr-8">
+            {event.title}
+          </h2>
+
+          {/* Date, time, location */}
+          <div className="space-y-3 mb-6">
+            <div className="flex items-center gap-3 text-[13px] font-medium">
+              <Calendar className="w-4 h-4 text-[#FF4D00] flex-shrink-0" />
+              <span>{event.date}</span>
+            </div>
+            <div className="flex items-center gap-3 text-[13px] font-medium text-[#111111]/60">
+              <Clock className="w-4 h-4 text-[#FF4D00] flex-shrink-0" />
+              <span>{event.time}</span>
+            </div>
+            <div className="flex items-center gap-3 text-[13px] font-medium text-[#111111]/60">
+              <MapPin className="w-4 h-4 text-[#FF4D00] flex-shrink-0" />
+              <span>{event.location}</span>
+            </div>
+          </div>
+
+          {/* Description */}
+          <p className="text-[14px] md:text-[15px] text-[#111111]/60 leading-[1.7] font-medium mb-6">
+            {event.description}
+          </p>
+
+          {/* Spots */}
+          <div className="flex items-center gap-2 text-[12px] font-medium text-[#111111]/40 mb-8 pb-6 border-b border-[#111111]/10">
+            <Users className="w-4 h-4" />
+            <span>{event.spots}</span>
+          </div>
+
+          {/* RSVP button */}
+          <button className="w-full py-3.5 bg-[#FF4D00] text-white text-[12px] font-bold uppercase tracking-[0.12em] hover:bg-[#FF4D00]/90 transition-colors">
+            RSVP Now
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    UPCOMING EVENTS, Cards with dates, locations, and registration
    ══════════════════════════════════════════════════════════════════════════ */
 function UpcomingEventsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [selectedEvent, setSelectedEvent] = useState<(typeof upcomingEvents)[number] | null>(null);
 
   const eventTypeColor: Record<string, string> = {
     "Demo Day": "bg-[#FF4D00] text-white",
@@ -641,7 +774,8 @@ function UpcomingEventsSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
-              className={`group border bg-white p-5 md:p-7 hover:shadow-md transition-all duration-300 ${
+              onClick={() => setSelectedEvent(event)}
+              className={`group border bg-white p-5 md:p-7 hover:shadow-md transition-all duration-300 cursor-pointer ${
                 event.featured
                   ? "border-[#FF4D00]/30 hover:border-[#FF4D00]/60"
                   : "border-[#111111]/10 hover:border-[#111111]/20"
@@ -716,6 +850,16 @@ function UpcomingEventsSection() {
           </Link>
         </div>
       </div>
+
+      {/* Event Detail Modal */}
+      <AnimatePresence>
+        {selectedEvent && (
+          <EventDetailModal
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
@@ -917,6 +1061,119 @@ function CommunityPillarsSection() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COMMUNITY RHYTHM, How the network operates on a cadence
+   ══════════════════════════════════════════════════════════════════════════ */
+function CommunityRhythmSection() {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const isHeaderInView = useInView(headerRef, { once: true, margin: "-80px" });
+  const isCardsInView = useInView(cardsRef, { once: true, margin: "-80px" });
+
+  return (
+    <>
+      {/* Section header (white bg) */}
+      <section
+        ref={headerRef}
+        className="py-16 md:py-24 px-6 md:px-12 lg:px-20 bg-white text-[#111111] border-b border-[#111111]/10"
+      >
+        <div className="w-full max-w-3xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
+              The Rhythm
+            </span>
+            <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05] mb-6">
+              How the network{" "}
+              <em className="italic font-serif text-[#FF4D00]">moves</em>.
+            </h2>
+            <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
+              The community compounds because it has a cadence. Weekly, monthly,
+              quarterly. Every cycle builds on the last.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Rhythm cards (dark bg) */}
+      <section
+        ref={cardsRef}
+        className="py-16 md:py-24 px-6 md:px-12 lg:px-20 bg-[#111111] text-white"
+      >
+        <div className="w-full max-w-[1400px] mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            {rhythmItems.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={item.cadence}
+                  initial={{ opacity: 0, y: 25 }}
+                  animate={isCardsInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: i * 0.12, ease: "easeOut" }}
+                  className="border border-white/10 p-6 md:p-8 relative group hover:border-[#FF4D00]/30 transition-colors duration-300"
+                >
+                  {/* Cadence label */}
+                  <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] block mb-4">
+                    {item.cadence}
+                  </span>
+
+                  {/* Title */}
+                  <h3 className="text-[18px] md:text-[20px] font-display font-medium tracking-tight mb-3 group-hover:text-[#FF4D00] transition-colors">
+                    {item.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-[13px] text-white/45 leading-[1.7] font-medium">
+                    {item.description}
+                  </p>
+
+                  {/* Icon in bottom-right corner */}
+                  <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6">
+                    <Icon className="w-10 h-10 md:w-12 md:h-12 text-white/10" strokeWidth={1} />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Community by the numbers mini-stats row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isCardsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+            className="mt-12 md:mt-16 pt-10 border-t border-white/10"
+          >
+            <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
+              <div className="text-center">
+                <span className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em] text-white">52+</span>
+                <span className="text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 ml-2">peer circle sessions/yr</span>
+              </div>
+              <div className="hidden md:block w-px h-8 bg-white/10" />
+              <div className="text-center">
+                <span className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em] text-white">12</span>
+                <span className="text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 ml-2">masterclasses/yr</span>
+              </div>
+              <div className="hidden md:block w-px h-8 bg-white/10" />
+              <div className="text-center">
+                <span className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em] text-white">4</span>
+                <span className="text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 ml-2">demo days/yr</span>
+              </div>
+              <div className="hidden md:block w-px h-8 bg-white/10" />
+              <div className="text-center">
+                <span className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em] text-white">1</span>
+                <span className="text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 ml-2">Assembly</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
 }
 

@@ -759,3 +759,120 @@ Stage Summary:
 - All 18 team members now show anonymous initials monograms instead of stock photos
 - Founder card visually distinguished with orange monogram, Crown icon, and tinted border
 - No more Unsplash portrait images anywhere in team data or card components
+
+---
+Task ID: 13
+Agent: Main Agent
+Task: Add Case Studies section to Ventures page below Load More button
+
+Work Log:
+- Read `/home/z/my-project/worklog.md`, `/home/z/my-project/src/artemis/pages/Ventures.tsx`, and `/home/z/my-project/src/artemis/data/caseStudies.ts` to understand current state
+- Added `import { caseStudiesData } from "@/artemis/data/caseStudies"` to Ventures.tsx imports
+- Created `CaseStudiesSection` component with:
+  - **Section header**: White bg with `border-t border-[#111111]/10`, `py-20 md:py-28` padding matching rest of page
+    - Small mono label: "CASE STUDIES" in `text-[10px] font-mono font-bold tracking-[0.4em] uppercase text-[#FF4D00]`
+    - Heading: "Proof that critical technology <em>works</em>" with "works" in italic serif orange via `font-serif italic text-[#FF4D00]`
+    - Subtext: "Four ventures. Four verticals. Real revenue, real jobs, real impact."
+  - **Cards grid**: `grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5`
+    - Each card has case study image as background with `aspect-[4/3]`
+    - Dark gradient overlay from bottom: `bg-gradient-to-t from-black/80 via-black/30 to-transparent`
+    - Vertical tag badge at top-left: `bg-[#FF4D00]` with mono uppercase text
+    - Venture name in white at bottom: `text-[15px] md:text-[17px] font-display font-bold text-white`
+    - Key metric in orange: `text-[#FF4D00]` showing `cs.results.revenue`
+    - Hover effects: `group-hover:scale-105` on image, `grayscale group-hover:grayscale-0` for color transition, brightened overlay
+    - Each card links to `/case-study` via `<Link>` from `@/artemis/router`
+  - **Animations**: `useInView` scroll-triggered with staggered card entrance (`delay: 0.1 + i * 0.1`)
+- Inserted `<CaseStudiesSection />` between the Ventures Grid section closing tag and `<ReviewSection />` in the Ventures component render
+- Order now: Load More button → CaseStudiesSection → ReviewSection
+- All lint checks pass clean
+- Dev server running on port 3000
+
+Stage Summary:
+- Case Studies section added to Ventures page, positioned below Load More and above ReviewSection
+- 4 case study cards (SolarGrid Africa, AquaPure, Denari Finance, NomaAgri) with image backgrounds, gradient overlays, vertical badges, venture names, and key metrics
+- Scroll-triggered animations with staggered card entrance via framer-motion useInView
+- Card hover effects: grayscale-to-color image transition, slight scale, brightened overlay
+- All cards link to `/case-study` page
+- Design consistent with xCelero language: font-display, font-mono, #FF4D00 accent, #111111 text
+
+---
+Task ID: 12-a
+Agent: Main Agent
+Task: Add "13 Critical Domains" section with image cards to About page
+
+Work Log:
+- Read worklog at `/home/z/my-project/worklog.md` and current `/src/artemis/pages/About.tsx` (580 lines)
+- Added `criticalDomains` data array with 13 domains: Energy, Water, Food & Agriculture, Manufacturing, Mobility & Logistics, Data & Intelligence, Built Environments, Life Sciences, Digital Finance, Education, Space, Defense & Security, Climate & Regeneration
+- Each domain has name, description, and Unsplash image URL
+- Created `CriticalDomainsSection` component with:
+  - Section header: "Critical Domains" mono uppercase orange label, "13 technologies. One Route." heading with "Route" in italic serif orange
+  - Descriptive subtext about self-reliance domains
+  - Grid layout: `grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4`
+  - Each card: `aspect-[3/4]` tall card with background image (`object-cover`), dark gradient overlay (`from-black/80 via-black/20 to-transparent`), domain name at bottom (`text-[14px] md:text-[16px] font-display font-medium`), description text (`text-[11px] text-white/60`)
+  - Hover effects: image scales up (group-hover:scale-110, duration-500), overlay darkens (from-black/90 via-black/30)
+  - Staggered entrance animations: delay i * 0.06 with useInView scroll trigger
+  - Dark section background: `bg-[#111111] text-white`
+  - "Explore ventures in these domains" link to `/ventures` with ArrowRight icon
+- Inserted `<CriticalDomainsSection />` between `<HowWeWorkSection />` and `<ManifestoCardsSection />` in the About component
+- All existing sections preserved unchanged
+- Updated About component comment to include critical domains
+- No sovereignty/sovereign words or em dashes used
+- All lint checks pass clean
+
+Stage Summary:
+- About page now has 5 sections: OpeningSection, FlowingContent, HowWeWorkSection, CriticalDomainsSection, ManifestoCardsSection
+- CriticalDomainsSection displays 13 domain image cards in a responsive grid
+- Cards feature Unsplash background images with gradient overlays and staggered animations
+- Section uses dark background (#111111) with orange accent (#FF4D00) for labels and heading accent
+- Link to /ventures provided below the grid
+
+---
+Task ID: 14 + 15
+Agent: Main Agent
+Task: Add Event Detail Popup and Community Rhythm Section to Community page
+
+Work Log:
+- Read `/home/z/my-project/worklog.md` and existing `Community.tsx` (1048 lines)
+- **Feature 1: Event Detail Popup**
+  - Added `useEffect` import from React
+  - Added `X` icon import from lucide-react
+  - Added `selectedEvent` state to `UpcomingEventsSection`: `useState<typeof upcomingEvents[number] | null>(null)`
+  - Made each event card clickable with `onClick={() => setSelectedEvent(event)}` and added `cursor-pointer`
+  - Created `EventDetailModal` component:
+    - Full-screen semi-transparent backdrop (`fixed inset-0 bg-black/60 backdrop-blur-sm z-50`)
+    - Centered white modal card (`max-w-lg`, `max-h-[90vh]`, `overflow-y-auto`)
+    - Close button (X icon) at top-right with hover effect
+    - Event type badge (colored, matches existing eventTypeColor scheme)
+    - Event title (display font, 24-28px)
+    - Date, time, location rows with Calendar/Clock/MapPin icons in orange
+    - Full description text
+    - Spots/availability info with Users icon
+    - RSVP button at bottom with orange bg (#FF4D00)
+    - Click backdrop to close (stopPropagation on modal content)
+    - ESC key to close (useEffect with keydown listener)
+  - Wrapped modal in `AnimatePresence` for smooth enter/exit animations (fade + scale)
+
+- **Feature 2: Community Rhythm Section**
+  - Added `rhythmItems` data array with 4 cadence items (Weekly/Clock, Monthly/Calendar, Quarterly/Star, Annually/Globe)
+  - Created `CommunityRhythmSection` component with two sub-sections:
+    - **Section header** (white bg, centered): "THE RHYTHM" mono label in orange, heading "How the network moves." with "moves" in italic serif orange, subtext about cadence
+    - **Rhythm cards** (dark bg `bg-[#111111]`, white text): Grid of 4 cadence cards in `grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5`
+      - Each card: `border border-white/10 p-6 md:p-8` with hover effect
+      - Cadence label: mono uppercase in orange
+      - Title: `text-[18px] md:text-[20px] font-display font-medium` with hover orange
+      - Description: `text-[13px] text-white/45 leading-[1.7]`
+      - Icon in bottom-right corner: large and subtle (`text-white/10`)
+    - **Community by the numbers** mini-stats row below grid:
+      - 52+ peer circle sessions/yr, 12 masterclasses/yr, 4 demo days/yr, 1 Assembly
+      - Inline row with vertical dividers on desktop (`w-px h-8 bg-white/10`)
+      - Display font numbers + mono uppercase labels
+  - Inserted `CommunityRhythmSection` between `CommunityPillarsSection` and `PastHighlightsSection`
+
+- All existing sections preserved unchanged
+- All lint checks pass clean
+- Dev server running on port 3000
+
+Stage Summary:
+- Event Detail Popup: Clickable event cards open animated modal with full event details, ESC/backdrop close
+- Community Rhythm Section: Two-part section (white header + dark cards) showing Weekly/Monthly/Quarterly/Annually cadence with mini-stats row
+- Both features match xCelero design language: font-display, font-mono, #FF4D00 accent, #111111 text, clean borders

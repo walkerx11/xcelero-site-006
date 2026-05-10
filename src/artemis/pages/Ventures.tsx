@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Link } from "@/artemis/router";
 import { Search, ChevronDown, X, MapPin, Scale, Rocket, DollarSign, Users, ArrowRight } from "lucide-react";
 import { venturesData, Venture } from "@/artemis/data/ventures";
+import { caseStudiesData } from "@/artemis/data/caseStudies";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
 
 const ITEMS_PER_PAGE = 25;
@@ -230,6 +231,82 @@ function VentureExpanded({ venture, onClose }: { venture: Venture; onClose: () =
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   CASE STUDIES SECTION
+   ══════════════════════════════════════════════════════════════════════════ */
+function CaseStudiesSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+
+  return (
+    <section className="bg-white border-t border-[#111111]/10">
+      <div ref={sectionRef} className="px-6 md:px-12 w-full max-w-7xl mx-auto py-20 md:py-28">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-12 md:mb-16"
+        >
+          <div className="text-[10px] font-mono font-bold tracking-[0.4em] uppercase text-[#FF4D00] mb-4">
+            Case Studies
+          </div>
+          <h2 className="text-[32px] md:text-[44px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05] mb-4">
+            Proof that critical technology <em className="font-serif italic text-[#FF4D00]">works</em>
+          </h2>
+          <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.7] max-w-2xl">
+            Four ventures. Four verticals. Real revenue, real jobs, real impact.
+          </p>
+        </motion.div>
+
+        {/* Cards Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+          {caseStudiesData.map((cs, i) => (
+            <motion.div
+              key={cs.id}
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Link
+                href="/case-study"
+                className="group block relative aspect-[4/3] overflow-hidden"
+              >
+                {/* Background Image */}
+                <img
+                  src={cs.image}
+                  alt={cs.ventureName}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
+                />
+
+                {/* Dark Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-300 group-hover:from-black/70 group-hover:via-black/20" />
+
+                {/* Vertical Tag Badge */}
+                <div className="absolute top-3 left-3">
+                  <span className="px-2 py-1 bg-[#FF4D00] text-[8px] font-mono font-bold tracking-widest uppercase text-white">
+                    {cs.vertical}
+                  </span>
+                </div>
+
+                {/* Bottom Content */}
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <h3 className="text-[15px] md:text-[17px] font-display font-bold text-white leading-tight mb-1">
+                    {cs.ventureName}
+                  </h3>
+                  <span className="text-[12px] md:text-[13px] font-display font-medium text-[#FF4D00]">
+                    {cs.results.revenue}
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    VENTURES PAGE
    ══════════════════════════════════════════════════════════════════════════ */
 export function Ventures() {
@@ -382,6 +459,8 @@ export function Ventures() {
           </div>
         )}
       </section>
+
+      <CaseStudiesSection />
 
       <ReviewSection title="Field notes on critical technology, venture infrastructure, and the routes that connect them" />
     </div>

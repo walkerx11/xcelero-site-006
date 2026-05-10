@@ -137,8 +137,77 @@ const categories = [
   { key: "research", label: "Research & Associates" },
 ];
 
+/* ── Critical Domains Data ── */
+const criticalDomains = [
+  {
+    name: "Energy",
+    description: "Distributed power generation, microgrids, and off-grid infrastructure",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Water",
+    description: "Atmospheric harvesting, desalination, and purification systems",
+    image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Food & Agriculture",
+    description: "Precision farming, agritech, and food supply chain infrastructure",
+    image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Manufacturing",
+    description: "Distributed production, additive manufacturing, and local value addition",
+    image: "https://images.unsplash.com/photo-1565043666747-69f6646db940?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Mobility & Logistics",
+    description: "Autonomous transport, cross-border trade rails, and last-mile delivery",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Data & Intelligence",
+    description: "Independent AI, federated learning, and locally-controlled data infrastructure",
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Built Environments",
+    description: "Prefabricated housing, smart cities, and climate-adaptive construction",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Life Sciences",
+    description: "Diagnostics, therapeutics, and point-of-care biotech for emerging markets",
+    image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Digital Finance",
+    description: "Mobile money rails, fractional investment, and cross-border settlement",
+    image: "https://images.unsplash.com/photo-1642790106117-e829e14a795f?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Education",
+    description: "Adaptive learning, project-based curricula, and cognitive infrastructure",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Space",
+    description: "Orbital independence, satellite infrastructure, and off-world capability",
+    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Defense & Security",
+    description: "Independent security tech, AI-driven surveillance, and cyber infrastructure",
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    name: "Climate & Regeneration",
+    description: "Carbon credits, bio-acoustic monitoring, and circular industrial systems",
+    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80",
+  },
+];
+
 /* ══════════════════════════════════════════════════════════════════════════
-   ABOUT PAGE — Flowing narrative + How we work + manifesto cards
+   ABOUT PAGE — Flowing narrative + How we work + critical domains + manifesto cards
    ══════════════════════════════════════════════════════════════════════════ */
 export function About() {
   return (
@@ -146,6 +215,7 @@ export function About() {
       <OpeningSection />
       <FlowingContent />
       <HowWeWorkSection />
+      <CriticalDomainsSection />
       <ManifestoCardsSection />
     </div>
   );
@@ -500,6 +570,87 @@ function TeamCard({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   CRITICAL DOMAINS — 13 domain image cards
+   ══════════════════════════════════════════════════════════════════════════ */
+function CriticalDomainsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-16 md:py-24 px-5 sm:px-6 md:px-12 lg:px-20 bg-[#111111] text-white"
+    >
+      <div className="w-full max-w-[1200px] mx-auto">
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mb-10 md:mb-14"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-4 block">
+            Critical Domains
+          </span>
+          <h2 className="text-[28px] md:text-[40px] lg:text-[48px] font-display font-medium tracking-tight leading-[1.08] mb-4">
+            13 technologies. One{" "}
+            <em className="italic font-serif text-[#FF4D00]">Route</em>.
+          </h2>
+          <p className="text-[15px] md:text-[17px] text-white/40 font-medium leading-[1.6] max-w-xl">
+            Each domain is a vertical where self-reliance is not optional but
+            existential. We build, invest, and deploy across all thirteen.
+          </p>
+        </motion.div>
+
+        {/* Domain image cards grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+          {criticalDomains.map((domain, i) => (
+            <motion.div
+              key={domain.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.06, ease: "easeOut" }}
+              className="group relative aspect-[3/4] overflow-hidden cursor-pointer"
+            >
+              {/* Background image */}
+              <img
+                src={domain.image}
+                alt={domain.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/90 group-hover:via-black/30" />
+
+              {/* Text content at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+                <h3 className="text-[14px] md:text-[16px] font-display font-medium text-white leading-tight mb-1">
+                  {domain.name}
+                </h3>
+                <p className="text-[11px] text-white/60 leading-[1.5] font-medium">
+                  {domain.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Link to ventures */}
+        <div className="mt-8 md:mt-10">
+          <Link
+            to="/ventures"
+            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-[#FF4D00] hover:text-white transition-colors group"
+          >
+            Explore ventures in these domains
+            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    MANIFESTO CARDS — Horizontal side-by-side cards below How We Work
    ══════════════════════════════════════════════════════════════════════════ */
 function ManifestoCardsSection() {
@@ -575,5 +726,3 @@ function ManifestoCardsSection() {
     </section>
   );
 }
-
-
