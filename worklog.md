@@ -656,3 +656,35 @@ Stage Summary:
 8. **LayoutGroup**: Removed `<LayoutGroup>` wrapper around the grid and `</LayoutGroup>` after `</AnimatePresence>`
 
 **Lint**: Passed with no errors.
+
+---
+Task ID: 6
+Agent: Main Agent
+Task: Rewrite About page team section as "How We Work" with Newlab/YC blended roles, move manifesto to horizontal cards
+
+Work Log:
+- Read current About.tsx (700 lines) to understand existing structure
+- Read team data (team.ts), Manifesto.tsx, and Team.tsx for context
+- Replaced TeamSection (detailed individual cards with photos, bios, filter tabs) with HowWeWorkSection (functional role groups)
+- Created 5 role groups from user's title list, blending Newlab (function-based) + YC (partner hierarchy) approach:
+  - Investment & Governance: Managing Partner(s), General Partner(s), Partner Emeritus, Associates
+  - Product & Programs: Head of Product, Head of Programs, Product Engineer
+  - Business & Community: Global Head of Business, Membership & Community
+  - Capital & Operations: Fund Controller, Finance, Legal Analyst
+  - Research & Insight: Writer & Researcher
+- Each role group card has: icon, label, description, and role list with dot indicators
+- Removed manifesto entries from FlowingContent timeline thread (TransitionMarker + ManifestoEntry components)
+- Kept ManifestoCardsSection as horizontal 3-column cards below How We Work section
+- Removed unused imports: useState, AnimatePresence, MapPin, ChevronDown, teamData, TeamMember
+- Added imports: Briefcase, Cpu, TrendingUp, Shield, PenTool for role group icons
+- Section header: "How we work" with "Not a hierarchy. An operating system." tagline
+- Added "View Open Roles" link at bottom of How We Work section
+- All lint checks pass clean
+- Pushed to GitHub
+
+Stage Summary:
+- About page team section replaced with "How We Work" functional role groups
+- No more individual bios, photos, or filter tabs
+- Roles organized into 5 groups matching Newlab/YC blended approach
+- Manifesto removed from timeline thread, exists only as horizontal cards below
+- Clean 3-section flow: Timeline → How We Work → What We Believe
