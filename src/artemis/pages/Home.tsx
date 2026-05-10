@@ -510,11 +510,15 @@ const homeEvents = [
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
-   UPCOMING EVENTS SECTION, Featured events with CTA to Community page
+   UPCOMING EVENTS SECTION, Magazine-style editorial layout
    ══════════════════════════════════════════════════════════════════════════ */
 function UpcomingEventsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const featuredEvents = homeEvents.filter((e) => e.featured);
+  const otherEvents = homeEvents.filter((e) => !e.featured);
+  const heroEvent = featuredEvents[0];
 
   const eventTypeStyle: Record<string, string> = {
     "Demo Day": "bg-[#FF4D00] text-white",
@@ -557,77 +561,157 @@ function UpcomingEventsSection() {
           </div>
         </motion.div>
 
-        {/* Events grid with images */}
-        <div className="grid md:grid-cols-2 gap-5 md:gap-6">
-          {homeEvents.map((event, i) => (
+        {/* Magazine layout: featured hero + compact list */}
+        <div className="grid lg:grid-cols-12 gap-5 md:gap-6">
+          {/* Left: Featured hero event */}
+          {heroEvent && (
             <motion.div
-              key={event.title}
               initial={{ opacity: 0, y: 25 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
-              className={`group border bg-white overflow-hidden hover:shadow-md transition-all duration-300 ${
-                event.featured
-                  ? "border-[#FF4D00]/30 hover:border-[#FF4D00]/60"
-                  : "border-[#111111]/10 hover:border-[#111111]/25"
-              }`}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="lg:col-span-7 group border bg-white overflow-hidden hover:shadow-md transition-all duration-300 border-[#FF4D00]/30 hover:border-[#FF4D00]/50"
             >
-              {/* Event image */}
-              <div className="relative aspect-[16/9] overflow-hidden">
+              {/* Tall hero image */}
+              <div className="relative aspect-[4/3] lg:aspect-[3/2] overflow-hidden">
                 <img
-                  src={event.image}
-                  alt={event.title}
+                  src={heroEvent.image}
+                  alt={heroEvent.title}
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 {/* Type badge */}
-                <div className="absolute top-3 left-3">
-                  <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 ${eventTypeStyle[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
-                    {event.type}
+                <div className="absolute top-4 left-4 flex items-center gap-2">
+                  <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2.5 py-1 ${eventTypeStyle[heroEvent.type] || "bg-[#111111]/10 text-[#111111]"}`}>
+                    {heroEvent.type}
+                  </span>
+                  <span className="text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2.5 py-1 bg-[#FF4D00] text-white flex items-center gap-1">
+                    <Star className="w-3 h-3" />
+                    Featured
                   </span>
                 </div>
-                {event.featured && (
-                  <div className="absolute top-3 right-3">
+                {/* Title + date overlaid on image */}
+                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-8">
+                  <h3 className="text-[22px] sm:text-[28px] md:text-[34px] font-display font-medium tracking-tight leading-[1.1] text-white mb-3 group-hover:text-[#FF4D00] transition-colors">
+                    {heroEvent.title}
+                  </h3>
+                  <p className="text-[13px] md:text-[15px] text-white/70 leading-[1.6] font-medium mb-4 line-clamp-2">
+                    {heroEvent.description}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-4 text-[11px] text-white/60 font-mono font-bold tracking-[0.05em] uppercase">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-[#FF4D00]" />
+                      {heroEvent.date}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-[#FF4D00]" />
+                      {heroEvent.time}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-[#FF4D00]" />
+                      {heroEvent.location}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Right: Compact event list */}
+          <div className="lg:col-span-5 flex flex-col gap-5 md:gap-6">
+            {/* Second featured event (if any) */}
+            {featuredEvents[1] && (
+              <motion.div
+                initial={{ opacity: 0, y: 25 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+                className="group border bg-white overflow-hidden hover:shadow-md transition-all duration-300 border-[#FF4D00]/30 hover:border-[#FF4D00]/50"
+              >
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <img
+                    src={featuredEvents[1].image}
+                    alt={featuredEvents[1].title}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 flex items-center gap-2">
+                    <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 ${eventTypeStyle[featuredEvents[1].type] || "bg-[#111111]/10 text-[#111111]"}`}>
+                      {featuredEvents[1].type}
+                    </span>
                     <span className="text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 bg-[#FF4D00] text-white flex items-center gap-1">
                       <Star className="w-3 h-3" />
                       Featured
                     </span>
                   </div>
-                )}
-                {/* Date overlay */}
-                <div className="absolute bottom-3 left-3">
-                  <div className="text-[11px] font-mono font-bold tracking-[0.05em] text-white flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-[#FF4D00]" />
-                    {event.date}
+                </div>
+                <div className="p-5">
+                  <h3 className="text-[18px] md:text-[20px] font-display font-medium tracking-tight leading-tight mb-2 group-hover:text-[#FF4D00] transition-colors">
+                    {featuredEvents[1].title}
+                  </h3>
+                  <p className="text-[12px] md:text-[13px] text-[#111111]/50 leading-[1.6] font-medium mb-3 line-clamp-2">
+                    {featuredEvents[1].description}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-[#111111]/40 font-mono font-bold tracking-[0.05em] uppercase">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3 text-[#FF4D00]/60" />
+                      {featuredEvents[1].date}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <MapPin className="w-3 h-3 text-[#FF4D00]/60" />
+                      {featuredEvents[1].location}
+                    </span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
+            )}
 
-              {/* Content below image */}
-              <div className="p-5 md:p-6">
-                {/* Title */}
-                <h3 className="text-[18px] md:text-[22px] font-display font-medium tracking-tight leading-tight mb-3 group-hover:text-[#FF4D00] transition-colors">
-                  {event.title}
-                </h3>
+            {/* Other events as compact rows */}
+            {otherEvents.map((event, i) => (
+              <motion.div
+                key={event.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.25 + i * 0.1, ease: "easeOut" }}
+                className="group border bg-white overflow-hidden hover:shadow-md transition-all duration-300 border-[#111111]/10 hover:border-[#111111]/25"
+              >
+                <div className="flex gap-4 p-4 md:p-5">
+                  {/* Date block */}
+                  <div className="flex-shrink-0 w-16 md:w-20 flex flex-col items-center justify-center border border-[#111111]/10 bg-white py-2">
+                    <span className="text-[10px] font-mono font-bold tracking-[0.1em] uppercase text-[#FF4D00]">
+                      {event.date.split(" ")[0]}
+                    </span>
+                    <span className="text-[24px] md:text-[28px] font-display font-medium leading-[1] text-[#111111]">
+                      {event.date.split(" ")[1].replace(",", "")}
+                    </span>
+                    <span className="text-[10px] font-mono font-bold tracking-[0.1em] uppercase text-[#111111]/40">
+                      {event.date.split(" ")[2]}
+                    </span>
+                  </div>
 
-                {/* Description */}
-                <p className="text-[13px] md:text-[14px] text-[#111111]/50 leading-[1.65] font-medium mb-4 line-clamp-2">
-                  {event.description}
-                </p>
-
-                {/* Meta row */}
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-[#111111]/40 font-medium pt-4 border-t border-[#111111]/5">
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-[#FF4D00]/60" />
-                    {event.time}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-[#FF4D00]/60" />
-                    {event.location}
-                  </span>
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className={`text-[8px] font-mono font-bold tracking-[0.1em] uppercase px-1.5 py-0.5 ${eventTypeStyle[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
+                        {event.type}
+                      </span>
+                    </div>
+                    <h3 className="text-[15px] md:text-[17px] font-display font-medium tracking-tight leading-tight mb-1.5 group-hover:text-[#FF4D00] transition-colors">
+                      {event.title}
+                    </h3>
+                    <div className="flex items-center gap-3 text-[10px] text-[#111111]/40 font-mono font-bold tracking-[0.05em] uppercase">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-[#FF4D00]/60" />
+                        {event.time}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-[#FF4D00]/60" />
+                        {event.location}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
