@@ -20,6 +20,10 @@ import {
   Zap,
   Users,
   ChevronRight,
+  Scale,
+  Building,
+  Network,
+  TrendingUp,
 } from "lucide-react";
 import { Link } from "@/artemis/router";
 import {
@@ -487,6 +491,70 @@ export function CareersPage() {
               </Link>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── Life at xCelero Culture Section ────────────────────── */}
+      <section className="bg-[#FAFAFA] border-t border-b border-[#111111]/10">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="text-[10px] font-mono tracking-[0.4em] text-[#FF4D00] mb-4 uppercase font-bold">
+              Life at xCelero
+            </p>
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-medium tracking-tight leading-[1.05] mb-16">
+              Build the infrastructure the next century{" "}
+              <em className="italic font-serif text-[#FF4D00]">needs</em>
+            </h2>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: Scale,
+                title: "Solidarity Pricing",
+                description: "We believe geography shouldn't determine the quality of support. Founders in Nairobi get the same caliber of mentorship as founders in New York, at a fraction of the cost.",
+              },
+              {
+                icon: Building,
+                title: "Hub-First Work",
+                description: "Our teams work from XHansa Hubs across 39 countries. CNC machines, prototyping labs, and co-working spaces are your office.",
+              },
+              {
+                icon: Network,
+                title: "Route Network",
+                description: "Every team member is connected to 190 hubs, 1,000+ operators, and a global community of builders. You're never working alone.",
+              },
+              {
+                icon: TrendingUp,
+                title: "Growth Paths",
+                description: "From operator to program director. From analyst to partner. We promote from within and invest in your development.",
+              },
+            ].map((card, i) => (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="border border-[#111111]/10 bg-white p-6 hover:border-[#111111]/20 transition-colors group"
+              >
+                <div className="w-10 h-10 border border-[#111111]/10 flex items-center justify-center mb-5 group-hover:border-[#FF4D00] group-hover:text-[#FF4D00] transition-colors">
+                  <card.icon className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-display font-medium tracking-tight mb-3">
+                  {card.title}
+                </h3>
+                <p className="text-[13px] text-[#111111]/55 leading-[1.65] font-medium">
+                  {card.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

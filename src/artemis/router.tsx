@@ -53,6 +53,9 @@ export function RouterProvider({ children }: { children: React.ReactNode }) {
   if (path.startsWith("/insights/") && path.split("/").length === 3) {
     params.id = path.split("/")[2];
   }
+  if (path.startsWith("/case-studies/") && path.split("/").length === 3) {
+    params.id = path.split("/")[2];
+  }
 
   return (
     <RouterContext.Provider value={{ path, navigate, params }}>

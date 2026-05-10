@@ -21,9 +21,36 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "xCelero Labs – Critical Technologies",
-  description: "A high-performance civilizational venture launchpad and accelerator network. We back builders tackling civilization-level challenges.",
-  keywords: ["xCelero", "Critical Technologies", "Venture Capital", "Deep Tech", "Civilizational Infrastructure"],
+  title: "xCelero Labs — Critical Technology for Emerging Markets",
+  description: "Venture studio and infrastructure platform building critical technology across 39 countries. Invest from $500.",
+  keywords: ["xCelero", "Critical Technology", "Venture Capital", "Deep Tech", "Emerging Markets", "Infrastructure"],
+  manifest: "/manifest.json",
+  themeColor: "#FF4D00",
+  openGraph: {
+    title: "xCelero Labs — Critical Technology for Emerging Markets",
+    description: "Venture studio and infrastructure platform building critical technology across 39 countries. Invest from $500.",
+    url: "https://xcelero.com",
+    siteName: "xCelero Labs",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=630&fit=crop",
+        width: 1200,
+        height: 630,
+        alt: "xCelero Labs — Critical Technology for Emerging Markets",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "xCelero Labs — Critical Technology for Emerging Markets",
+    description: "Venture studio and infrastructure platform building critical technology across 39 countries. Invest from $500.",
+    images: ["https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=630&fit=crop"],
+  },
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

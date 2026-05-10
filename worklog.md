@@ -282,7 +282,230 @@ Stage Summary:
 - All lint checks pass clean
 
 ---
-## ⚡ AUTO-SAVE RULE
-After every completed task, always run:
-  git add -A && git commit -m "<task description>" && git push origin main
-GitHub repo: https://github.com/walkerx11/xcelero-site-006
+Task ID: 1-a
+Agent: Sub Agent
+Task: Add routing and navigation for Team and CaseStudies pages
+
+Work Log:
+- **page.tsx changes:**
+  - Added imports for `Team` from `@/artemis/pages/Team` and `CaseStudies` from `@/artemis/pages/CaseStudies`
+  - Added route: `if (path === "/team") return <Team />;`
+  - Added route: `if (path === "/case-study") return <CaseStudies />;`
+  - Enhanced 404 fallback to editorial-style page with:
+    - Large "404" in display font (80px mobile, 120px desktop)
+    - "Page Not Found" subtitle in display font
+    - Descriptive message: "The page you're looking for doesn't exist or has been moved."
+    - "Return Home" button (bg-[#111111] text-white, hover:bg-[#FF4D00])
+    - "Back to Insights" and "View Ventures" secondary links with hover accent
+    - White background, centered layout, consistent xCelero typography
+
+- **Layout.tsx changes:**
+  - Added `{ name: "team", path: "/team" }` after "careers" entry in navLinks array
+  - Added `{ name: "case studies", path: "/case-studies" }` after "team" entry in navLinks array
+
+- **router.tsx changes:**
+  - Added param parsing for case-studies: `if (path.startsWith("/case-studies/") && path.split("/").length === 3) { params.id = path.split("/")[2]; }`
+
+- All lint checks pass clean
+
+Stage Summary:
+- Team page now accessible at `#/team`
+- CaseStudies page now accessible at `#/case-studies`
+- Both pages linked in desktop and mobile navigation
+- Case-study detail route param parsing available for future detail pages
+- 404 page redesigned with editorial style consistent with site design
+
+---
+Task ID: 1-b
+Agent: Sub Agent
+Task: Add newsletter confirmation flow (#18) and enhance Favicon & Open Graph Meta (#20)
+
+Work Log:
+
+**Part 1: Newsletter Confirmation Flow (#18)**
+- Modified `NewsletterSection` in `/src/artemis/pages/Home.tsx`:
+  - Added `useCallback` import from React
+  - Added `Check` icon import from lucide-react
+  - Added `submitted` state with `useState(false)`
+  - Changed form `onSubmit` to `setSubmitted(true)` instead of no-op
+  - When `submitted` is true, renders confirmation UI with:
+    - Checkmark icon: orange-bordered circle with Lucide `Check` icon in brand orange (#FF4D00)
+    - Heading: "Check your inbox" in display font with responsive sizing
+    - Body: "You're now subscribed to the xCelero Letter. Look for our quarterly dispatch on critical technology commercialization."
+    - "Return to site" link: scrolls to top with smooth behavior, orange text with hover transition, ArrowRight icon
+  - Confirmation UI wrapped in `motion.div` with fade-in animation
+  - When `submitted` is false, renders original form unchanged
+
+**Part 2: Favicon & Open Graph Meta (#20)**
+- Replaced `/public/favicon.svg` with proper SVG:
+  - Orange (#FF4D00) rounded square (rx=6) with path-based white "X" letter
+  - Replaced previous `<text>` element (which renders inconsistently as favicon) with SVG `<path>` for reliable rendering
+  - Clean, minimal design matching xCelero brand
+- Created `/public/manifest.json`:
+  - Web app manifest with name, short_name, description, theme_color (#FF4D00), background_color (#FFFFFF)
+  - Icon reference to `/favicon.svg`
+  - Standalone display mode
+- Updated `/src/app/layout.tsx` metadata:
+  - Added `manifest: "/manifest.json"` for PWA support
+  - Added `themeColor: "#FF4D00"` for browser chrome theming
+  - Kept existing OG image (Unsplash tech workspace photo) as it works well
+  - Kept existing title, description, keywords, twitter card config, icons config
+
+- All lint checks pass clean
+- Dev server running and responding on port 3000
+
+Stage Summary:
+- Newsletter form now has full submit → confirmation flow with checkmark, heading, body text, and return-to-site link
+- Favicon upgraded from text-element SVG to path-based SVG for reliable rendering
+- Web app manifest created for PWA support
+- Theme color (#FF4D00) added to metadata for browser chrome theming
+- All changes maintain xCelero's editorial aesthetic
+
+---
+Task ID: 2-b
+Agent: Sub Agent
+Task: Create Investor Dashboard page (#4) for portfolio overview
+
+Work Log:
+- Created `/src/artemis/pages/InvestorDashboard.tsx` with 6 sections:
+  - **Hero**: Dark bg (#111111), "xCelero Capital Dashboard" mono label, "Portfolio at a glance." heading, subtext about quarterly updates, disclaimer in white/30
+  - **Key Metrics Row**: 4 white cards (AUM $127.4M, 43 Active Ventures, 28.6% Net IRR, 7 Exits) with icons, hover effects, display font numbers
+  - **Fund Performance**: Table with 6 funds (Venture Fund I $45M +32.4%, Critical Tech $28M +24.8%, Route Infrastructure $22M +18.2%, Catalyst Notes $15M +12.6%, Community Notes $8.4M +8.4%, SPVs $9M Varies), responsive mobile layout with inline labels
+  - **Portfolio Breakdown**: 2-column layout with CSS bar charts (sector: Energy 28%, Water & Food 22%, Digital Infrastructure 18%, Manufacturing 14%, Mobility 10%, Other 8%; stage: Pre-Seed 35%, Seed 40%, Growth 25%), animated bars with #FF4D00 opacity variants
+  - **Recent Activity**: Timeline with 5 events (SolarGrid $4.2M, AquaPure expansion, Denari $12M, NomaAgri 12K farmers, Q3 distribution $2.1M), left border + dot markers
+  - **CTA Section**: Dark bg, "Ready to invest?" heading, two buttons (Schedule a Call → /join, View Investment Vehicles → /capital)
+- Added `/dashboard` route in `src/app/page.tsx` with InvestorDashboard import
+- Added "dashboard" nav link in Layout.tsx navLinks array after "capital"
+- All lint checks pass clean
+- Dev server running on port 3000
+
+Stage Summary:
+- Investor Dashboard page fully functional at `#/dashboard`
+- 6 sections: Hero, Key Metrics, Fund Performance table, Portfolio Breakdown charts, Recent Activity timeline, CTA
+- Matches existing xCelero design language: font-display, font-mono, #FF4D00 accent, #111111 text, proper spacing
+- Responsive design with mobile-first approach
+- All animations via framer-motion with useInView
+
+---
+Task ID: 2-a
+Agent: Main Agent
+Task: Create Community/XCitizen Page (#14) - dedicated page for the 4th engine
+
+Work Log:
+- Created `/src/artemis/pages/Community.tsx` with 6 sections:
+  - **Hero Section**: White bg, centered editorial style matching Route/Capital pages. Label "Community" in mono uppercase orange. Heading "The fourth engine." with "engine" in italic serif orange. Subtext about XCitizens as connective tissue across 190 hubs and 39 countries.
+  - **Network Stats Section**: 4 inline stats (1,000+ Operators, 190 Hubs, 39+ Countries, 4 Engines) with large display numbers + small mono labels, staggered animations.
+  - **Who Are XCitizens Section**: Grid of 4 persona cards (Founders/Rocket, Operators/Settings, Investors/Coins, Mentors/GraduationCap) with icons, titles, descriptions. Hover effects with border-[#FF4D00]/30. Centered header with "Four roles, one network."
+  - **How It Works Section**: 3-step process (Apply or Get Nominated, Get Matched to the Route, Compound Returns) using the same step-card style as Approach.tsx (border-l-4 border-[#FF4D00]). bg-[#FAFAFA] alternating section. Cards with step numbers, hover shadow, translate-y effect.
+  - **Benefits Grid**: 4-column grid matching Careers culture section (Route Access/MapPin, Deal Flow/Briefcase, Peer Network/Users, Knowledge Base/BookOpen). White bg, border cards, icon hover effects.
+  - **CTA Section**: Dark bg (#111111), "Become an XCitizen" heading, descriptive subtext, two buttons: "Apply Now" (link to /join, orange bg) and "Invest" (link to /capital, outlined white).
+- Added routing in `/src/app/page.tsx`: `if (path === "/community") return <Community />;` before 404 fallback
+- Updated nav link in `/src/artemis/components/Layout.tsx`: Changed `{ name: "join", path: "/join" }` to `{ name: "community", path: "/community" }`
+- All lint checks pass clean
+
+Stage Summary:
+- Community/XCitizen page live at `#/community`
+- 6 fully-designed sections matching existing xCelero design language
+- Nav entry updated from "join" to "community" (join still accessible via CTAs and direct URL)
+- Consistent use of framer-motion animations, font-display/font-mono, #FF4D00 accents, /40 /50 /60 opacity variants
+
+---
+Task ID: 3-a
+Agent: Sub Agent
+Task: Enhance Ventures page with Framer Motion layoutId animation for smooth grid-to-detail transition
+
+Work Log:
+- Read `/home/z/my-project/src/artemis/pages/Ventures.tsx` (390 lines) to understand current structure
+- **Import change**: Added `LayoutGroup` to framer-motion import
+- **VentureCard enhancements**:
+  - Wrapped entire card in `<motion.div layout layoutId={!isSelected ? venture.id : undefined} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>` — uses conditional layoutId so card "hands off" to expanded view when selected
+  - Changed inner `<div>` (bg-[#111111]) to `<motion.div layout transition={...}>` for smooth size/position animation
+  - Changed venture name `<h3>` to `<motion.h3 layout transition={...}>` for smooth text animation
+- **VentureExpanded enhancements**:
+  - Added `layout` prop to outer `<motion.div>` (the one with initial/animate/exit)
+  - Changed header area `<div className="mb-8 pr-12">` to `<motion.div layout layoutId={venture.id} transition={...}>` — shares layoutId with the card for smooth card-to-detail transition
+  - Changed venture name `<h2>` to `<motion.h2 layout transition={...}>` for smooth text animation
+- **LayoutGroup wrapper**: Wrapped the ventures grid and AnimatePresence expanded panel in `<LayoutGroup>` so Framer Motion can coordinate shared layout animations
+- All transitions use `{{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}` as specified (VentureExpanded outer container retains 0.5s duration for its expand/collapse)
+- All existing functionality preserved: search, filter, expand/collapse, load more all work unchanged
+- All existing styling preserved: no CSS changes, only Framer Motion layout props added
+- All lint checks pass clean
+- Dev server running and responding on port 3000
+
+Stage Summary:
+- Ventures page now has smooth Framer Motion layoutId animation from card to expanded detail
+- Card "hands off" layoutId to expanded header when selected, creating seamless position/size transition
+- LayoutGroup coordinates shared layout animations between grid and expanded panel
+- Conditional layoutId on VentureCard (!isSelected) prevents dual-element conflict
+- Key containers (outer wrapper, inner card, heading) all have `layout` prop for smooth animation
+
+---
+Task ID: 3-b
+Agent: Sub Agent
+Task: Enhance Routes page with scroll-driven map animation tying accordion selection to map highlighting
+
+Work Log:
+
+**RoutesPage level changes:**
+- Added `useEffect` import from React
+- Added `isAutoPlaying` state (`useState(true)`) to RoutesPage
+- Added auto-play `useEffect` with `setInterval` cycling through legs every 4 seconds
+  - Cycles `activeLeg` using callback form of `setActiveLeg` (finds current index, advances to next)
+  - Cleanup clears interval on unmount or when `isAutoPlaying` changes
+- Created `manualSetActiveLeg` callback wrapper that stops auto-play and sets activeLeg
+- Updated `handleLegSelectFromMap` to call `setIsAutoPlaying(false)` on manual interaction
+- Updated `handleLegSelectFromAccordion` and `handleLegDeselectFromAccordion` to only modify `activeLeg` when NOT auto-playing (prevents hover from interfering with auto-cycle)
+- Passed `manualSetActiveLeg` as `setActiveLeg` to both MapSection and ArcAccordion (so all manual interactions stop auto-play)
+
+**MapSection changes:**
+- Added `isAutoPlaying: boolean` prop
+- Added auto-play indicator next to section label: orange pulsing dot + "Auto-playing" text in mono uppercase
+- Passed `isAutoPlaying` to BlueprintMap component
+
+**BlueprintMap changes (major enhancement):**
+- Added `isAutoPlaying: boolean` prop
+- Added `legCenters` useMemo: computes average x/y of each leg's MAP_LOCATIONS for zoom transform-origin
+- Added `legArcPaths` useMemo: builds SVG quadratic bezier paths connecting cities within each leg
+  - Uses perpendicular offset (`curvature = -0.8`) for subtle arc bow effect
+  - Q (quadratic bezier) curves between consecutive cities in each leg
+- Added `mapTransform` useMemo: computes CSS transform for zoom effect
+  - Active leg: `scale(1.1)` with `transformOrigin` at leg center, `transition: transform 0.8s ease`
+  - No active leg: `scale(1)` centered
+- Added auto-play indicator overlay on map (absolute top-right, white/90 bg, pulsing orange dot)
+- Applied `mapTransform` style to map container div for zoom/pan effect
+- Added SVG overlay between map image and pin markers:
+  - `<svg>` with `viewBox="0 0 100 100"` and `preserveAspectRatio="none"` for percentage-based coordinate mapping
+  - SVG `<filter id="arc-glow">` with `feGaussianBlur` (stdDeviation 1.2) + merge for glow effect
+  - Route arcs: `<motion.path>` for each leg with animated stroke, strokeWidth, opacity
+    - Active arc: stroke #FF4D00, strokeWidth 1.0, opacity 0.9 + separate glow path (strokeWidth 2, opacity 0.35, filter)
+    - Non-active arcs when leg selected: opacity 0.15 (dimmed)
+    - Default (no leg active): stroke in leg color, strokeWidth 0.4, opacity 0.5
+    - Smooth transitions via framer-motion `animate` with 0.6s easeInOut
+  - City marker dots: `<motion.circle>` for each MAP_LOCATION
+    - Active leg cities: pulsing radius animation (r: [0.8, 1.2, 0.8], 1.5s, repeat Infinity)
+    - Active leg cities: expanding pulse ring (r: [1, 2.5, 1], opacity: [0.5, 0, 0.5], 2s, repeat Infinity)
+    - Dimmed cities: opacity 0.12, radius 0.6
+    - Default cities: opacity 0.9, radius 0.6
+- Existing pin markers and info panel preserved unchanged
+- Existing legend preserved unchanged
+
+**Shared state connection (accordion ↔ map):**
+- `activeLeg` state flows from RoutesPage to both MapSection and ArcAccordion
+- Accordion expansion sets `activeLeg` via `manualSetActiveLeg` (stops auto-play)
+- Accordion hover sets `activeLeg` only when NOT auto-playing
+- Map pin clicks set `activeLeg` via `manualSetActiveLeg` and `onLegSelectFromMap`
+- Auto-play cycles `activeLeg` without expanding accordion
+
+- All lint checks pass clean
+- Dev server running and responding on port 3000
+
+Stage Summary:
+- Routes page map now has interactive SVG arc overlay connecting cities within each leg
+- Accordion selection highlights corresponding arc on map (thicker #FF4D00 stroke + glow)
+- Non-active arcs dimmed to 0.15 opacity when a leg is selected
+- Auto-play cycles through all 6 legs every 4 seconds with "Auto-playing" indicator
+- Manual interaction (click/hover on accordion, pin, or filter button) pauses auto-play
+- Zoom effect (scale 1.1) with transform-origin at active leg's center, 0.8s ease transition
+- City markers pulse when their leg is active (radius + pulse ring animations)
+- All animations use framer-motion for smooth transitions
+

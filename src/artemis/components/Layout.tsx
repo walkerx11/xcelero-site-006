@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Search, ArrowRight } from "lucide-react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { Search, ArrowRight, Menu, X, ArrowUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link, useRouter } from "../router";
 import { SearchModal } from "./SearchModal";
 
@@ -16,15 +17,45 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-[#FAFAFA] text-[#111111] font-sans flex flex-col selection:bg-[#FF4D00]/20 selection:text-[#111111]">
       <Nav />
       <main className="flex-grow pt-[80px]">
-        {children}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={path}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
       </main>
       <Footer />
+      <StickyInvestBar />
+      <ScrollToTopButton />
     </div>
   );
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   NAV
+   ══════════════════════════════════════════════════════════════════════════ */
 function Nav() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on route change (handled via Link onClick in mobile menu)
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -32,10 +63,29 @@ function Nav() {
         e.preventDefault();
         setIsSearchOpen((prev) => !prev);
       }
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  const navLinks = [
+    { name: "manifesto", path: "/manifesto" },
+    { name: "approach", path: "/approach" },
+    { name: "infrastructure", path: "/platform" },
+    { name: "route", path: "/routes" },
+    { name: "programs", path: "/programs" },
+    { name: "ventures", path: "/ventures" },
+    { name: "capital", path: "/capital" },
+    { name: "dashboard", path: "/dashboard" },
+    { name: "careers", path: "/careers" },
+    { name: "team", path: "/team" },
+    { name: "case studies", path: "/case-studies" },
+    { name: "community", path: "/community" },
+    { name: "insights", path: "/insights" },
+  ];
 
   return (
     <>
@@ -47,29 +97,19 @@ function Nav() {
             </div>
             <span className="text-sm font-bold tracking-tight uppercase whitespace-nowrap hidden sm:inline text-[#111111]">xCelero Labs</span>
           </Link>
-          
+
+          {/* Desktop nav links */}
           <div className="hidden lg:flex space-x-8 items-center">
-            {[
-              { name: "manifesto", path: "/manifesto" },
-              { name: "approach", path: "/approach" },
-              { name: "infrastructure", path: "/platform" },
-              { name: "route", path: "/routes" },
-              { name: "programs", path: "/programs" },
-              { name: "ventures", path: "/ventures" },
-              { name: "capital", path: "/capital" },
-              { name: "careers", path: "/careers" },
-              { name: "join", path: "/join" },
-              { name: "insights", path: "/insights" }
-            ].map((item) => (
+            {navLinks.map((item) => (
               <Link key={item.name} to={item.path} className="text-[11px] lowercase tracking-[0.1em] font-medium text-[#111111]/60 hover:text-[#FF4D00] transition-colors relative">
                 {item.name}
               </Link>
             ))}
           </div>
-          
+
           <div className="flex items-center space-x-4">
-            <button 
-              onClick={() => setIsSearchOpen(true)} 
+            <button
+              onClick={() => setIsSearchOpen(true)}
               className="p-2 border border-[#111111]/10 hover:border-[#111111] hover:bg-[#111111] hover:text-white transition-colors group flex items-center gap-2"
               aria-label="Search"
             >
@@ -79,14 +119,216 @@ function Nav() {
             <Link to="/join" className="px-5 py-2.5 border border-[#111111] text-[11px] lowercase tracking-[0.1em] font-bold hover:bg-[#111111] hover:text-white transition-colors hidden sm:inline-flex">
               join
             </Link>
+
+            {/* Hamburger button — mobile only */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 border border-[#111111]/10 hover:border-[#111111] hover:bg-[#111111] hover:text-white transition-colors group"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            >
+              <motion.div
+                animate={isMobileMenuOpen ? "open" : "closed"}
+                variants={{
+                  open: { rotate: 90, scale: 1 },
+                  closed: { rotate: 0, scale: 1 },
+                }}
+                transition={{ duration: 0.2 }}
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-5 h-5 text-[#111111] group-hover:text-white" />
+                ) : (
+                  <Menu className="w-5 h-5 text-[#111111] group-hover:text-white" />
+                )}
+              </motion.div>
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-md flex flex-col"
+          >
+            {/* Close button */}
+            <div className="flex items-center justify-between px-6 h-[80px]">
+              <Link to="/" className="flex items-center space-x-3 group" onClick={() => setIsMobileMenuOpen(false)}>
+                <div className="w-6 h-6 bg-[#FF4D00] flex items-center justify-center">
+                  <span className="text-white font-bold text-[10px]">X</span>
+                </div>
+                <span className="text-sm font-bold tracking-tight uppercase text-white">xCelero Labs</span>
+              </Link>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 text-white/60 hover:text-white transition-colors"
+                aria-label="Close menu"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Nav links — centered vertically */}
+            <div className="flex-1 flex flex-col items-center justify-center gap-6">
+              {navLinks.map((item, i) => (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05, duration: 0.3 }}
+                >
+                  <Link
+                    to={item.path}
+                    className="text-3xl sm:text-4xl font-display font-medium tracking-tight text-white/70 hover:text-[#FF4D00] transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Bottom CTAs */}
+            <div className="px-6 pb-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                to="/capital"
+                className="px-8 py-4 bg-[#FF4D00] text-white text-[11px] font-bold uppercase tracking-widest hover:bg-[#FF4D00]/90 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Invest Now
+              </Link>
+              <Link
+                to="/join"
+                className="px-8 py-4 border border-white/20 text-white text-[11px] font-bold uppercase tracking-widest hover:bg-white hover:text-[#111111] transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Join
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   STICKY INVEST CTA BAR
+   ══════════════════════════════════════════════════════════════════════════ */
+function StickyInvestBar() {
+  const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return sessionStorage.getItem("invest-bar-dismissed") === "true";
+    } catch {
+      return false;
+    }
+  });
+  const { path } = useRouter();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const viewportHeight = window.innerHeight;
+      setVisible(window.scrollY > viewportHeight);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleDismiss = useCallback(() => {
+    setDismissed(true);
+    try {
+      sessionStorage.setItem("invest-bar-dismissed", "true");
+    } catch {
+      // sessionStorage not available
+    }
+  }, []);
+
+  // Don't show on capital page or if dismissed
+  const isCapitalPage = path === "/capital";
+  const shouldShow = visible && !dismissed && !isCapitalPage;
+
+  return (
+    <AnimatePresence>
+      {shouldShow && (
+        <motion.div
+          initial={{ y: 48, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 48, opacity: 0 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed bottom-0 left-0 right-0 z-40 h-12 bg-[#111111] text-white flex items-center justify-between px-4 md:px-6"
+        >
+          <span className="text-[11px] sm:text-[13px] font-medium text-white/70 truncate mr-4">
+            Invest in critical technology from $500
+          </span>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <Link
+              to="/capital"
+              className="px-4 py-1.5 bg-[#FF4D00] text-white text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF4D00]/90 transition-colors whitespace-nowrap"
+            >
+              Invest Now →
+            </Link>
+            <button
+              onClick={handleDismiss}
+              className="p-1 text-white/30 hover:text-white/70 transition-colors"
+              aria-label="Dismiss"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCROLL-TO-TOP BUTTON
+   ══════════════════════════════════════════════════════════════════════════ */
+function ScrollToTopButton() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setVisible(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.2 }}
+          onClick={scrollToTop}
+          className="fixed bottom-20 right-6 z-30 w-10 h-10 bg-white border border-[#111111]/10 flex items-center justify-center hover:bg-[#111111] hover:text-white transition-colors shadow-sm"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="w-4 h-4" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════════════════════════════════════ */
 function Footer() {
   return (
     <footer className="bg-[#000000] text-white pt-24 pb-12 px-6 md:px-12">
@@ -107,7 +349,7 @@ function Footer() {
                </div>
             </div>
           </Link>
-          
+
           <Link to="/capital" className="group block">
             <div className="border border-white/10 p-10 md:p-12 aspect-[16/9] md:aspect-auto md:h-[300px] flex flex-col justify-between hover:bg-white/5 transition-colors relative overflow-hidden">
                <div className="flex justify-between items-start">
@@ -130,7 +372,7 @@ function Footer() {
               xCelero<br />Labs
             </div>
           </div>
-          
+
           <div className="lg:col-span-6 grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="flex flex-col gap-4">
               <span className="text-[10px] font-bold tracking-widest uppercase text-white/30">xCelero Labs</span>
@@ -139,7 +381,7 @@ function Footer() {
               <Link to="/approach" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Who we back</Link>
               <Link to="/insights" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">News</Link>
             </div>
-            
+
             <div className="flex flex-col gap-4">
               <span className="text-[10px] font-bold tracking-widest uppercase text-white/30">Programs</span>
               <Link to="/programs" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Overview</Link>
@@ -161,7 +403,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        
+
         <div className="pt-8 border-t border-white/10 text-[10px] text-white/30 uppercase tracking-widest font-mono" suppressHydrationWarning>
           © {new Date().getFullYear()} xCelero Labs.
         </div>

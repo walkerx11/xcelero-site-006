@@ -1,8 +1,42 @@
 "use client";
 
 import { useRouter, Link } from "@/artemis/router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Clock } from "lucide-react";
 import { insightsData } from "@/artemis/data/insights";
+import { useState, useEffect } from "react";
+
+/* ── Read time calculator ── */
+function getReadTime(content: string[]): number {
+  return Math.max(3, Math.ceil(content.join(" ").split(" ").length / 200));
+}
+
+/* ── Reading progress bar ── */
+function ArticleProgressBar() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0) {
+        setProgress(Math.min(100, (scrollTop / docHeight) * 100));
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-transparent">
+      <div
+        className="h-full bg-[#FF4D00] transition-[width] duration-150 ease-out"
+        style={{ width: `${progress}%` }}
+      />
+    </div>
+  );
+}
 
 export function InsightDetail() {
   const { params, navigate } = useRouter();
@@ -20,8 +54,12 @@ export function InsightDetail() {
     );
   }
 
+  const readTime = getReadTime(post.content);
+
   return (
     <div className="bg-[#FAFAFA] text-[#111111] min-h-screen">
+      <ArticleProgressBar />
+
       <section className="pt-32 pb-24 px-6 md:px-12 border-b border-[#111111]/10">
         <div className="w-full max-w-4xl mx-auto">
           <Link to="/insights" className="text-[11px] font-mono uppercase tracking-[0.1em] text-[#111111]/50 hover:text-[#FF4D00] flex items-center gap-2 mb-12 w-fit transition-colors">
@@ -34,6 +72,10 @@ export function InsightDetail() {
             </div>
              <div className="px-4 py-2 border border-[#111111] bg-[#111111]/5 text-[#111111] text-[11px] font-mono tracking-widest uppercase font-bold">
               {post.date}
+            </div>
+            <div className="px-4 py-2 border border-[#111111]/10 bg-white text-[#111111]/60 text-[11px] font-mono tracking-widest uppercase font-bold flex items-center gap-2">
+              <Clock className="w-3 h-3" />
+              {readTime} min read
             </div>
           </div>
 

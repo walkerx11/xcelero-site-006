@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useMemo, useCallback } from "react";
+import { useRef, useState, useMemo, useCallback, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -41,6 +41,52 @@ import type { RouteLeg, KeyCity, MapLocation } from "@/artemis/data/routes";
 export function RoutesPage() {
   const [activeLeg, setActiveLeg] = useState<string | null>(null);
   const [expandedLeg, setExpandedLeg] = useState<string | null>(null);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  // Auto-play: cycle through legs every 4 seconds when no manual selection
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const timer = setInterval(() => {
+      setActiveLeg((prev) => {
+        const currentIdx = prev
+          ? routeLegs.findIndex((l) => l.id === prev)
+          : -1;
+        const nextIdx = (currentIdx + 1) % routeLegs.length;
+        return routeLegs[nextIdx].id;
+      });
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [isAutoPlaying]);
+
+  // Manual leg selection: stops auto-play
+  const manualSetActiveLeg = useCallback((id: string | null) => {
+    setIsAutoPlaying(false);
+    setActiveLeg(id);
+  }, []);
+
+  // Synchronized: map click expands accordion, accordion hover/click highlights map
+  const handleLegSelectFromMap = useCallback((legId: string) => {
+    setIsAutoPlaying(false);
+    setActiveLeg(legId);
+    setExpandedLeg(legId);
+    // Scroll to the accordion panel after a brief delay for expansion
+    setTimeout(() => {
+      const el = document.getElementById(`leg-${legId}`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  }, []);
+
+  const handleLegSelectFromAccordion = useCallback((legId: string) => {
+    if (!isAutoPlaying) {
+      setActiveLeg(legId);
+    }
+  }, [isAutoPlaying]);
+
+  const handleLegDeselectFromAccordion = useCallback(() => {
+    if (!isAutoPlaying) {
+      setActiveLeg(null);
+    }
+  }, [isAutoPlaying]);
 
   return (
     <div className="bg-[#FAFAFA] text-[#111111]">
@@ -48,13 +94,17 @@ export function RoutesPage() {
       <PreambleSection />
       <MapSection
         activeLeg={activeLeg}
-        setActiveLeg={setActiveLeg}
+        setActiveLeg={manualSetActiveLeg}
+        onLegSelectFromMap={handleLegSelectFromMap}
+        isAutoPlaying={isAutoPlaying}
       />
       <ArcAccordion
         expandedLeg={expandedLeg}
         setExpandedLeg={setExpandedLeg}
         activeLeg={activeLeg}
-        setActiveLeg={setActiveLeg}
+        setActiveLeg={manualSetActiveLeg}
+        onLegHover={handleLegSelectFromAccordion}
+        onLegHoverEnd={handleLegDeselectFromAccordion}
       />
       <JourneySection />
       <PricingSection />
@@ -185,9 +235,13 @@ function PreambleSection() {
 function MapSection({
   activeLeg,
   setActiveLeg,
+  onLegSelectFromMap,
+  isAutoPlaying,
 }: {
   activeLeg: string | null;
   setActiveLeg: (id: string | null) => void;
+  onLegSelectFromMap: (legId: string) => void;
+  isAutoPlaying: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
@@ -197,9 +251,17 @@ function MapSection({
       {/* Section label + filter buttons */}
       <div className="py-12 md:py-16 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
         <div className="w-full max-w-7xl mx-auto">
-          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
-            The Six Legs, Interactive Map
-          </span>
+          <div className="flex items-center gap-4 mb-6">
+            <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00]">
+              The Six Legs, Interactive Map
+            </span>
+            {isAutoPlaying && (
+              <span className="flex items-center gap-1.5 text-[9px] font-mono font-bold tracking-[0.12em] uppercase text-[#FF4D00]/60">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF4D00] animate-pulse" />
+                Auto-playing
+              </span>
+            )}
+          </div>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveLeg(null)}
@@ -237,7 +299,7 @@ function MapSection({
         className="py-8 md:py-12 px-6 md:px-12 lg:px-20 bg-white"
       >
         <div className="w-full max-w-6xl mx-auto">
-          <BlueprintMap activeLeg={activeLeg} setActiveLeg={setActiveLeg} />
+          <BlueprintMap activeLeg={activeLeg} setActiveLeg={setActiveLeg} onLegSelectFromMap={onLegSelectFromMap} isAutoPlaying={isAutoPlaying} />
         </div>
       </motion.div>
     </section>
@@ -252,12 +314,73 @@ function MapSection({
 function BlueprintMap({
   activeLeg,
   setActiveLeg,
+  onLegSelectFromMap,
+  isAutoPlaying,
 }: {
   activeLeg: string | null;
   setActiveLeg: (id: string | null) => void;
+  onLegSelectFromMap: (legId: string) => void;
+  isAutoPlaying: boolean;
 }) {
   const [activeLocId, setActiveLocId] = useState<string | null>(null);
   const isAnyActive = activeLeg !== null;
+
+  // Compute center of each leg's cities for zoom transform-origin
+  const legCenters = useMemo(() => {
+    const centers: Record<string, { x: number; y: number }> = {};
+    routeLegs.forEach((leg) => {
+      const locs = MAP_LOCATIONS.filter((l) => l.legId === leg.id);
+      if (locs.length > 0) {
+        centers[leg.id] = {
+          x: locs.reduce((sum, l) => sum + l.x, 0) / locs.length,
+          y: locs.reduce((sum, l) => sum + l.y, 0) / locs.length,
+        };
+      }
+    });
+    return centers;
+  }, []);
+
+  // Build curved arc paths connecting cities within each leg
+  const legArcPaths = useMemo(() => {
+    const paths: Record<string, string> = {};
+    routeLegs.forEach((leg) => {
+      const locs = MAP_LOCATIONS.filter((l) => l.legId === leg.id);
+      if (locs.length < 2) return;
+      const parts: string[] = [`M ${locs[0].x} ${locs[0].y}`];
+      for (let i = 1; i < locs.length; i++) {
+        const prev = locs[i - 1];
+        const curr = locs[i];
+        const mx = (prev.x + curr.x) / 2;
+        const my = (prev.y + curr.y) / 2;
+        const dx = curr.x - prev.x;
+        const dy = curr.y - prev.y;
+        const len = Math.sqrt(dx * dx + dy * dy) || 1;
+        // Perpendicular offset for a subtle arc bow
+        const curvature = -0.8;
+        const cx = mx + (-dy / len) * curvature;
+        const cy = my + (dx / len) * curvature;
+        parts.push(`Q ${cx} ${cy} ${curr.x} ${curr.y}`);
+      }
+      paths[leg.id] = parts.join(" ");
+    });
+    return paths;
+  }, []);
+
+  // Zoom transform targeting the active leg's region
+  const mapTransform = useMemo(() => {
+    if (activeLeg && legCenters[activeLeg]) {
+      return {
+        transform: "scale(1.1)",
+        transformOrigin: `${legCenters[activeLeg].x}% ${legCenters[activeLeg].y}%`,
+        transition: "transform 0.8s ease",
+      };
+    }
+    return {
+      transform: "scale(1)",
+      transformOrigin: "50% 50%",
+      transition: "transform 0.8s ease",
+    };
+  }, [activeLeg, legCenters]);
 
   const activeLocData = useMemo(
     () => MAP_LOCATIONS.find((l) => l.id === activeLocId),
@@ -280,9 +403,20 @@ function BlueprintMap({
 
   return (
     <div className="w-full relative">
-      {/* Map container */}
+      {/* Auto-playing indicator on map */}
+      {isAutoPlaying && (
+        <div className="absolute top-3 right-3 z-50 flex items-center gap-1.5 bg-white/90 border border-[#111111]/10 px-3 py-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FF4D00] animate-pulse" />
+          <span className="text-[9px] font-mono font-bold tracking-[0.12em] uppercase text-[#FF4D00]/70">
+            Auto-playing
+          </span>
+        </div>
+      )}
+
+      {/* Map container with zoom */}
       <div
         className="relative w-full overflow-hidden bg-white"
+        style={mapTransform}
         onClick={(e) => {
           if (e.target === e.currentTarget) {
             setActiveLocId(null);
@@ -295,6 +429,103 @@ function BlueprintMap({
           className="w-full h-auto pointer-events-none select-none opacity-80"
           src="/routes/newlab-map.avif"
         />
+
+        {/* SVG overlay for route arcs and city markers */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <filter id="arc-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="1.2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* Route arcs for each leg */}
+          {routeLegs.map((leg) => {
+            const path = legArcPaths[leg.id];
+            if (!path) return null;
+            const isActive = activeLeg === leg.id;
+            const isDimmed = isAnyActive && !isActive;
+            return (
+              <g key={leg.id}>
+                {/* Glow layer for active arc */}
+                {isActive && (
+                  <path
+                    d={path}
+                    fill="none"
+                    stroke="#FF4D00"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    opacity={0.35}
+                    filter="url(#arc-glow)"
+                  />
+                )}
+                {/* Main arc path */}
+                <motion.path
+                  d={path}
+                  fill="none"
+                  strokeLinecap="round"
+                  animate={{
+                    stroke: isActive ? "#FF4D00" : leg.color,
+                    strokeWidth: isActive ? 1.0 : 0.4,
+                    opacity: isDimmed ? 0.15 : isActive ? 0.9 : 0.5,
+                  }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                />
+              </g>
+            );
+          })}
+
+          {/* City marker dots with pulse animation */}
+          {MAP_LOCATIONS.map((loc) => {
+            const isActiveLeg = activeLeg === loc.legId;
+            const isDimmed = isAnyActive && !isActiveLeg;
+            return (
+              <g key={`svg-marker-${loc.id}`}>
+                {/* Pulse ring for active leg cities */}
+                {isActiveLeg && (
+                  <motion.circle
+                    cx={loc.x}
+                    cy={loc.y}
+                    fill="none"
+                    stroke={loc.legColor}
+                    strokeWidth={0.3}
+                    animate={{
+                      r: [1, 2.5, 1],
+                      opacity: [0.5, 0, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
+                )}
+                {/* Core dot */}
+                <motion.circle
+                  cx={loc.x}
+                  cy={loc.y}
+                  fill={loc.legColor}
+                  opacity={isDimmed ? 0.12 : 0.9}
+                  animate={isActiveLeg ? {
+                    r: [0.8, 1.2, 0.8],
+                  } : { r: 0.6 }}
+                  transition={isActiveLeg ? {
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  } : { duration: 0.3 }}
+                />
+              </g>
+            );
+          })}
+        </svg>
 
         {/* Pin markers with always-visible labels */}
         {visibleLocations.map((loc, index) => {
@@ -316,6 +547,7 @@ function BlueprintMap({
                   onClick={() => {
                     setActiveLocId(activeLocId === loc.id ? null : loc.id);
                     setActiveLeg(loc.legId);
+                    onLegSelectFromMap(loc.legId);
                   }}
                   className={`relative w-3.5 h-3.5 md:w-4 md:h-4 rounded-full shrink-0 cursor-pointer transition-all duration-200 border-[2.5px] border-transparent hover:border-black/20 hover:scale-110 ${isActive ? "scale-125 border-black/30" : ""}`}
                   style={{ backgroundColor: loc.legColor }}
@@ -422,6 +654,7 @@ function BlueprintMap({
                   style={{ backgroundColor: activeLocData.legColor }}
                   onClick={() => {
                     scrollToLeg(activeLocData.legId);
+                    onLegSelectFromMap(activeLocData.legId);
                     setActiveLocId(null);
                   }}
                 >
@@ -460,11 +693,15 @@ function ArcAccordion({
   setExpandedLeg,
   activeLeg,
   setActiveLeg,
+  onLegHover,
+  onLegHoverEnd,
 }: {
   expandedLeg: string | null;
   setExpandedLeg: (id: string | null) => void;
   activeLeg: string | null;
   setActiveLeg: (id: string | null) => void;
+  onLegHover: (legId: string) => void;
+  onLegHoverEnd: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-40px" });
@@ -495,6 +732,8 @@ function ArcAccordion({
                 }
                 activeLeg={activeLeg}
                 setActiveLeg={setActiveLeg}
+                onLegHover={onLegHover}
+                onLegHoverEnd={onLegHoverEnd}
               />
             );
           })}
@@ -513,12 +752,16 @@ function LegAccordionPanel({
   onToggle,
   activeLeg,
   setActiveLeg,
+  onLegHover,
+  onLegHoverEnd,
 }: {
   leg: RouteLeg;
   isExpanded: boolean;
   onToggle: () => void;
   activeLeg: string | null;
   setActiveLeg: (id: string | null) => void;
+  onLegHover: (legId: string) => void;
+  onLegHoverEnd: () => void;
 }) {
   const images = arcImages[leg.id] || [];
 
@@ -532,7 +775,12 @@ function LegAccordionPanel({
       {/* Header row */}
       <button
         suppressHydrationWarning
-        onClick={onToggle}
+        onClick={() => {
+          onToggle();
+          setActiveLeg(isExpanded ? null : leg.id);
+        }}
+        onMouseEnter={() => onLegHover(leg.id)}
+        onMouseLeave={onLegHoverEnd}
         className="w-full px-4 sm:px-5 md:px-6 py-4 sm:py-5 flex items-center justify-between text-left group gap-3"
       >
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">

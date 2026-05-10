@@ -200,12 +200,38 @@ function HeroSection() {
   );
 }
 
+/* ── Engine taglines ── */
+const engineTaglines: Record<string, string> = {
+  Infrastructure: "The physical OS",
+  Ventures: "Commercialization at scale",
+  Capital: "Patient, blended, non-dilutive",
+  Community: "Compound network effects",
+};
+
+/* ── Connection pairs (each engine connects to every other) ── */
+const connections: [number, number][] = [
+  [0, 1], [0, 2], [0, 3],
+  [1, 2], [1, 3],
+  [2, 3],
+];
+
 /* ══════════════════════════════════════════════════════════════════════════
-   4 ENGINES, Moved from Infrastructure page
+   4 ENGINES, Interactive Node Diagram
    ══════════════════════════════════════════════════════════════════════════ */
 function ThreeEnginesSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [active, setActive] = useState<number | null>(null);
+
+  /* Diamond positions: top, right, bottom, left (as % of container) */
+  const nodePositions = [
+    { top: "0%", left: "50%" },   // Infrastructure (top)
+    { top: "50%", left: "100%" },  // Ventures (right)
+    { top: "100%", left: "50%" },  // Capital (bottom)
+    { top: "50%", left: "0%" },    // Community (left)
+  ];
+
+  const activeEngine = active !== null ? engines[active] : null;
 
   return (
     <section
@@ -231,42 +257,206 @@ function ThreeEnginesSection() {
           </p>
         </motion.div>
 
-        {/* Engine cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {engines.map((engine, i) => {
-            const Icon = engine.icon;
-            return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
-                className="group"
-              >
-                <div className="border border-[#111111]/10 bg-white p-8 md:p-10 hover:border-[#FF4D00] transition-all duration-300 min-h-[340px] flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 border border-[#111111]/10 flex items-center justify-center group-hover:border-[#FF4D00] group-hover:bg-[#FF4D00]/5 transition-all">
-                        <Icon className="w-5 h-5 text-[#FF4D00]" strokeWidth={1.5} />
-                      </div>
-                      <span className="text-[11px] font-mono font-bold text-[#FF4D00]">Engine {engine.num}</span>
-                    </div>
-                    <h3 className="text-[24px] md:text-[28px] font-display font-medium tracking-tight mb-4">{engine.title}</h3>
-                    <p className="text-[14px] md:text-[15px] text-[#111111]/55 font-medium leading-[1.7]">{engine.desc}</p>
-                  </div>
-                  <div className="mt-8 pt-6 border-t border-[#111111]/5">
-                    <Link
-                      to={engine.link}
-                      className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#FF4D00] hover:text-[#111111] transition-colors group/link"
+        {/* Interactive Diagram */}
+        <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+          {/* Diagram container */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="w-full lg:w-1/2 flex justify-center"
+          >
+            {/* Desktop: Diamond layout */}
+            <div className="hidden md:block relative w-full max-w-[480px] aspect-square">
+              {/* Connection lines */}
+              {connections.map(([from, to], i) => {
+                const fromPos = nodePositions[from];
+                const toPos = nodePositions[to];
+                const isActiveLine = active !== null && (from === active || to === active);
+                return (
+                  <div
+                    key={i}
+                    className="absolute h-px transition-all duration-500"
+                    style={{
+                      left: fromPos.left,
+                      top: fromPos.top,
+                      width: "0px",
+                      transformOrigin: "0 0",
+                      backgroundColor: isActiveLine ? "#FF4D00" : "rgba(17,17,17,0.1)",
+                      boxShadow: isActiveLine ? "0 0 8px rgba(255,77,0,0.4)" : "none",
+                      /* We use a CSS trick: position at from, rotate toward to, width = distance */
+                    }}
+                    ref={(el) => {
+                      if (!el) return;
+                      const container = el.parentElement;
+                      if (!container) return;
+                      const w = container.offsetWidth;
+                      const h = container.offsetHeight;
+                      const fx = parseFloat(fromPos.left) / 100 * w;
+                      const fy = parseFloat(fromPos.top) / 100 * h;
+                      const tx = parseFloat(toPos.left) / 100 * w;
+                      const ty = parseFloat(toPos.top) / 100 * h;
+                      const dx = tx - fx;
+                      const dy = ty - fy;
+                      const length = Math.sqrt(dx * dx + dy * dy);
+                      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                      el.style.left = `${fx}px`;
+                      el.style.top = `${fy}px`;
+                      el.style.width = `${length}px`;
+                      el.style.transform = `rotate(${angle}deg)`;
+                    }}
+                  />
+                );
+              })}
+
+              {/* Nodes */}
+              {engines.map((engine, i) => {
+                const Icon = engine.icon;
+                const pos = nodePositions[i];
+                const isActive = active === i;
+                return (
+                  <motion.button
+                    key={i}
+                    suppressHydrationWarning
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ duration: 0.5, delay: 0.4 + i * 0.1, ease: "easeOut" }}
+                    onClick={() => setActive(active === i ? null : i)}
+                    onMouseEnter={() => setActive(i)}
+                    className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 cursor-pointer group transition-all duration-300`}
+                    style={{ top: pos.top, left: pos.left }}
+                  >
+                    <div
+                      className={`w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                        isActive
+                          ? "border-[#FF4D00] bg-[#FF4D00]/10 shadow-lg shadow-[#FF4D00]/20"
+                          : "border-[#111111]/15 bg-white group-hover:border-[#FF4D00]/50 group-hover:bg-[#FF4D00]/5"
+                      }`}
                     >
-                      Explore {engine.title}
-                      <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
-                    </Link>
+                      <Icon
+                        className={`w-7 h-7 md:w-8 md:h-8 transition-colors duration-300 ${
+                          isActive ? "text-[#FF4D00]" : "text-[#111111]/40 group-hover:text-[#FF4D00]"
+                        }`}
+                        strokeWidth={1.5}
+                      />
+                    </div>
+                    <div className="text-center">
+                      <div className={`text-[13px] md:text-[15px] font-display font-medium transition-colors duration-300 ${
+                        isActive ? "text-[#FF4D00]" : "text-[#111111]"
+                      }`}>
+                        {engine.title}
+                      </div>
+                      <div className="text-[10px] md:text-[11px] font-mono tracking-wider uppercase text-[#111111]/40 mt-0.5">
+                        {engineTaglines[engine.title]}
+                      </div>
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* Mobile: Vertical stack */}
+            <div className="md:hidden w-full flex flex-col gap-4">
+              {engines.map((engine, i) => {
+                const Icon = engine.icon;
+                const isActive = active === i;
+                return (
+                  <motion.button
+                    key={i}
+                    suppressHydrationWarning
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+                    onClick={() => setActive(active === i ? null : i)}
+                    className={`flex items-center gap-4 p-4 border transition-all duration-300 text-left w-full ${
+                      isActive
+                        ? "border-[#FF4D00] bg-[#FF4D00]/5"
+                        : "border-[#111111]/10 bg-white hover:border-[#FF4D00]/30"
+                    }`}
+                  >
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center border-2 shrink-0 transition-all duration-300 ${
+                        isActive
+                          ? "border-[#FF4D00] bg-[#FF4D00]/10"
+                          : "border-[#111111]/15 bg-white"
+                      }`}
+                    >
+                      <Icon
+                        className={`w-5 h-5 transition-colors duration-300 ${
+                          isActive ? "text-[#FF4D00]" : "text-[#111111]/40"
+                        }`}
+                        strokeWidth={1.5}
+                      />
+                    </div>
+                    <div>
+                      <div className={`text-[15px] font-display font-medium transition-colors ${
+                        isActive ? "text-[#FF4D00]" : "text-[#111111]"
+                      }`}>
+                        {engine.title}
+                      </div>
+                      <div className="text-[10px] font-mono tracking-wider uppercase text-[#111111]/40">
+                        {engineTaglines[engine.title]}
+                      </div>
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          {/* Description panel */}
+          <div className="w-full lg:w-1/2 min-h-[280px]">
+            <AnimatePresence mode="wait">
+              {activeEngine ? (
+                <motion.div
+                  key={active}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="border-l-4 border-[#FF4D00] pl-8 py-2"
+                >
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-full bg-[#FF4D00]/10 flex items-center justify-center">
+                      <activeEngine.icon className="w-5 h-5 text-[#FF4D00]" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-mono font-bold text-[#FF4D00]">Engine {activeEngine.num}</span>
+                      <h3 className="text-[28px] md:text-[36px] font-display font-medium tracking-tight leading-[1.1]">
+                        {activeEngine.title}
+                      </h3>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            );
-          })}
+
+                  <p className="text-[16px] md:text-[18px] text-[#111111]/60 font-medium leading-[1.7] mb-8">
+                    {activeEngine.desc}
+                  </p>
+
+                  <Link
+                    to={activeEngine.link}
+                    className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#FF4D00] hover:text-[#111111] transition-colors group/link"
+                  >
+                    Explore {activeEngine.title}
+                    <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
+                  </Link>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center justify-center h-full min-h-[280px] text-[#111111]/25"
+                >
+                  <div className="text-center">
+                    <div className="text-[16px] font-display font-medium mb-2">Select an engine</div>
+                    <div className="text-[13px] font-mono tracking-wider">Hover or tap a node to explore</div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </section>

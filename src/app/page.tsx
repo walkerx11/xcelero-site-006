@@ -16,6 +16,10 @@ import { InsightDetail } from "@/artemis/pages/InsightDetail";
 import { Capital } from "@/artemis/pages/Capital";
 import { JoinPage } from "@/artemis/pages/JoinPage";
 import { CareersPage } from "@/artemis/pages/CareersPage";
+import { Team } from "@/artemis/pages/Team";
+import { CaseStudies } from "@/artemis/pages/CaseStudies";
+import { Community } from "@/artemis/pages/Community";
+import { InvestorDashboard } from "@/artemis/pages/InvestorDashboard";
 
 function Router() {
   const { path } = useRouter();
@@ -36,16 +40,38 @@ function Router() {
     if (path === "/capital") return <Capital />;
     if (path === "/join") return <JoinPage />;
     if (path === "/careers") return <CareersPage />;
-    
+    if (path === "/team") return <Team />;
+    if (path === "/case-studies") return <CaseStudies />;
+    if (path === "/dashboard") return <InvestorDashboard />;
+    if (path === "/community") return <Community />;
+
     // 404 fallback
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] text-[#111111]">
-        <div className="text-center px-6">
-          <p className="font-mono text-[10px] tracking-[0.4em] text-[#FF4D00] mb-4">404_PAGE_NOT_FOUND</p>
-          <h1 className="text-6xl font-display font-medium mb-8 uppercase tracking-tighter">Page Missing</h1>
-          <a href="#/" className="inline-flex items-center gap-2 px-8 py-4 bg-[#111111] text-white text-[12px] font-bold uppercase tracking-widest hover:bg-[#FF4D00] transition-colors">
-            Return Home
-          </a>
+      <div className="min-h-[80vh] flex items-center justify-center bg-white text-[#111111]">
+        <div className="max-w-xl mx-auto text-center px-6 py-24">
+          <p className="font-mono text-[10px] tracking-[0.4em] text-[#FF4D00] mb-6">404</p>
+          <h1 className="text-[80px] md:text-[120px] font-display font-medium leading-none tracking-tighter mb-6">404</h1>
+          <h2 className="text-2xl md:text-3xl font-display font-medium tracking-tight mb-4">Page Not Found</h2>
+          <p className="text-[#111111]/50 font-medium leading-relaxed mb-10">
+            The page you&apos;re looking for doesn&apos;t exist or has been moved.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+            <a
+              href="#/"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#111111] text-white text-[12px] font-bold uppercase tracking-widest hover:bg-[#FF4D00] transition-colors"
+            >
+              Return Home
+            </a>
+          </div>
+          <div className="flex items-center justify-center gap-6 text-[11px] lowercase tracking-[0.1em] font-medium">
+            <a href="#/insights" className="text-[#111111]/40 hover:text-[#FF4D00] transition-colors">
+              Back to Insights
+            </a>
+            <span className="text-[#111111]/20">|</span>
+            <a href="#/ventures" className="text-[#111111]/40 hover:text-[#FF4D00] transition-colors">
+              View Ventures
+            </a>
+          </div>
         </div>
       </div>
     );

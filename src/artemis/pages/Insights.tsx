@@ -8,6 +8,11 @@ import { insightsData } from "@/artemis/data/insights";
 
 const categories = ["All", ...new Set(insightsData.map((i) => i.category))];
 
+/* ── Read time calculator ── */
+function getReadTime(content: string[]): number {
+  return Math.max(3, Math.ceil(content.join(" ").split(" ").length / 200));
+}
+
 /* ── Cover images per category ── */
 const categoryImages: Record<string, string> = {
   Energy: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80",
@@ -212,6 +217,9 @@ function FeaturedArticle({ article }: { article: typeof insightsData[0] }) {
                   <span className="px-3 py-1 border border-[#111111]/10 text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/40">
                     Featured
                   </span>
+                  <span className="px-3 py-1 border border-[#111111]/10 text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/40">
+                    {getReadTime(article.content)} min read
+                  </span>
                 </div>
 
                 <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-display font-medium tracking-tight leading-[1.1] mb-6 group-hover:text-[#FF4D00] transition-colors">
@@ -300,9 +308,12 @@ function ArticleCard({ article }: { article: typeof insightsData[0] }) {
             alt={article.title}
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
-          <div className="absolute top-3 left-3">
+          <div className="absolute top-3 left-3 flex items-center gap-2">
             <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-[9px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
               {article.category}
+            </span>
+            <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-[9px] font-mono font-bold tracking-widest uppercase text-[#111111]/50">
+              {getReadTime(article.content)} min
             </span>
           </div>
         </div>

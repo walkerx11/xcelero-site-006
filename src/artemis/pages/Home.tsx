@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useMemo, useEffect } from "react";
+import { useRef, useState, useMemo, useEffect, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import { Link } from "@/artemis/router";
 import {
@@ -12,6 +12,7 @@ import {
   Coins,
   Users,
   MapPin,
+  Check,
 } from "lucide-react";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
 import { routeLegs, MAP_LOCATIONS } from "@/artemis/data/routes";
@@ -691,6 +692,11 @@ function LocationAccordion({
 function NewsletterSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleReturnToSite = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   return (
     <section
@@ -716,71 +722,105 @@ function NewsletterSection() {
             </p>
           </motion.div>
 
-          {/* Right: Form */}
+          {/* Right: Form or Confirmation */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             className="flex flex-col justify-center"
           >
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-              className="space-y-6"
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
-                    First Name *
-                  </label>
-                  <input
-                    suppressHydrationWarning
-                    type="text"
-                    required
-                    className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
-                    placeholder="First name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
-                    Last Name *
-                  </label>
-                  <input
-                    suppressHydrationWarning
-                    type="text"
-                    required
-                    className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
-                    placeholder="Last name"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
-                  Email *
-                </label>
-                <input
-                  suppressHydrationWarning
-                  type="email"
-                  required
-                  className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
-                  placeholder="you@email.com"
-                />
-              </div>
-              <p className="text-[11px] text-[#111111]/30 leading-[1.5]">
-                By subscribing you agree to our{" "}
-                <span className="text-[#2563EB] underline cursor-pointer">Privacy Policy</span>.
-                We respect your data. Unsubscribe anytime.
-              </p>
-              <button
-                suppressHydrationWarning
-                type="submit"
-                className="inline-flex items-center gap-3 px-10 py-4 bg-[#111111] text-white text-[12px] uppercase tracking-[0.12em] font-bold hover:bg-[#FF4D00] transition-colors duration-300"
+            {submitted ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="space-y-6"
               >
-                Submit
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
+                {/* Checkmark icon */}
+                <div className="w-16 h-16 rounded-full border-2 border-[#FF4D00] flex items-center justify-center">
+                  <Check className="w-7 h-7 text-[#FF4D00]" strokeWidth={2.5} />
+                </div>
+
+                {/* Confirmation heading */}
+                <h3 className="text-[28px] sm:text-[36px] md:text-[44px] font-display font-medium tracking-[-0.02em] leading-[0.95]">
+                  Check your inbox
+                </h3>
+
+                {/* Confirmation body */}
+                <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.6] max-w-md">
+                  You&apos;re now subscribed to the xCelero Letter. Look for our quarterly dispatch on critical technology commercialization.
+                </p>
+
+                {/* Return to site link */}
+                <button
+                  onClick={handleReturnToSite}
+                  className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.12em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
+                >
+                  Return to site
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </motion.div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setSubmitted(true);
+                }}
+                className="space-y-6"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
+                      First Name *
+                    </label>
+                    <input
+                      suppressHydrationWarning
+                      type="text"
+                      required
+                      className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
+                      placeholder="First name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
+                      Last Name *
+                    </label>
+                    <input
+                      suppressHydrationWarning
+                      type="text"
+                      required
+                      className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
+                      placeholder="Last name"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono tracking-[0.15em] uppercase text-[#111111]/40 mb-2">
+                    Email *
+                  </label>
+                  <input
+                    suppressHydrationWarning
+                    type="email"
+                    required
+                    className="w-full border-b border-[#111111]/20 bg-transparent py-3 text-[15px] font-medium focus:border-[#FF4D00] focus:outline-none transition-colors placeholder:text-[#111111]/20"
+                    placeholder="you@email.com"
+                  />
+                </div>
+                <p className="text-[11px] text-[#111111]/30 leading-[1.5]">
+                  By subscribing you agree to our{" "}
+                  <span className="text-[#2563EB] underline cursor-pointer">Privacy Policy</span>.
+                  We respect your data. Unsubscribe anytime.
+                </p>
+                <button
+                  suppressHydrationWarning
+                  type="submit"
+                  className="inline-flex items-center gap-3 px-10 py-4 bg-[#111111] text-white text-[12px] uppercase tracking-[0.12em] font-bold hover:bg-[#FF4D00] transition-colors duration-300"
+                >
+                  Submit
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            )}
           </motion.div>
         </div>
       </div>
