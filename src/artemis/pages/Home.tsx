@@ -13,6 +13,9 @@ import {
   Users,
   MapPin,
   Check,
+  Calendar,
+  Clock,
+  Star,
 } from "lucide-react";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
 import { routeLegs, MAP_LOCATIONS } from "@/artemis/data/routes";
@@ -168,6 +171,7 @@ export function Home() {
       <IntroSection />
       <NumbersSection />
       <ThreePillarsSection />
+      <UpcomingEventsSection />
       <LocationsSection />
       <ReviewSection title="Field notes on critical technology, venture infrastructure, and the routes that connect them" />
       <NewsletterSection />
@@ -458,6 +462,154 @@ function PillarBlock({
         </motion.div>
       </div>
     </div>
+  );
+}
+
+/* ── Upcoming Events Data ── */
+const homeEvents = [
+  {
+    title: "Accelerator Cohort 8 Demo Day",
+    date: "March 28, 2026",
+    time: "10:00 AM EAT",
+    location: "M1 Core Nairobi + Virtual",
+    type: "Demo Day",
+    description: "12 ventures present validated MVPs to investors and partners. Sector deep-dives in energy, life sciences, and digital finance.",
+    featured: true,
+  },
+  {
+    title: "Route Summit: Gulf of Guinea Arc",
+    date: "April 12, 2026",
+    time: "9:00 AM WAT",
+    location: "XEmbassy Lagos",
+    type: "Summit",
+    description: "Operators and founders from Lagos, Accra, and Abidjan convene for cross-hub deal flow and peer mentorship.",
+    featured: false,
+  },
+  {
+    title: "Building in Life Sciences: From Lab to Market",
+    date: "April 25, 2026",
+    time: "2:00 PM EAT",
+    location: "Virtual Masterclass",
+    type: "Masterclass",
+    description: "Regulatory pathways for diagnostics and therapeutics in African markets. Case studies from Refract and Allele.",
+    featured: false,
+  },
+  {
+    title: "Capital Roundtable: Thematic Fund Deep Dive",
+    date: "May 15, 2026",
+    time: "11:00 AM CAT",
+    location: "M1 Core Cape Town + Virtual",
+    type: "Investor Event",
+    description: "Thematic Fund allocation strategy, portfolio construction, and co-investment opportunities for LPs.",
+    featured: true,
+  },
+];
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UPCOMING EVENTS SECTION, Featured events with CTA to Community page
+   ══════════════════════════════════════════════════════════════════════════ */
+function UpcomingEventsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const eventTypeStyle: Record<string, string> = {
+    "Demo Day": "bg-[#FF4D00] text-white",
+    Summit: "bg-[#111111] text-white",
+    Masterclass: "bg-[#FF4D00]/10 text-[#FF4D00]",
+    "Investor Event": "bg-[#FF4D00] text-white",
+  };
+
+  return (
+    <section
+      ref={ref}
+      className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10 bg-[#FAFAFA]"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-12 md:mb-16"
+        >
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div>
+              <span className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-[#FF4D00] mb-4 block">
+                Upcoming Events
+              </span>
+              <h2 className="text-[32px] sm:text-[44px] md:text-[56px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.95]">
+                Where the network
+                <br />
+                <em className="italic font-serif text-[#FF4D00]">convenes</em>.
+              </h2>
+            </div>
+            <Link
+              to="/community"
+              className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.12em] text-[#FF4D00] hover:text-[#111111] transition-colors group flex-shrink-0"
+            >
+              View all events
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* Events grid */}
+        <div className="grid md:grid-cols-2 gap-5 md:gap-6">
+          {homeEvents.map((event, i) => (
+            <motion.div
+              key={event.title}
+              initial={{ opacity: 0, y: 25 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+              className={`group border bg-white p-6 md:p-8 hover:shadow-md transition-all duration-300 ${
+                event.featured
+                  ? "border-[#FF4D00]/30 hover:border-[#FF4D00]/60"
+                  : "border-[#111111]/10 hover:border-[#111111]/25"
+              }`}
+            >
+              {/* Top row: type + featured badge */}
+              <div className="flex items-center gap-2 mb-4">
+                <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 ${eventTypeStyle[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
+                  {event.type}
+                </span>
+                {event.featured && (
+                  <span className="text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 bg-[#FF4D00]/10 text-[#FF4D00] flex items-center gap-1">
+                    <Star className="w-3 h-3" />
+                    Featured
+                  </span>
+                )}
+              </div>
+
+              {/* Title */}
+              <h3 className="text-[18px] md:text-[22px] font-display font-medium tracking-tight leading-tight mb-3 group-hover:text-[#FF4D00] transition-colors">
+                {event.title}
+              </h3>
+
+              {/* Description */}
+              <p className="text-[13px] md:text-[14px] text-[#111111]/50 leading-[1.65] font-medium mb-5">
+                {event.description}
+              </p>
+
+              {/* Meta row */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-[#111111]/40 font-medium pt-5 border-t border-[#111111]/5">
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-[#FF4D00]/60" />
+                  {event.date}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-[#FF4D00]/60" />
+                  {event.time}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#FF4D00]/60" />
+                  {event.location}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
