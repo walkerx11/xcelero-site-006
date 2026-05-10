@@ -73,51 +73,36 @@ function Nav() {
   }, []);
 
   const navLinks = [
-    { name: "manifesto", path: "/manifesto" },
     { name: "approach", path: "/approach" },
     { name: "infrastructure", path: "/platform" },
-    { name: "route", path: "/routes" },
-    { name: "programs", path: "/programs" },
+    { name: "routes", path: "/routes" },
     { name: "ventures", path: "/ventures" },
     { name: "capital", path: "/capital" },
-    { name: "dashboard", path: "/dashboard" },
-    { name: "careers", path: "/careers" },
-    { name: "team", path: "/team" },
-    { name: "case studies", path: "/case-studies" },
     { name: "community", path: "/community" },
     { name: "insights", path: "/insights" },
+    { name: "careers", path: "/careers" },
   ];
 
   const mobileNavGroups = [
     {
       label: "The Platform",
       links: [
-        { name: "manifesto", path: "/manifesto" },
         { name: "approach", path: "/approach" },
         { name: "infrastructure", path: "/platform" },
-        { name: "route", path: "/routes" },
+        { name: "routes", path: "/routes" },
       ],
     },
     {
-      label: "Programs & Ventures",
+      label: "Ventures & Capital",
       links: [
-        { name: "programs", path: "/programs" },
         { name: "ventures", path: "/ventures" },
-        { name: "case studies", path: "/case-studies" },
-      ],
-    },
-    {
-      label: "Capital",
-      links: [
         { name: "capital", path: "/capital" },
-        { name: "dashboard", path: "/dashboard" },
       ],
     },
     {
       label: "Network",
       links: [
         { name: "community", path: "/community" },
-        { name: "team", path: "/team" },
         { name: "careers", path: "/careers" },
         { name: "insights", path: "/insights" },
       ],

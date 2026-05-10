@@ -3,6 +3,7 @@
 import { useRouter, Link } from "@/artemis/router";
 import {
   ArrowLeft,
+  ArrowRight,
   MapPin,
   Scale,
   Rocket,
@@ -336,6 +337,30 @@ export function VentureDetail() {
                   Apply to help build this venture
                 </p>
               </Link>
+            </div>
+
+            {/* Data Room Access */}
+            <div className="mt-6 border border-[#111111]/10 p-6 md:p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] mb-2 block">
+                    Data Room
+                  </span>
+                  <h3 className="text-[18px] md:text-[20px] font-display font-medium tracking-tight mb-1">
+                    Request Data Room Access
+                  </h3>
+                  <p className="text-[13px] text-[#111111]/50 font-medium leading-[1.6]">
+                    Due diligence materials available upon executed NDA
+                  </p>
+                </div>
+                <Link
+                  to="/join"
+                  className="group inline-flex items-center gap-3 px-6 py-3 bg-[#111111] text-white text-[11px] font-mono font-bold tracking-[0.15em] uppercase hover:bg-[#FF4D00] transition-colors shrink-0"
+                >
+                  Request Access
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
             </div>
           </div>
 

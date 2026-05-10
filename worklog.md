@@ -595,3 +595,64 @@ Stage Summary:
 - Design consistent with xCelero language: font-display, font-mono, #FF4D00 accent, #111111 text, opacity variants
 - Mobile-first responsive: horizontal scroll on mobile, grid on desktop for values; 2-col to 4-col for stats
 
+
+## Task 5-b: Add "Request Data Room Access" section to VentureDetail page
+
+**File modified:** `/home/z/my-project/src/artemis/pages/VentureDetail.tsx`
+
+**Changes made:**
+1. Added `ArrowRight` to the `lucide-react` import statement (line 6)
+2. Added "Data Room Access" section below the CTA grid (after line 339), containing:
+   - A bordered container with `mt-6 border border-[#111111]/10 p-6 md:p-8`
+   - Flex layout (column on mobile, row on desktop) with text content on the left and a CTA button on the right
+   - "Data Room" label in orange mono uppercase
+   - "Request Data Room Access" heading
+   - "Due diligence materials available upon executed NDA" subtitle
+   - "Request Access" button linking to `/join` with ArrowRight icon and hover effects
+
+**Lint result:** VentureDetail.tsx passes lint cleanly. (Pre-existing error in Ventures.tsx unrelated to this task.)
+
+---
+Task ID: 5-c
+Agent: Main Agent
+Task: Trim desktop navigation from 13 items to 8 items
+
+Work Log:
+- Read Layout.tsx to identify current navLinks (13 items) and mobileNavGroups (4 groups)
+- Updated `navLinks` array from 13 to 8 items:
+  - Removed: manifesto, programs, dashboard, team, case studies
+  - Kept: approach, infrastructure, routes, ventures, capital, community, insights, careers
+  - Also fixed "route" → "routes" name for consistency
+- Updated `mobileNavGroups` from 4 groups to 3 groups:
+  - "The Platform": approach, infrastructure, routes (removed manifesto, fixed "route" → "routes")
+  - "Ventures & Capital": ventures, capital (replaced "Programs & Ventures" and "Capital" groups; removed programs, case studies, dashboard)
+  - "Network": community, careers, insights (removed team)
+- Removed items remain accessible via:
+  - manifesto → footer and search (⌘K)
+  - programs → ventures page and footer
+  - dashboard → capital page (sub-feature)
+  - team → footer and search
+  - case studies → ventures page and search
+- All lint checks pass clean (Layout.tsx has no errors; pre-existing Ventures.tsx parsing error unrelated)
+- Dev server running on port 3000
+
+Stage Summary:
+- Desktop nav reduced from 13 crowded items to 8 clean items
+- Mobile nav reduced from 4 groups (11 links) to 3 groups (8 links)
+- Navigation is less crowded while maintaining access to all pages
+
+## Task 5-a: Undo Framer Motion layoutId/layout/LayoutGroup changes from Ventures page
+
+**File**: `/home/z/my-project/src/artemis/pages/Ventures.tsx`
+
+**Changes made**:
+1. **Import**: Removed `LayoutGroup` from framer-motion import (was already absent in the import line, but LayoutGroup was still referenced in JSX)
+2. **VentureCard**: Removed outer `<motion.div layout layoutId={...} transition={...}>` wrapper and its closing `</motion.div>`. The `<button>` is now the direct return element.
+3. **VentureCard inner div**: Changed `<motion.div layout transition={...}>` back to plain `<div>`
+4. **VentureCard h3**: Changed `</motion.h3>` closing tag back to `</h3>` (opening was already `<h3>`)
+5. **VentureExpanded outer div**: Removed `layout` prop from `<motion.div layout ref={ref}...>` → `<motion.div ref={ref}...>`
+6. **VentureExpanded header**: Changed `<motion.div layout layoutId={venture.id} transition={...} className="mb-8 pr-12">` to `<div className="mb-8 pr-12">`
+7. **VentureExpanded h2**: Changed `<motion.h2 layout transition={...}>` and `</motion.h2>` to `<h2>` and `</h2>`
+8. **LayoutGroup**: Removed `<LayoutGroup>` wrapper around the grid and `</LayoutGroup>` after `</AnimatePresence>`
+
+**Lint**: Passed with no errors.

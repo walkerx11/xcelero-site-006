@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
-import { motion, AnimatePresence, useInView, LayoutGroup } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Link } from "@/artemis/router";
 import { Search, ChevronDown, X, MapPin, Scale, Rocket, DollarSign, Users, ArrowRight } from "lucide-react";
 import { venturesData, Venture } from "@/artemis/data/ventures";
@@ -54,21 +54,20 @@ function getVentureMetrics(venture: Venture) {
    ══════════════════════════════════════════════════════════════════════════ */
 function VentureCard({ venture, isSelected, onSelect }: { venture: Venture; isSelected: boolean; onSelect: () => void }) {
   return (
-    <motion.div layout layoutId={!isSelected ? venture.id : undefined} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>
     <button
       onClick={onSelect}
       className="group block text-left w-full"
     >
-      <motion.div layout transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className={`relative bg-[#111111] text-white overflow-hidden transition-all duration-200 group-hover:scale-[1.02] group-hover:brightness-110 ${
+      <div className={`relative bg-[#111111] text-white overflow-hidden transition-all duration-200 group-hover:scale-[1.02] group-hover:brightness-110 ${
         isSelected ? "ring-2 ring-[#FF4D00] ring-offset-2 ring-offset-[#FAFAFA]" : "group-hover:ring-1 group-hover:ring-[#FF4D00]"
       }`}>
         {/* Top section: name + code */}
         <div className="p-4 pb-3">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
-              <motion.h3 layout transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className="text-sm font-display font-bold text-white leading-tight truncate">
+              <h3 className="text-sm font-display font-bold text-white leading-tight truncate">
                 {venture.name}
-              </motion.h3>
+              </h3>
               <span className="text-[10px] font-mono text-white/50 tracking-wider mt-1 block">
                 {venture.code}
               </span>
@@ -104,9 +103,8 @@ function VentureCard({ venture, isSelected, onSelect }: { venture: Venture; isSe
         <div className="absolute bottom-3 right-3 w-8 h-8 bg-[#FF4D00] flex items-center justify-center font-display font-bold text-sm text-white">
           {venture.name.charAt(0)}
         </div>
-      </motion.div>
+      </div>
     </button>
-    </motion.div>
   );
 }
 
@@ -120,7 +118,6 @@ function VentureExpanded({ venture, onClose }: { venture: Venture; onClose: () =
 
   return (
     <motion.div
-      layout
       ref={ref}
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: "auto" }}
@@ -139,7 +136,7 @@ function VentureExpanded({ venture, onClose }: { venture: Venture; onClose: () =
 
         <div className="p-6 md:p-10 lg:p-12">
           {/* Header */}
-          <motion.div layout layoutId={venture.id} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className="mb-8 pr-12">
+          <div className="mb-8 pr-12">
             <div className="flex items-center gap-3 mb-4">
               <span className="px-3 py-1 bg-[#FF4D00]/10 text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
                 {venture.code}
@@ -148,13 +145,13 @@ function VentureExpanded({ venture, onClose }: { venture: Venture; onClose: () =
                 {venture.vertical}
               </span>
             </div>
-            <motion.h2 layout transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className="text-[32px] md:text-[44px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05] mb-4">
+            <h2 className="text-[32px] md:text-[44px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05] mb-4">
               {venture.name}
-            </motion.h2>
+            </h2>
             <p className="text-[16px] md:text-[18px] text-[#111111]/55 font-medium leading-[1.7] max-w-3xl">
               {venture.solution}
             </p>
-          </motion.div>
+          </div>
 
           {/* Problem */}
           <div className="mb-10 border-t border-[#111111]/10 pt-8">
@@ -345,7 +342,6 @@ export function Ventures() {
           </span>
         </div>
 
-        <LayoutGroup>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {visibleVentures.map((venture) => (
             <VentureCard
@@ -366,7 +362,6 @@ export function Ventures() {
             />
           )}
         </AnimatePresence>
-        </LayoutGroup>
 
         {filteredVentures.length === 0 && (
           <div className="py-32 text-center text-xl text-[#111111]/50 font-medium">
