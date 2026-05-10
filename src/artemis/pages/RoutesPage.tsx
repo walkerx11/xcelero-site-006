@@ -71,7 +71,7 @@ function HeroSection() {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section className="relative bg-white text-[#111111] pt-32 pb-20 md:pt-44 md:pb-28 px-6 md:px-12 lg:px-20">
+    <section className="relative bg-white text-[#111111] pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-44 md:pb-28 px-5 sm:px-6 md:px-12 lg:px-20">
       <div ref={ref} className="w-full max-w-4xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -89,13 +89,13 @@ function HeroSection() {
             <span className="italic font-serif text-[#FF4D00]">lie</span>.
           </h1>
 
-          <p className="text-lg md:text-xl lg:text-[22px] leading-[1.6] text-[#111111]/50 font-medium max-w-2xl mb-14 md:mb-20">
+          <p className="text-base sm:text-lg md:text-xl lg:text-[22px] leading-[1.6] text-[#111111]/50 font-medium max-w-2xl mb-10 sm:mb-14 md:mb-20">
             The real world doesn&apos;t operate in countries. It operates in Routes.
             Six legs. 190+ hubs. 35+ countries. One circulatory system for the
             movement of goods, capital, data, and people.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-x-10 gap-y-6 md:gap-x-16">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-5 sm:gap-x-10 md:gap-x-16">
             {[
               { value: "6", label: "Legs" },
               { value: "190+", label: "Hub Cities" },
@@ -107,9 +107,9 @@ function HeroSection() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.4 + i * 0.08, ease: "easeOut" }}
-                className="text-center"
+                className="text-center min-w-[60px]"
               >
-                <div className="text-[32px] md:text-[40px] font-display font-medium tracking-[-0.02em] text-[#111111]">
+                <div className="text-[26px] sm:text-[32px] md:text-[40px] font-display font-medium tracking-[-0.02em] text-[#111111]">
                   {m.value}
                 </div>
                 <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/35 mt-1">
@@ -142,7 +142,7 @@ function PreambleSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="space-y-8 text-lg md:text-xl leading-[1.8] text-[#111111]/60 font-medium">
+          <div className="space-y-6 sm:space-y-8 text-base sm:text-lg md:text-xl leading-[1.8] text-[#111111]/60 font-medium">
             <p>
               It&apos;s a diagram of political cages. Lines drawn by men who never
               walked the terrain.
@@ -163,7 +163,7 @@ function PreambleSection() {
           </div>
 
           <div className="mt-14 pt-14 border-t border-[#111111]/10">
-            <p className="text-[22px] sm:text-[26px] md:text-[30px] font-display font-medium tracking-[-0.02em] leading-[1.25] text-[#111111]">
+            <p className="text-[20px] sm:text-[24px] md:text-[30px] font-display font-medium tracking-[-0.02em] leading-[1.25] text-[#111111]">
               You can&apos;t change the world if you haven&apos;t seen it.{" "}
               <span className="text-[#FF4D00]">
                 {routeMetrics.countries} countries.
@@ -335,15 +335,15 @@ function BlueprintMap({
           );
         })}
 
-        {/* Info Panel Overlay */}
+        {/* Info Panel Overlay — bottom sheet on mobile, side panel on desktop */}
         <AnimatePresence>
           {activeLocData && (
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50, transition: { duration: 0.2 } }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 30, transition: { duration: 0.2 } }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute top-4 bottom-4 right-4 w-64 sm:w-72 md:w-80 lg:w-96 bg-white border border-[#111111]/10 shadow-2xl p-6 md:p-8 flex flex-col z-50 overflow-y-auto"
+              className="absolute inset-x-2 bottom-2 sm:inset-x-auto sm:left-auto top-4 bottom-4 sm:right-4 w-auto sm:w-72 md:w-80 lg:w-96 max-h-[60vh] sm:max-h-none bg-white border border-[#111111]/10 shadow-2xl p-5 sm:p-6 md:p-8 flex flex-col z-50 overflow-y-auto rounded sm:rounded-none"
             >
               <button
                 onClick={() => setActiveLocId(null)}
@@ -533,20 +533,20 @@ function LegAccordionPanel({
       <button
         suppressHydrationWarning
         onClick={onToggle}
-        className="w-full px-5 md:px-6 py-5 flex items-center justify-between text-left group gap-4"
+        className="w-full px-4 sm:px-5 md:px-6 py-4 sm:py-5 flex items-center justify-between text-left group gap-3"
       >
-        <div className="flex items-center gap-4 flex-1 min-w-0">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
           <div
-            className="w-4 h-4 shrink-0 rounded-full"
+            className="w-3 h-3 sm:w-4 sm:h-4 shrink-0 rounded-full"
             style={{ backgroundColor: leg.color }}
           />
           <span
-            className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase shrink-0"
+            className="text-[9px] sm:text-[10px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.15em] uppercase shrink-0"
             style={{ color: leg.color }}
           >
             Leg {leg.legNumber}
           </span>
-          <span className="font-display font-medium text-lg md:text-xl group-hover:text-[#FF4D00] transition-colors truncate">
+          <span className="font-display font-medium text-base sm:text-lg md:text-xl group-hover:text-[#FF4D00] transition-colors truncate">
             {leg.name}
           </span>
           <span className="hidden md:inline text-[11px] font-mono tracking-wide text-[#111111]/30 shrink-0">
@@ -573,7 +573,7 @@ function LegAccordionPanel({
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-5 md:px-6 pb-6 border-t border-[#111111]/8 pt-6">
+            <div className="px-4 sm:px-5 md:px-6 pb-5 sm:pb-6 border-t border-[#111111]/8 pt-5 sm:pt-6">
               {/* Countries as tag pills */}
               <div className="flex flex-wrap gap-2 mb-6">
                 {leg.countries.map((c) => (
@@ -607,8 +607,8 @@ function LegAccordionPanel({
                       {images.map((img, i) => (
                         <div
                           key={i}
-                          className={`h-[180px] md:h-[220px] overflow-hidden border border-[#111111]/8 shrink-0 ${
-                            i === 0 ? "w-[340px] md:w-[420px]" : "w-[260px] md:w-[320px]"
+                          className={`h-[140px] sm:h-[180px] md:h-[220px] overflow-hidden border border-[#111111]/8 shrink-0 ${
+                            i === 0 ? "w-[260px] sm:w-[340px] md:w-[420px]" : "w-[200px] sm:w-[260px] md:w-[320px]"
                           }`}
                         >
                           <img
@@ -1283,12 +1283,11 @@ function InvitationSection() {
           <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] inline-block mb-6">
             The Invitation
           </span>
-          <h2 className="text-[36px] sm:text-[48px] md:text-[60px] lg:text-[72px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-8 uppercase">
-            The Routes is not a program.
-            <br />
+          <h2 className="text-[30px] sm:text-[40px] md:text-[56px] lg:text-[72px] font-display font-medium tracking-[-0.03em] leading-[0.95] mb-6 sm:mb-8 uppercase">
+            The Routes is not a program.{" "}
             <span className="text-[#FF4D00]">It is a covenant.</span>
           </h2>
-          <p className="text-lg md:text-xl text-white/40 font-medium leading-[1.6] max-w-lg">
+          <p className="text-base sm:text-lg md:text-xl text-white/40 font-medium leading-[1.6] max-w-lg">
             Whether you&apos;re a founder, investor, or sovereign partner —
             there&apos;s a place on the Route for those who refuse to build in
             isolation. For those who understand that the next frontier isn&apos;t
