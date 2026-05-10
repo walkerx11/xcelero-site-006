@@ -168,6 +168,120 @@ Stage Summary:
 - No TypeScript errors
 
 ---
+Task ID: 5
+Agent: Main Agent
+Task: Remove PortfolioSectors from Capital, replace HowItWorks with ProgramImpact on Programs, replace AI-generated sector images with Unsplash
+
+Work Log:
+- **Task 1: Capital.tsx — Remove PortfolioSectors section**
+  - Removed `<PortfolioSectors />` from Capital component render
+  - Removed entire `PortfolioSectors` function definition (lines 924-1024)
+  - Removed `sectorImages` const (was inside PortfolioSectors)
+  - Removed `verticals` derived data (only used by PortfolioSectors)
+  - Removed unused icon imports: TrendingUp, Users, Globe, FileText, Scale, Wallet
+  - Kept `venturesData` import (still used by `totalVentures`)
+  - No more `/sectors/` references in Capital.tsx
+
+- **Task 2: Programs.tsx — Remove HowItWorks, add ProgramImpact**
+  - Removed `<HowItWorks />` from Programs component render
+  - Removed entire `HowItWorks` function definition (desktop timeline + mobile vertical timeline)
+  - Removed `timelineDescriptions` const (only used by HowItWorks)
+  - Added new `ProgramImpact` section with:
+    - 6 impact metrics: Companies Launched (127), Follow-on Capital Raised ($340M), Jobs Created (4,200+), Survival Rate (75%), Countries Reached (39), Max Funding Package ($620K)
+    - Consistent xCelero design: border cards, mono labels, display font headings, orange accents
+    - Hover effects: value turns orange, border turns orange, bottom accent line
+    - Grid layout: 1 col mobile, 2 col tablet, 3 col desktop
+  - Added `impactMetrics` data array
+
+- **Task 3: Insights.tsx — Replace AI-generated sector images with Unsplash**
+  - Replaced `categoryImages` object: all 12 categories now use real Unsplash URLs instead of `/sectors/*.png`
+  - Replaced fallback references to `/sectors/energy.png` with the Energy Unsplash URL
+  - Categories updated: Energy, Water, Food Systems, Infrastructure, Capital, Ventures, Community, Manufacturing, Mobility, AI & Data, Space, Policy
+  - No more `/sectors/` references in entire src directory
+
+- All lint checks pass clean
+- Dev server running and responding on port 3000
+
+Stage Summary:
+- Capital.tsx: PortfolioSectors section removed, along with unused imports and verticals data
+- Programs.tsx: HowItWorks timeline replaced with ProgramImpact metrics section (6 cards showing key outcomes)
+- Insights.tsx: All AI-generated /sectors/ images replaced with real Unsplash photo URLs
+- Zero /sectors/ references remain in codebase
+
+---
+Task ID: 2-b
+Agent: Sub Agent
+Task: Replace sovereignty/sovereign with non-political alternatives and remove em dashes
+
+Work Log:
+
+**Task A: Sovereignty/Sovereign Replacements**
+- Used Python script with ordered replacements to handle 80+ instances across 13 source files
+- Context-specific replacements applied per task rules:
+  - "sovereign energy" → "self-sustaining energy"
+  - "sovereign AI" → "independent AI"
+  - "sovereign compute" → "independent compute"
+  - "sovereign infrastructure" → "independent infrastructure"
+  - "sovereign data" → "locally-controlled data"
+  - "data sovereignty" → "data independence"
+  - "cognitive sovereignty" → "cognitive independence"
+  - "water sovereignty" → "water self-sufficiency"
+  - "energy sovereignty" → "energy self-sufficiency"
+  - "food sovereignty" → "food self-sufficiency"
+  - "orbital sovereignty" → "orbital independence"
+  - "Sovereign Tech" → "Critical Tech" (Capital.tsx thematic funds)
+  - "Sovereign-by-design" → "Self-sustaining by design"
+  - "sovereign incentives" → "government incentives"
+  - "sovereign partners" → "institutional partners"
+  - "sovereign zones" → "allied zones"
+  - "sovereign fabrication" → "independent fabrication"
+  - "sovereign encryption" → "independent encryption"
+  - "sovereign clouds" → "locally-controlled clouds"
+  - "SovereignData Net" → "IndepData Net"
+  - "sovereign-data-net" → "indep-data-net"
+  - "Defense & Sovereignty" → "Defense & Self-Reliance"
+  - "Rare Earth & Mineral Sovereignty" → "Rare Earth & Mineral Independence"
+  - "Sovereign Agile Laboratory" → "Self-Sustaining Agile Laboratory"
+  - "Climate Data Sovereignty Lab" → "Climate Data Independence Lab"
+  - "Sovereign Data Routing Lab" → "Independent Data Routing Lab"
+  - "Sovereign Mandate" → "Self-Reliance Mandate" (Manifesto.tsx)
+  - "True sovereignty is technological" → "True self-reliance is technological"
+  - "self-sovereign identity" → "self-managed identity"
+  - "sovereign wealth funds" → KEPT AS IS (standard financial term)
+  - "sovereign wealth" → KEPT AS IS (standard financial term)
+  - "sovereign bonds/debt" → "government bonds/debt" (financial context)
+- Fixed double word: "allied allied zones" → "allied zones" (from "allied sovereign zones")
+- Fixed financial context: "African independent and corporate bond investment" → "African government and corporate bond investment"
+- Files modified: insights.ts, companies.ts, ventures.ts, routes.ts, programs.ts, careers.ts, Approach.tsx, Capital.tsx, Platform.tsx, Manifesto.tsx, RoutesPage.tsx, VentureDetail.tsx
+
+**Task B: Em Dash (—) Replacements**
+- Used Python script with regex patterns to handle 100+ em dash instances across 16 files
+- Context-specific replacements:
+  - Date ranges ("Jan — Mar") → en dash ("Jan – Mar")
+  - Job titles ("Engineer — Specialty") → colon ("Engineer: Specialty")
+  - Locations ("Remote — Africa") → en dash ("Remote – Africa")
+  - Page title ("xCelero Labs — Critical Technologies") → en dash
+  - Climate notes ("Dry season — optimal transit") → colon ("Dry season: optimal transit")
+  - City descriptions ("Nerve center — 20M people") → colon ("Nerve center: 20M people")
+  - Comment separators ("HERO — Layout") → en dash ("HERO – Layout")
+  - Parenthetical asides ("X — not Y") → comma ("X, not Y")
+  - Explanatory phrases ("X — the Y") → colon ("X: the Y")
+  - Appositives ("X — a Y") → comma ("X, a Y")
+  - New sentences ("X — It Y") → period ("X. It Y")
+  - Manifesto.tsx: "interests—focused" → "interests, focused"; "world—particularly" → "world, particularly"
+- Files modified: layout.tsx, CareersPage.tsx, Platform.tsx, Approach.tsx, Insights.tsx, Programs.tsx, VentureDetail.tsx, Capital.tsx, ProgramDetail.tsx, JoinPage.tsx, RoutesPage.tsx, Home.tsx, insights.ts, routes.ts, programs.ts, careers.ts, Manifesto.tsx
+
+- All lint checks pass clean
+- Zero remaining "sovereign"/"sovereignty" instances (except protected "sovereign wealth" terms)
+- Zero remaining em dashes (U+2014) in source files
+
+Stage Summary:
+- 80+ sovereignty/sovereign instances replaced with context-appropriate non-political alternatives across 12 files
+- 100+ em dashes replaced with colons, commas, periods, or en dashes based on usage context across 17 files
+- "sovereign wealth funds" and "sovereign wealth" preserved as standard financial terms
+- All lint checks pass clean
+
+---
 ## ⚡ AUTO-SAVE RULE
 After every completed task, always run:
   git add -A && git commit -m "<task description>" && git push origin main

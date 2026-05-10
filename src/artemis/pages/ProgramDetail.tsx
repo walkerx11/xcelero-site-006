@@ -95,7 +95,7 @@ export function ProgramDetail() {
   return (
     <div className="bg-white text-[#1B1C1E] min-h-screen selection:bg-[#FF9CDF] selection:text-white pb-0 overflow-x-hidden">
       
-      {/* ── HERO SECTION — Title + description left, button right (matches Hexa blueprint) ── */}
+      {/* ── HERO SECTION, Title + description left, button right (matches Hexa blueprint) ── */}
       <section className="pt-32 pb-16 px-6 lg:px-12 w-full max-w-[1400px] mx-auto">
         <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div className="flex-1">
@@ -220,7 +220,7 @@ export function ProgramDetail() {
          </div>
       </section>
 
-      {/* ── An Unfair Starting Line — 6 features + auto-play photo collage ── */}
+      {/* ── An Unfair Starting Line, 6 features + auto-play photo collage ── */}
       {(program.features && program.features.length > 0) && (
         <section id="what-you-get" className="py-24 lg:py-32 px-6 lg:px-12 bg-[#F9F9F9]">
            <div className="max-w-[1400px] mx-auto">
@@ -275,7 +275,7 @@ export function ProgramDetail() {
                         <div>
                           <div className="flex items-center justify-between mb-6">
                             <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#1B1C1E]/40">What they say</span>
-                            <span className="font-mono text-[10px] text-[#1B1C1E]/30">03 — 03</span>
+                            <span className="font-mono text-[10px] text-[#1B1C1E]/30">03, 03</span>
                           </div>
                           <p className="text-lg md:text-xl font-medium leading-[1.5] text-[#1B1C1E]/80 mb-8">
                             &ldquo;{program.testimonial.quote}&rdquo;
@@ -319,7 +319,7 @@ export function ProgramDetail() {
         </section>
       )}
 
-      {/* ── STARTUP IDEAS — 6 cards ── */}
+      {/* ── STARTUP IDEAS, 6 cards ── */}
       {(program.ideas && program.ideas.length > 0) && (
         <section id="startup-ideas" className="py-24 lg:py-32 px-6 lg:px-12 max-w-[1400px] mx-auto bg-white">
            <div className="mb-16 md:mb-20">
@@ -364,7 +364,7 @@ export function ProgramDetail() {
         </section>
       )}
 
-      {/* ── FROM IDEA TO COMPANY — 4 ventures from ventures data ── */}
+      {/* ── FROM IDEA TO COMPANY, 4 ventures from ventures data ── */}
       {programVentures.length > 0 && (
         <section className="py-24 lg:py-32 px-6 lg:px-12 max-w-[1400px] mx-auto bg-white mb-16 relative">
            <div className="mb-16">

@@ -64,7 +64,7 @@ export function RoutesPage() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO SECTION — Editorial, centered, clean
+   HERO SECTION, Editorial, centered, clean
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -125,7 +125,7 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PREAMBLE SECTION — Continuation of the hero thesis
+   PREAMBLE SECTION, Continuation of the hero thesis
    ══════════════════════════════════════════════════════════════════════════ */
 function PreambleSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -149,7 +149,7 @@ function PreambleSection() {
             </p>
             <p>
               The Hanseatic League understood this in 1356. They didn&apos;t build a
-              nation — they built a network of 190 cities connected by shared
+              nation, they built a network of 190 cities connected by shared
               protocols for trade, law, and mutual defense. The League lasted 300
               years and made its member cities the wealthiest in Europe. Not
               through conquest, but through <span className="text-[#111111] font-semibold">flow</span>.
@@ -179,7 +179,7 @@ function PreambleSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   MAP SECTION — Blueprint-style: static world map image + positioned pins
+   MAP SECTION, Blueprint-style: static world map image + positioned pins
    + dynamic header + slide-in side panel
    ══════════════════════════════════════════════════════════════════════════ */
 function MapSection({
@@ -198,7 +198,7 @@ function MapSection({
       <div className="py-12 md:py-16 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
         <div className="w-full max-w-7xl mx-auto">
           <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
-            The Six Legs — Interactive Map
+            The Six Legs, Interactive Map
           </span>
           <div className="flex flex-wrap gap-2">
             <button
@@ -245,7 +245,7 @@ function MapSection({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   BLUEPRINT MAP — Newlab-style: static world map image + positioned pin
+   BLUEPRINT MAP, Newlab-style: static world map image + positioned pin
    markers with always-visible labels + slide-in detail panel
    Based on: https://github.com/Questy708/map2-
    ══════════════════════════════════════════════════════════════════════════ */
@@ -289,7 +289,7 @@ function BlueprintMap({
           }
         }}
       >
-        {/* World map image — Newlab topographic map */}
+        {/* World map image, Newlab topographic map */}
         <img
           alt="World Map showing xCelero Routes"
           className="w-full h-auto pointer-events-none select-none opacity-80"
@@ -335,7 +335,7 @@ function BlueprintMap({
           );
         })}
 
-        {/* Info Panel Overlay — bottom sheet on mobile, side panel on desktop */}
+        {/* Info Panel Overlay, bottom sheet on mobile, side panel on desktop */}
         <AnimatePresence>
           {activeLocData && (
             <motion.div
@@ -392,7 +392,7 @@ function BlueprintMap({
                       {legOfActive.name}
                     </p>
                     <p className="text-xs text-[#111111]/40 mt-1">
-                      {legOfActive.subtitle} — {legOfActive.hubCount} hubs
+                      {legOfActive.subtitle}, {legOfActive.hubCount} hubs
                     </p>
                   </div>
                 )}
@@ -453,7 +453,7 @@ function BlueprintMap({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   ARC ACCORDION — Expandable sections per leg (no dark bands)
+   ARC ACCORDION, Expandable sections per leg (no dark bands)
    ══════════════════════════════════════════════════════════════════════════ */
 function ArcAccordion({
   expandedLeg,
@@ -473,7 +473,7 @@ function ArcAccordion({
     <section ref={ref} className="border-b border-[#111111]/10">
       <div className="py-12 md:py-16 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
         <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00]">
-          The Arcs — In Detail
+          The Arcs, In Detail
         </span>
       </div>
       <motion.div
@@ -505,7 +505,7 @@ function ArcAccordion({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   LEG ACCORDION PANEL — Single expandable panel per leg
+   LEG ACCORDION PANEL, Single expandable panel per leg
    ══════════════════════════════════════════════════════════════════════════ */
 function LegAccordionPanel({
   leg,
@@ -586,7 +586,7 @@ function LegAccordionPanel({
                 ))}
               </div>
 
-              {/* Horizontal collage — Activities & Infrastructure */}
+              {/* Horizontal collage, Activities & Infrastructure */}
               {images.length > 0 && (
                 <div className="mb-8">
                   <div className="flex items-center gap-2 mb-4">
@@ -979,27 +979,27 @@ function JourneySection() {
               {[
                 {
                   time: "06:00",
-                  desc: "Dawn patrol — market visit, port walk, or field deployment",
+                  desc: "Dawn patrol, market visit, port walk, or field deployment",
                 },
                 {
                   time: "09:00",
-                  desc: "Deal room — structured sprint on the signature route deal",
+                  desc: "Deal room, structured sprint on the signature route deal",
                 },
                 {
                   time: "12:00",
-                  desc: "Commons feast — shared meal with local operators and partners",
+                  desc: "Commons feast, shared meal with local operators and partners",
                 },
                 {
                   time: "14:00",
-                  desc: "Deep work — prototyping, API integration, or regulatory mapping",
+                  desc: "Deep work, prototyping, API integration, or regulatory mapping",
                 },
                 {
                   time: "17:00",
-                  desc: "Heritage walk — curated walk through the hub's trade history",
+                  desc: "Heritage walk, curated walk through the hub's trade history",
                 },
                 {
                   time: "19:00",
-                  desc: "Ritual closing — reflection, documentation, and intention setting",
+                  desc: "Ritual closing, reflection, documentation, and intention setting",
                 },
               ].map((r) => (
                 <div key={r.time} className="flex items-start gap-4">
@@ -1027,11 +1027,11 @@ function JourneySection() {
             </div>
             <div className="space-y-4">
               {[
-                "A signed Route Deal — a commercial agreement with at least one counterparty across the leg",
-                "A Playbook — codified operating procedures for every friction point encountered",
-                "A Network — direct relationships with operators, regulators, and capital sources across the leg",
-                "A Worldview — firsthand understanding of how 80% of global trade actually moves",
-                "A Covenant — membership in the Routes alumni network, with lifelong access to every hub",
+                "A signed Route Deal, a commercial agreement with at least one counterparty across the leg",
+                "A Playbook, codified operating procedures for every friction point encountered",
+                "A Network, direct relationships with operators, regulators, and capital sources across the leg",
+                "A Worldview, firsthand understanding of how 80% of global trade actually moves",
+                "A Covenant, membership in the Routes alumni network, with lifelong access to every hub",
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <span className="text-[#FF4D00] font-mono text-sm mt-0.5">
@@ -1288,8 +1288,7 @@ function InvitationSection() {
             <span className="text-[#FF4D00]">It is a covenant.</span>
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-white/40 font-medium leading-[1.6] max-w-lg">
-            Whether you&apos;re a founder, investor, or sovereign partner —
-            there&apos;s a place on the Route for those who refuse to build in
+            Whether you&apos;re a founder, investor, or independent partner, there&apos;s a place on the Route for those who refuse to build in
             isolation. For those who understand that the next frontier isn&apos;t
             a metaphor. It&apos;s a map.
           </p>
@@ -1341,7 +1340,7 @@ function InvitationSection() {
           >
             <div>
               <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-white/40 mb-2">
-                For Sovereign Partners
+                For Independent Partners
               </div>
               <div className="text-lg md:text-xl font-display font-medium">
                 Build With Us

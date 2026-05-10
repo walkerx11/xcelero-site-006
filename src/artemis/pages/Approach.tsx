@@ -19,14 +19,14 @@ const engines = [
     num: "01",
     title: "Infrastructure",
     icon: Building2,
-    desc: "A distributed constellation of 190 XHansa Hubs spanning every African nation and 19 global cities. M1 Cores, XEmbassies, and living labs for real-world testing — the physical and digital operating system for civilization-building.",
+    desc: "A distributed constellation of 190 XHansa Hubs spanning every African nation and 19 global cities. M1 Cores, XEmbassies, and living labs for real-world testing: the physical and digital operating system for civilization-building.",
     link: "/platform",
   },
   {
     num: "02",
     title: "Ventures",
     icon: Rocket,
-    desc: "Convening industry, government, and entrepreneurs to run real-world pilots. Structured commercialization programs — from the Quest Fellowship to industry sprints — transforming ideas into tangible change at civilizational scale.",
+    desc: "Convening industry, government, and entrepreneurs to run real-world pilots. Structured commercialization programs, from the Quest Fellowship to industry sprints, transforming ideas into tangible change at civilizational scale.",
     link: "/programs",
   },
   {
@@ -40,7 +40,7 @@ const engines = [
     num: "04",
     title: "Community",
     icon: Users,
-    desc: "The XCitizens network — operators, founders, investors, and mentors creating compound network effects across the Route. Every hub, every cohort, every deal strengthens the connective tissue that turns individual efforts into collective momentum.",
+    desc: "The XCitizens network, operators, founders, investors, and mentors creating compound network effects across the Route. Every hub, every cohort, every deal strengthens the connective tissue that turns individual efforts into collective momentum.",
     link: "/join",
   },
 ];
@@ -50,16 +50,16 @@ const criticalDomains = [
   { name: "Energy (Generation & Transmission)", desc: "Microgrids, non-lithium storage, low-temp geothermal, small modular nuclear / fusion pathways." },
   { name: "Water & Aquatic Systems", desc: "Distributed desalination, atmospheric H₂O harvesting, aquaculture optimization, open-source water grids." },
   { name: "Food & Algorithmic Agriculture", desc: "Climate resilient crop genetics, vertical protein farming, algorithmic harvest optimization." },
-  { name: "Materials & Computation", desc: "Ethical refining architectures, bio-plastics, mycelium composites, semi-conductor material sovereignty." },
+  { name: "Materials & Computation", desc: "Ethical refining architectures, bio-plastics, mycelium composites, semi-conductor material independence." },
   { name: "Mobility & Logistics", desc: "Electric mass transit retrofits, heavy-lift drone logistics for remote delivery, autonomous port management." },
-  { name: "Cognitive Systems & Data Sovereignty", desc: "Edge AI, decentralized identity, indigenous language LLMs, private sovereign clouds." },
+  { name: "Cognitive Systems & Data Independence", desc: "Edge AI, decentralized identity, indigenous language LLMs, private locally-controlled clouds." },
   { name: "Built Environments & Circularity", desc: "Algorithmic urban planning, cooling architectures, waste-to-energy syndicates." },
   { name: "Earth Systems & Biometrics", desc: "Real-time planetary monitoring, early warning sensors, programmable conservation efforts." },
   { name: "Space & Deep Sea Tech", desc: "Micro-satellite constellations for climate tracking, deep sea non-extractive resource mapping." },
   { name: "Industrial Biotech", desc: "Programmable biology, synthetic enzymes, and microbial factories." },
   { name: "Hypersonics", desc: "Next-generation high-speed atmospheric transit." },
-  { name: "Quantum Technologies", desc: "Quantum sensing and unbreakable sovereign encryption architectures." },
-  { name: "Semiconductors", desc: "Sovereign fabrication capabilities and novel chip design." },
+  { name: "Quantum Technologies", desc: "Quantum sensing and unbreakable independent encryption architectures." },
+  { name: "Semiconductors", desc: "Independent fabrication capabilities and novel chip design." },
 ];
 
 /* ── Traits ── */
@@ -76,7 +76,7 @@ const traits = [
   },
   {
     title: "Go unreasonably deep",
-    desc: "There's a particular kind of intensity we look for — a relentless drive that goes far beyond surface insights or hard work. It's curiosity that crosses over into obsession but reads more \"learn-it-all\" than \"know-it-all.\" It means full immersion in materials science when starting an energy company or working on the factory floor to live the pain of industrial bottlenecks.",
+    desc: "There's a particular kind of intensity we look for, a relentless drive that goes far beyond surface insights or hard work. It's curiosity that crosses over into obsession but reads more \"learn-it-all\" than \"know-it-all.\" It means full immersion in materials science when starting an energy company or working on the factory floor to live the pain of industrial bottlenecks.",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
   }
 ];
@@ -85,31 +85,31 @@ const howWeWork = [
   {
     step: "01",
     title: "Deep Diligence",
-    desc: "We spend three to five hours with every team before making a decision. Not slideshows — real conversations about your core technical insight, the specific bottleneck you're addressing, and the architecture you've chosen to solve it."
+    desc: "We spend three to five hours with every team before making a decision. Not slideshows, real conversations about your core technical insight, the specific bottleneck you're addressing, and the architecture you've chosen to solve it."
   },
   {
     step: "02",
     title: "Conviction-Led Investment",
-    desc: "We invest based on conviction in the founding team and their thesis, not momentum or social proof. Our decisions are made by the people who'll work closest with you — no investment committees, no off-site partners weighing in."
+    desc: "We invest based on conviction in the founding team and their thesis, not momentum or social proof. Our decisions are made by the people who'll work closest with you, no investment committees, no off-site partners weighing in."
   },
   {
     step: "03",
     title: "Hands-On Foundation Building",
-    desc: "After investing, we embed. From your first hire to your first revenue milestone, we operate alongside you — not as consultants, but as co-builders who've been in the trenches of early-stage company construction before."
+    desc: "After investing, we embed. From your first hire to your first revenue milestone, we operate alongside you, not as consultants, but as co-builders who've been in the trenches of early-stage company construction before."
   }
 ];
 
 const faqs = [
-  { category: "Timing", q: "Is it ever too early to approach xCelero about investing?", a: "No, it's never too early to reach out. We don't see divisions between angel, pre-seed and seed — we're interested across the board." },
+  { category: "Timing", q: "Is it ever too early to approach xCelero about investing?", a: "No, it's never too early to reach out. We don't see divisions between angel, pre-seed and seed, we're interested across the board." },
   { category: "Timing", q: "What if I'm still employed elsewhere?", a: "Absolutely reach out. We regularly meet with future proto-citizens who are in exactly this position, months away from making the official leap." },
-  { category: "Timing", q: "What if I've already raised from angels or a pre-seed fund — is it too late?", a: "Of course not. While we're usually the first money in, we've worked with a number of teams that raised a small round before coming to us." },
+  { category: "Timing", q: "What if I've already raised from angels or a pre-seed fund, is it too late?", a: "Of course not. While we're usually the first money in, we've worked with a number of teams that raised a small round before coming to us." },
   { category: "Timing", q: "Do I need customers and revenue?", a: "Nope. Many of our 500+ companies came to us when they were a couple of people with an idea and a lab." },
-  { category: "Timing", q: "I'm raising my Series B or Series C — should I contact you?", a: "Nope. We're explicitly focused on the foundation phase." },
+  { category: "Timing", q: "I'm raising my Series B or Series C, should I contact you?", a: "Nope. We're explicitly focused on the foundation phase." },
   { category: "Decision making", q: "What does xCelero look for in a thesis?", a: "Above all, we look for compelling and contrarian insight into how infrastructure works." },
   { category: "Decision making", q: "How do you weigh different criteria in your decision-making process?", a: "The biggest factor in our decision-making is always the founding team. How innovative, resourceful and resilient are you?" },
-  { category: "Where we invest", q: "Does xCelero only invest in particular areas or industries?", a: "We focus heavily on the 13 Critical Domains—from energy generation and biotech to cognitive systems and hypersonics." },
+  { category: "Where we invest", q: "Does xCelero only invest in particular areas or industries?", a: "We focus heavily on the 13 Critical Domains, from energy generation and biotech to cognitive systems and hypersonics." },
   { category: "Where we invest", q: "Do you invest in companies located outside of major tech hubs?", a: "Yes! Our flexible constellation spans 190 XHansa Hubs across the globe." },
-  { category: "Where we invest", q: "Do you invest outside of the United States?", a: "We tend to focus on companies based in the U.S. or allied sovereign zones." },
+  { category: "Where we invest", q: "Do you invest outside of the United States?", a: "We tend to focus on companies based in the U.S. or allied zones." },
   { category: "Process", q: "What does your investment process look like?", a: "Our process is rigorous but fast. We like to spend at least three to five hours on any company before we make a final decision." },
   { category: "Process", q: "What's the best way to get on your radar?", a: "A direct referral from someone within the XEmbassy network works best, but cold outreach with a strong technical whitepaper is highly welcome." },
   { category: "Process", q: "How should I prep for your partner meeting?", a: "We recommend focusing on your core technical insight, the specific civilizational bottleneck you are addressing." },
@@ -138,7 +138,7 @@ export function Approach() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO — Light bg, 7+5 grid (NEWLAB style, matching Programs)
+   HERO, Light bg, 7+5 grid (NEWLAB style, matching Programs)
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -168,7 +168,7 @@ function HeroSection() {
           </h1>
 
           <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#111111]/60 font-medium max-w-lg">
-            We back founders who go unreasonably deep to get their beginnings right — and we provide the infrastructure, ventures, capital, and community to make it work.
+            We back founders who go unreasonably deep to get their beginnings right, and we provide the infrastructure, ventures, capital, and community to make it work.
           </p>
         </motion.div>
 
@@ -201,7 +201,7 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   4 ENGINES — Moved from Infrastructure page
+   4 ENGINES, Moved from Infrastructure page
    ══════════════════════════════════════════════════════════════════════════ */
 function ThreeEnginesSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -227,7 +227,7 @@ function ThreeEnginesSection() {
             Four engines, <span className="text-[#111111]/40">one machine.</span>
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            xCelero operates through four integrated engines — Infrastructure, Ventures, Capital, and Community — each reinforcing the others to unblock commercialization at civilizational scale.
+            xCelero operates through four integrated engines, Infrastructure, Ventures, Capital, and Community, each reinforcing the others to unblock commercialization at civilizational scale.
           </p>
         </motion.div>
 
@@ -274,7 +274,7 @@ function ThreeEnginesSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   WHO WE BACK — Split Screen Layout
+   WHO WE BACK, Split Screen Layout
    ══════════════════════════════════════════════════════════════════════════ */
 function WhoWeBackSection() {
   const [activeTrait, setActiveTrait] = useState(0);
@@ -312,7 +312,7 @@ function WhoWeBackSection() {
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           className="grid lg:grid-cols-12 gap-12 lg:gap-16"
         >
-          {/* Left Column — Number Indicators */}
+          {/* Left Column, Number Indicators */}
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-32 flex lg:flex-col flex-row gap-4 lg:gap-0 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 scrollbar-hide">
               {traits.map((trait, i) => (
@@ -344,7 +344,7 @@ function WhoWeBackSection() {
                   >
                     0{i + 1}
                   </span>
-                  {/* Title — only visible on mobile/tablet inline */}
+                  {/* Title, only visible on mobile/tablet inline */}
                   <span
                     className={`lg:hidden text-[14px] md:text-[16px] font-display font-medium transition-colors whitespace-nowrap ${
                       activeTrait === i
@@ -359,7 +359,7 @@ function WhoWeBackSection() {
             </div>
           </div>
 
-          {/* Right Column — Active Trait Content */}
+          {/* Right Column, Active Trait Content */}
           <div className="lg:col-span-8 min-h-[320px] md:min-h-[400px]">
             <AnimatePresence mode="wait">
               <motion.div
@@ -405,7 +405,7 @@ function WhoWeBackSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HOW WE WORK — Card Carousel Layout
+   HOW WE WORK, Card Carousel Layout
    ══════════════════════════════════════════════════════════════════════════ */
 function HowWeWorkSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -431,7 +431,7 @@ function HowWeWorkSection() {
             Rigorous, fast, <span className="text-[#111111]/40">and on your side</span>.
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            Our process is designed to respect your time and get to conviction quickly — because the best founders don&apos;t wait.
+            Our process is designed to respect your time and get to conviction quickly, because the best founders don&apos;t wait.
           </p>
         </motion.div>
 
@@ -526,7 +526,7 @@ function HowWeWorkCard({ step, index }: { step: typeof howWeWork[number]; index:
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   13 CRITICAL DOMAINS — Moved from Infrastructure page
+   13 CRITICAL DOMAINS, Moved from Infrastructure page
    ══════════════════════════════════════════════════════════════════════════ */
 function CriticalDomainsSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -552,7 +552,7 @@ function CriticalDomainsSection() {
             Where we focus <span className="text-[#111111]/40">our conviction.</span>
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            These are the domains where sovereignty is technological — the ability to generate electricity, secure food, purify water, and defend networks on one&apos;s own terms.
+            These are the domains where self-reliance is technological: the ability to generate electricity, secure food, purify water, and defend networks on one&apos;s own terms.
           </p>
         </motion.div>
 
@@ -578,7 +578,7 @@ function CriticalDomainsSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FAQ — Centered layout with horizontal category tabs
+   FAQ, Centered layout with horizontal category tabs
    ══════════════════════════════════════════════════════════════════════════ */
 function FaqSection() {
   const [activeCategory, setActiveCategory] = useState("Timing");
@@ -611,7 +611,7 @@ function FaqSection() {
           </h2>
         </motion.div>
 
-        {/* Desktop category tabs — horizontal, centered */}
+        {/* Desktop category tabs, horizontal, centered */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -672,7 +672,7 @@ function FaqSection() {
           )}
         </div>
 
-        {/* FAQ items — centered */}
+        {/* FAQ items, centered */}
         <div className="max-w-4xl mx-auto">
           {filteredFaqs.map((faq, index) => (
             <FaqItem

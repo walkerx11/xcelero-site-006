@@ -8,9 +8,6 @@ import {
   ArrowRight,
   ChevronDown,
   Shield,
-  TrendingUp,
-  Users,
-  Globe,
   Check,
   X,
   Loader2,
@@ -20,17 +17,13 @@ import {
   Landmark,
   Mail,
   PiggyBank,
-  FileText,
   Banknote,
-  Scale,
-  Wallet,
   CircleDollarSign,
   Layers,
 } from "lucide-react";
 
 /* ── Derived Data ── */
 
-const verticals = [...new Set(venturesData.map((v) => v.vertical))];
 const totalVentures = venturesData.length;
 const totalCountries = 39;
 const totalHubs = 190;
@@ -45,7 +38,7 @@ const investmentVehicles = [
     icon: CircleDollarSign,
     tagline: "Continuous capital. Broad exposure. Open access.",
     description:
-      "An open-ended, evergreen commingled fund that deploys across the full xCelero venture portfolio. The Fund offers quarterly liquidity windows, transparent NAV reporting, and entry from $500 — making institutional-grade venture accessible to everyone.",
+      "An open-ended, evergreen commingled fund that deploys across the full xCelero venture portfolio. The Fund offers quarterly liquidity windows, transparent NAV reporting, and entry from $500: making institutional-grade venture accessible to everyone.",
     details: [
       { label: "Structure", value: "Open-ended evergreen fund" },
       { label: "Min entry", value: "$500" },
@@ -64,7 +57,7 @@ const investmentVehicles = [
     icon: Layers,
     tagline: "Co-invest alongside institutions on breakout deals.",
     description:
-      "Purpose-built Special Purpose Vehicles for individual follow-on investments in high-conviction ventures. Each SPV is a single-asset vehicle with defined economics — you know exactly what you're investing in, with side-by-side GP economics and institutional-grade deal terms.",
+      "Purpose-built Special Purpose Vehicles for individual follow-on investments in high-conviction ventures. Each SPV is a single-asset vehicle with defined economics: you know exactly what you're investing in, with side-by-side GP economics and institutional-grade deal terms.",
     details: [
       { label: "Structure", value: "Single-asset SPV per deal" },
       { label: "Min entry", value: "$5,000" },
@@ -83,7 +76,7 @@ const investmentVehicles = [
     icon: PiggyBank,
     tagline: "Concentrated bets on critical technology verticals.",
     description:
-      "Commingled closed-end funds targeting specific verticals — Energy, Food Systems, Sovereign Tech, Digital Finance. Each fund concentrates capital in 8–15 ventures within a single domain, giving investors targeted exposure to the sectors they believe in most.",
+      "Commingled closed-end funds targeting specific verticals: Energy, Food Systems, Critical Tech, Digital Finance. Each fund concentrates capital in 8–15 ventures within a single domain, giving investors targeted exposure to the sectors they believe in most.",
     details: [
       { label: "Structure", value: "7-year closed-end fund" },
       { label: "Min entry", value: "$50,000" },
@@ -102,7 +95,7 @@ const investmentVehicles = [
     icon: Banknote,
     tagline: "Revenue-linked returns. Venture velocity without equity dilution.",
     description:
-      "Revenue-based financing instruments for portfolio ventures that have reached revenue milestones. Investors receive a fixed return multiple tied to venture revenue performance — no equity dilution, no valuation negotiations. Capital that moves at the speed of the business.",
+      "Revenue-based financing instruments for portfolio ventures that have reached revenue milestones. Investors receive a fixed return multiple tied to venture revenue performance: no equity dilution, no valuation negotiations. Capital that moves at the speed of the business.",
     details: [
       { label: "Structure", value: "Revenue-linked note" },
       { label: "Min entry", value: "$10,000" },
@@ -121,7 +114,7 @@ const investmentVehicles = [
     icon: Shield,
     tagline: "Unlock grants, prizes, and government incentives across 39 countries.",
     description:
-      "Not a fund — a service. Our Non-Dilutive Capital Desk matches ventures with grants, prizes, sovereign incentives, and development finance across every country on the Route. Average non-dilutive raise per venture: $180K. This is capital that doesn't cost equity.",
+      "Not a fund: a service. Our Non-Dilutive Capital Desk matches ventures with grants, prizes, government incentives, and development finance across every country on the Route. Average non-dilutive raise per venture: $180K. This is capital that doesn't cost equity.",
     details: [
       { label: "Structure", value: "Advisory + placement" },
       { label: "Min entry", value: "N/A (venture-side)" },
@@ -243,7 +236,7 @@ const faqItems = [
   },
   {
     q: "How does xCelero deploy capital?",
-    a: "We deploy across five vehicles: (1) xCelero Fund — broad exposure across the full portfolio; (2) SPV Syndicates — single-deal co-investments alongside institutions; (3) Thematic Funds — concentrated sector bets in energy, food, sovereign tech; (4) Catalyst Notes — revenue-linked returns for revenue-stage ventures; (5) Non-Dilutive Desk — grants and incentives matching across 39 countries.",
+    a: "We deploy across five vehicles: (1) xCelero Fund, broad exposure across the full portfolio; (2) SPV Syndicates, single-deal co-investments alongside institutions; (3) Thematic Funds, concentrated sector bets in energy, food, independent tech; (4) Catalyst Notes, revenue-linked returns for revenue-stage ventures; (5) Non-Dilutive Desk, grants and incentives matching across 39 countries.",
   },
   {
     q: "What are the fees?",
@@ -255,11 +248,11 @@ const faqItems = [
   },
   {
     q: "Is this a fund-of-funds?",
-    a: "No. xCelero Capital originates and builds ventures directly. We are a venture studio that deploys capital into our own creations — not a passive allocator. When we co-invest through SPVs, it's alongside institutional partners we've selected, not into blind pools.",
+    a: "No. xCelero Capital originates and builds ventures directly. We are a venture studio that deploys capital into our own creations, not a passive allocator. When we co-invest through SPVs, it's alongside institutional partners we've selected, not into blind pools.",
   },
   {
     q: "What's the investment thesis?",
-    a: "Critical technology — energy, food, water, defense, manufacturing — not SaaS arbitrage. Global South-first markets where infrastructure gaps are the opportunity. Revenue-adjacent ventures with working prototypes and pilot customers, not slide decks. Route-connected companies that leverage the 190-hub network for scale. Sovereign-by-design technology that enables self-determination, not dependency.",
+    a: "Critical technology, energy, food, water, defense, manufacturing, not SaaS arbitrage. Global South-first markets where infrastructure gaps are the opportunity. Revenue-adjacent ventures with working prototypes and pilot customers, not slide decks. Route-connected companies that leverage the 190-hub network for scale. Self-sustaining by design technology that enables self-determination, not dependency.",
   },
   {
     q: "Can international investors participate?",
@@ -282,7 +275,6 @@ export function Capital() {
       <Hero onSubscribe={() => setShowSubscribe(true)} />
       <InvestmentVehicles />
       <InvestmentTiers />
-      <PortfolioSectors />
       <FAQSection />
       <InvestCTA onSubscribe={() => setShowSubscribe(true)} />
       <SubscribeModal
@@ -294,7 +286,7 @@ export function Capital() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO — Editorial centered with serif accent
+   HERO, Editorial centered with serif accent
    ══════════════════════════════════════════════════════════════════════════ */
 function Hero({ onSubscribe }: { onSubscribe: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -334,7 +326,7 @@ function Hero({ onSubscribe }: { onSubscribe: () => void }) {
             xCelero gives you access to that pipeline.
           </p>
 
-          {/* Stats metrics row — matching Route page style */}
+          {/* Stats metrics row, matching Route page style */}
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-5 sm:gap-x-10 md:gap-x-16 mb-10 sm:mb-14 md:mb-20">
             {heroStats.map((stat, i) => (
               <motion.div
@@ -383,7 +375,7 @@ function Hero({ onSubscribe }: { onSubscribe: () => void }) {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   STATS BAR — Horizontal ticker
+   STATS BAR, Horizontal ticker
    ══════════════════════════════════════════════════════════════════════════ */
 function StatsBar() {
   const ref = useRef<HTMLDivElement>(null);
@@ -427,7 +419,7 @@ function StatsBar() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   INVESTMENT VEHICLES — Expandable detail cards
+   INVESTMENT VEHICLES, Expandable detail cards
    ══════════════════════════════════════════════════════════════════════════ */
 function InvestmentVehicles() {
   const ref = useRef<HTMLDivElement>(null);
@@ -456,7 +448,7 @@ function InvestmentVehicles() {
           </h2>
           <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.7] max-w-xl mt-4">
             From $500 in the xCelero Fund to custom Anchor Mandates at $250K+,
-            every vehicle is built for the same thesis — critical technology in
+            every vehicle is built for the same thesis, critical technology in
             the markets that need it most.
           </p>
         </motion.div>
@@ -521,7 +513,7 @@ function InvestmentVehicles() {
                   {vehicle.description}
                 </p>
 
-                {/* Details Grid — always visible */}
+                {/* Details Grid, always visible */}
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
                   {vehicle.details.map((detail, di) => (
                     <div key={di} className="flex flex-col">
@@ -535,7 +527,7 @@ function InvestmentVehicles() {
                   ))}
                 </div>
 
-                {/* Best For — expandable */}
+                {/* Best For, expandable */}
                 <AnimatePresence>
                   {isExpanded && (
                     <motion.div
@@ -566,7 +558,7 @@ function InvestmentVehicles() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   INVESTMENT TIERS — Interactive selection + inline form
+   INVESTMENT TIERS, Interactive selection + inline form
    ══════════════════════════════════════════════════════════════════════════ */
 function InvestmentTiers() {
   const ref = useRef<HTMLDivElement>(null);
@@ -642,7 +634,7 @@ function InvestmentTiers() {
           </p>
         </motion.div>
 
-        {/* Tier Cards — horizontal scroll on mobile */}
+        {/* Tier Cards, horizontal scroll on mobile */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
           {investmentTiers.map((tier, i) => {
             const Icon = tier.icon;
@@ -922,109 +914,7 @@ function InvestmentTiers() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PORTFOLIO SECTORS — Visual sector matrix from ventures data
-   ══════════════════════════════════════════════════════════════════════════ */
-function PortfolioSectors() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  const sectorData = verticals.map((vertical) => {
-    const count = venturesData.filter((v) => v.vertical === vertical).length;
-    return { name: vertical, count };
-  });
-
-  const sectorImages: Record<string, string> = {
-    Energy: "/sectors/energy.png",
-    Water: "/sectors/water.png",
-    "Food & Agriculture": "/sectors/food-agriculture.png",
-    "Materials & Manufacturing": "/sectors/materials-manufacturing.png",
-    "Mobility & Logistics": "/sectors/mobility-logistics.png",
-    "Data & Intelligence": "/sectors/data-intelligence.png",
-    "Built Environments": "/sectors/built-environments.png",
-    "Life Sciences": "/sectors/life-sciences.png",
-    "Digital Finance": "/sectors/digital-finance.png",
-    "Education & Cognitive Infrastructure": "/sectors/education-cognitive.png",
-    "Space & Off-World Industrialization": "/sectors/space-industrialization.png",
-  };
-
-  return (
-    <section
-      ref={ref}
-      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 bg-[#111111] text-white border-t border-white/10"
-    >
-      <div className="w-full max-w-[1400px] mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-12 md:mb-16"
-        >
-          <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
-            Portfolio Exposure
-          </span>
-          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-[-0.03em] leading-[0.95] mt-3">
-            Broad exposure <em className="font-serif italic text-[#FF4D00]">by design</em>
-          </h2>
-          <p className="text-[15px] md:text-[17px] text-white/50 font-medium leading-[1.7] max-w-xl mt-4">
-            One investment creates exposure to {totalVentures} ventures across{" "}
-            {verticals.length} critical technology sectors. Broad exposure
-            increases the probability of capturing a breakout winner.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-5">
-          {sectorData.map((sector, i) => (
-            <motion.div
-              key={sector.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              className="group relative overflow-hidden cursor-pointer"
-            >
-              {/* Photo */}
-              <div className="aspect-[4/5] relative">
-                <img
-                  src={sectorImages[sector.name] || "/sectors/energy.png"}
-                  alt={sector.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 group-hover:from-black/90 group-hover:via-black/40 transition-colors duration-500" />
-              </div>
-              {/* Content overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                <span className="text-[28px] md:text-[36px] font-display font-medium text-[#FF4D00] leading-none block mb-1">
-                  {sector.count}
-                </span>
-                <span className="text-[11px] md:text-[13px] font-bold text-white/90 block leading-tight">
-                  {sector.name}
-                </span>
-                <span className="text-[9px] md:text-[10px] font-mono font-bold tracking-widest uppercase text-white/40 block mt-1">
-                  ventures
-                </span>
-              </div>
-              {/* Hover accent line */}
-              <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#FF4D00] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-12 text-center">
-          <Link
-            to="/ventures"
-            className="inline-flex items-center gap-2 px-8 py-4 border border-white/20 text-[12px] font-bold uppercase tracking-[0.12em] hover:bg-white hover:text-[#111111] transition-all"
-          >
-            View All Ventures
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   FAQ — Accordion
+   FAQ, Accordion
    ══════════════════════════════════════════════════════════════════════════ */
 function FAQSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -1108,7 +998,7 @@ function FAQSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   INVEST CTA — Bottom call-to-action
+   INVEST CTA, Bottom call-to-action
    ══════════════════════════════════════════════════════════════════════════ */
 function InvestCTA({ onSubscribe }: { onSubscribe: () => void }) {
   return (
@@ -1124,7 +1014,7 @@ function InvestCTA({ onSubscribe }: { onSubscribe: () => void }) {
           right now. Will you fund it?
         </h2>
         <p className="text-[15px] md:text-[17px] text-white/50 font-medium leading-[1.7] max-w-xl mx-auto mb-10">
-          From $500 in the xCelero Fund to custom Anchor Mandates — six
+          From $500 in the xCelero Fund to custom Anchor Mandates, six
           vehicles, one thesis, 39 countries of deal flow.
         </p>
         <div className="flex flex-wrap gap-4 items-center justify-center">

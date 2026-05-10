@@ -10,18 +10,18 @@ const categories = ["All", ...new Set(insightsData.map((i) => i.category))];
 
 /* ── Cover images per category ── */
 const categoryImages: Record<string, string> = {
-  Energy: "/sectors/energy.png",
-  Water: "/sectors/water.png",
-  "Food Systems": "/sectors/food-agriculture.png",
-  Infrastructure: "/sectors/built-environments.png",
-  Capital: "/sectors/digital-finance.png",
-  Ventures: "/sectors/mobility-logistics.png",
-  Community: "/sectors/built-environments.png",
-  Manufacturing: "/sectors/materials-manufacturing.png",
-  Mobility: "/sectors/mobility-logistics.png",
-  "AI & Data": "/sectors/data-intelligence.png",
-  Space: "/sectors/space-industrialization.png",
-  Policy: "/sectors/data-intelligence.png",
+  Energy: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+  Water: "https://images.unsplash.com/photo-1504297050568-910d24c426d3?auto=format&fit=crop&w=800&q=80",
+  "Food Systems": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80",
+  Infrastructure: "https://images.unsplash.com/photo-1565792323902-486ad4b6a110?auto=format&fit=crop&w=800&q=80",
+  Capital: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+  Ventures: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=800&q=80",
+  Community: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+  Manufacturing: "https://images.unsplash.com/photo-1565043666747-69f6646db940?auto=format&fit=crop&w=800&q=80",
+  Mobility: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80",
+  "AI & Data": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
+  Space: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=800&q=80",
+  Policy: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
 };
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -56,7 +56,7 @@ export function Insights() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO — Centered editorial (matching Route/Capital page style)
+   HERO, Centered editorial (matching Route/Capital page style)
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -164,7 +164,7 @@ function CategoryFilter({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FEATURED ARTICLE — Large hero card
+   FEATURED ARTICLE, Large hero card
    ══════════════════════════════════════════════════════════════════════════ */
 function FeaturedArticle({ article }: { article: typeof insightsData[0] }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -173,7 +173,7 @@ function FeaturedArticle({ article }: { article: typeof insightsData[0] }) {
     article.imageCover ||
     article.image ||
     categoryImages[article.category] ||
-    "/sectors/energy.png";
+    "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80";
 
   return (
     <section
@@ -251,7 +251,7 @@ function FeaturedArticle({ article }: { article: typeof insightsData[0] }) {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   ARTICLE GRID — 3-col cards
+   ARTICLE GRID, 3-col cards
    ══════════════════════════════════════════════════════════════════════════ */
 function ArticleGrid({ articles }: { articles: typeof insightsData }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -288,7 +288,7 @@ function ArticleCard({ article }: { article: typeof insightsData[0] }) {
   const imgSrc =
     article.image ||
     categoryImages[article.category] ||
-    "/sectors/energy.png";
+    "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80";
 
   return (
     <Link to={`/insights/${article.id}`} className="group block">

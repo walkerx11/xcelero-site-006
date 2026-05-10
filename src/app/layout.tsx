@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "xCelero Labs — Critical Technologies",
+  title: "xCelero Labs – Critical Technologies",
   description: "A high-performance civilizational venture launchpad and accelerator network. We back builders tackling civilization-level challenges.",
   keywords: ["xCelero", "Critical Technologies", "Venture Capital", "Deep Tech", "Civilizational Infrastructure"],
 };

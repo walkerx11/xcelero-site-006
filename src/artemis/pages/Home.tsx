@@ -52,7 +52,7 @@ const pillars = [
     subtext:
       "M1 Core campuses, XEmbassy nodes, & distributed living labs",
     description:
-      "We build and operate the physical and digital infrastructure that ventures need to move from prototype to production. M1 Core campuses provide 50,000+ sq ft of lab, maker, and co-working space in prime hub cities. XEmbassy nodes — compact 5,000 sq ft drop-in studios — extend reach into secondary markets. Distributed living labs connect field testing sites across the Route, giving ventures access to real-world validation environments from day one.",
+      "We build and operate the physical and digital infrastructure that ventures need to move from prototype to production. M1 Core campuses provide 50,000+ sq ft of lab, maker, and co-working space in prime hub cities. XEmbassy nodes: compact 5,000 sq ft drop-in studios: extend reach into secondary markets. Distributed living labs connect field testing sites across the Route, giving ventures access to real-world validation environments from day one.",
     images: [
       {
         src: "https://images.unsplash.com/photo-1565792323902-486ad4b6a110?auto=format&fit=crop&w=1200&q=80",
@@ -72,7 +72,7 @@ const pillars = [
     subtext:
       "Venture commercialization programs with industry & government partners",
     description:
-      "We run structured commercialization programs that take ventures from idea to revenue. Each program is co-designed with industry and government partners who provide market access, pilot opportunities, and first-customer contracts. The Quest Fellowship — our flagship semester-long program run in collaboration with DDQIC at Queen's University — uses MIT's Disciplined Entrepreneurship framework to guide founders through 24 steps of validated learning. Programs run on the Route, connecting cohorts across hub cities for shared deal flow and peer support.",
+      "We run structured commercialization programs that take ventures from idea to revenue. Each program is co-designed with industry and government partners who provide market access, pilot opportunities, and first-customer contracts. The Quest Fellowship: our flagship semester-long program run in collaboration with DDQIC at Queen's University: uses MIT's Disciplined Entrepreneurship framework to guide founders through 24 steps of validated learning. Programs run on the Route, connecting cohorts across hub cities for shared deal flow and peer support.",
     images: [
       {
         src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1200&q=80",
@@ -109,9 +109,9 @@ const pillars = [
     icon: Users,
     heading: "Community",
     subtext:
-      "The XCitizens network — operators, founders, investors & mentors across the Route",
+      "The XCitizens network, operators, founders, investors & mentors across the Route",
     description:
-      "The fourth engine. Community is the connective tissue that turns individual efforts into collective momentum. The XCitizens network spans every hub on the Route — operators who run infrastructure, founders building ventures, investors deploying capital, and mentors transferring knowledge. Compound network effects mean every new member strengthens the whole, creating a flywheel that accelerates commercialization for everyone.",
+      "The fourth engine. Community is the connective tissue that turns individual efforts into collective momentum. The XCitizens network spans every hub on the Route: operators who run infrastructure, founders building ventures, investors deploying capital, and mentors transferring knowledge. Compound network effects mean every new member strengthens the whole, creating a flywheel that accelerates commercialization for everyone.",
     images: [
       {
         src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
@@ -129,30 +129,30 @@ const pillars = [
 const routeRegions = [
   {
     name: "Gulf of Guinea Arc",
-    description: "Lagos, Accra, Abidjan, Dakar — the commercial backbone of West Africa",
+    description: "Lagos, Accra, Abidjan, Dakar: the commercial backbone of West Africa",
   },
   {
     name: "East Africa Corridor",
     description:
-      "Nairobi, Kampala, Kigali, Addis Ababa — innovation hubs of East Africa",
+      "Nairobi, Kampala, Kigali, Addis Ababa: innovation hubs of East Africa",
   },
   {
     name: "Southern Africa Arc",
     description:
-      "Cape Town, Johannesburg, Harare, Maputo — mining, manufacturing, and finance",
+      "Cape Town, Johannesburg, Harare, Maputo: mining, manufacturing, and finance",
   },
   {
     name: "Mediterranean Bridge",
-    description: "Cairo, Tunis, Casablanca — Mediterranean gateway to the continent",
+    description: "Cairo, Tunis, Casablanca: Mediterranean gateway to the continent",
   },
   {
     name: "Sahel Band",
-    description: "Bamako, Ouagadougou, Niamey, N'Djamena — climate adaptation frontier",
+    description: "Bamako, Ouagadougou, Niamey, N'Djamena: climate adaptation frontier",
   },
   {
     name: "Central African Heartland",
     description:
-      "Kinshasa, Brazzaville, Douala — mineral-rich, infrastructure-poor corridor",
+      "Kinshasa, Brazzaville, Douala: mineral-rich, infrastructure-poor corridor",
   },
 ];
 
@@ -175,7 +175,7 @@ export function Home() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO — Contained image with heading below (NEWLAB style)
+   HERO, Contained image with heading below (NEWLAB style)
    ══════════════════════════════════════════════════════════════════════════ */
 function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
@@ -189,7 +189,7 @@ function Hero() {
 
   return (
     <section className="relative w-full px-6 md:px-12 lg:px-20 pt-4 md:pt-6">
-      {/* Contained image — not full-bleed */}
+      {/* Contained image, not full-bleed */}
       <div className="relative w-full max-w-[1400px] mx-auto h-[50vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] overflow-hidden">
         {heroImages.map((img, i) => (
           <motion.div
@@ -249,7 +249,7 @@ function Hero() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   IMAGE CARDS — 4 side-by-side images (hidden on mobile)
+   IMAGE CARDS, 4 side-by-side images (hidden on mobile)
    ══════════════════════════════════════════════════════════════════════════ */
 function ImageCards() {
   const ref = useRef<HTMLDivElement>(null);
@@ -282,7 +282,7 @@ function ImageCards() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   INTRO SECTION — Centered text
+   INTRO SECTION, Centered text
    ══════════════════════════════════════════════════════════════════════════ */
 function IntroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -302,13 +302,12 @@ function IntroSection() {
         >
           <p className="text-[20px] sm:text-[24px] md:text-[28px] leading-[1.5] font-medium text-[#111111]/80 text-balance">
             Ventures are building the critical technologies that will define our
-            future — but across the Global South, 90% never make it past the
+            future, but across the Global South, 90% never make it past the
             starting line.{" "}
             <span className="text-[#111111]">
               xCelero unblocks commercialization through infrastructure,
               ventures, capital, and community in the geographies that need it most
-            </span>{" "}
-            — so the right ideas don&apos;t just survive, they scale.
+            </span>{" "}, so the right ideas don&apos;t just survive, they scale.
           </p>
         </motion.div>
       </div>
@@ -317,7 +316,7 @@ function IntroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   NUMBERS SECTION — 4 big stat cards with motion
+   NUMBERS SECTION, 4 big stat cards with motion
    ══════════════════════════════════════════════════════════════════════════ */
 function NumbersSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -370,7 +369,7 @@ function NumbersSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   THREE PILLARS SECTION — Each pillar: heading + subtext left, 2 images right
+   THREE PILLARS SECTION, Each pillar: heading + subtext left, 2 images right
    ══════════════════════════════════════════════════════════════════════════ */
 function ThreePillarsSection() {
   return (
@@ -462,7 +461,7 @@ function PillarBlock({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   LOCATIONS SECTION — Interactive Blueprint Map with leg filters
+   LOCATIONS SECTION, Interactive Blueprint Map with leg filters
    ══════════════════════════════════════════════════════════════════════════ */
 function LocationsSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -475,7 +474,7 @@ function LocationsSection() {
       className="py-20 md:py-32 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10 bg-white"
     >
       <div className="w-full max-w-[1400px] mx-auto">
-        {/* Header — centered, NEWLAB style */}
+        {/* Header, centered, NEWLAB style */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -576,7 +575,7 @@ function LocationsSection() {
   );
 }
 
-/* ── Blueprint Map — Newlab topographic map with color-coded pin markers ── */
+/* ── Blueprint Map, Newlab topographic map with color-coded pin markers ── */
 function BlueprintMap({ activeLeg }: { activeLeg: string | null }) {
   const isAnyActive = activeLeg !== null;
 
@@ -588,7 +587,7 @@ function BlueprintMap({ activeLeg }: { activeLeg: string | null }) {
   return (
     <div className="w-full relative">
       <div className="relative w-full overflow-hidden bg-white">
-        {/* World map image — Newlab topographic map */}
+        {/* World map image, Newlab topographic map */}
         <img
           alt="World Map showing xCelero Routes"
           className="w-full h-auto pointer-events-none select-none opacity-80"
@@ -687,7 +686,7 @@ function LocationAccordion({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   NEWSLETTER SECTION — Two-column: heading + form
+   NEWSLETTER SECTION, Two-column: heading + form
    ══════════════════════════════════════════════════════════════════════════ */
 function NewsletterSection() {
   const ref = useRef<HTMLDivElement>(null);

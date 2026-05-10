@@ -28,7 +28,7 @@ const caseComparisons = [
     company: "Amazon",
     context: "USA, 1994",
     advantage:
-      "When Bezos quit his Wall Street job to sell books online, he didn't need to build a banking system — credit cards and ACH already existed. He didn't need to build delivery infrastructure — FedEx and UPS already covered every address in America. He didn't need to build a payments layer — the entire financial stack was mature, trusted, and ubiquitous.",
+      "When Bezos quit his Wall Street job to sell books online, he didn't need to build a banking system, credit cards and ACH already existed. He didn't need to build delivery infrastructure, FedEx and UPS already covered every address in America. He didn't need to build a payments layer: the entire financial stack was mature, trusted, and ubiquitous.",
     takeaway:
       "The infrastructure was invisible because it was already there.",
     icon: "📦",
@@ -38,7 +38,7 @@ const caseComparisons = [
     company: "Tesla / SpaceX",
     context: "USA, 2002–2003",
     advantage:
-      "Musk could recruit the world's best engineers from Stanford and MIT. He could file patents in a legal system that enforced them. He could raise capital on Sand Hill Road from partners who understood deep-tech risk. The roads his cars would drive on were already paved. The grid they'd plug into was already stable. The regulatory framework — FMVSS, EPA, NHTSA — was codified and navigable.",
+      "Musk could recruit the world's best engineers from Stanford and MIT. He could file patents in a legal system that enforced them. He could raise capital on Sand Hill Road from partners who understood deep-tech risk. The roads his cars would drive on were already paved. The grid they'd plug into was already stable. The regulatory framework, FMVSS, EPA, NHTSA, was codified and navigable.",
     takeaway:
       "Every system the venture needed to touch was already operational.",
     icon: "🚀",
@@ -48,7 +48,7 @@ const caseComparisons = [
     company: "Any venture, any sector",
     context: "Uganda, 2024",
     advantage:
-      "There is no mature payments infrastructure — mobile money works but cross-border settlement doesn't. There is no reliable last-mile logistics — roads are unpaved and addresses are informal. There is no deep-tech talent pipeline — the best engineers emigrate. There is no venture capital ecosystem — the few funds that exist are Nairobi-based and consumer-focused. The grid fails daily. Legal frameworks shift without notice. Supply chains are informal, opaque, and cash-dependent.",
+      "There is no mature payments infrastructure, mobile money works but cross-border settlement doesn't. There is no reliable last-mile logistics, roads are unpaved and addresses are informal. There is no deep-tech talent pipeline: the best engineers emigrate. There is no venture capital ecosystem: the few funds that exist are Nairobi-based and consumer-focused. The grid fails daily. Legal frameworks shift without notice. Supply chains are informal, opaque, and cash-dependent.",
     takeaway:
       "Before you can build the product, you must first build the ground it stands on.",
     icon: "🏗️",
@@ -58,11 +58,11 @@ const caseComparisons = [
 const coreTechnologies = [
   { name: "Robotics", icon: CircuitBoard, desc: "Autonomous systems for manufacturing, logistics, and hazardous environments." },
   { name: "Connected Systems", icon: Link2, desc: "IoT, mesh networks, and real-time sensor infrastructure for distributed intelligence." },
-  { name: "Artificial Intelligence", icon: Brain, desc: "Edge AI, multilingual LLMs, and decision platforms for sovereign computation." },
-  { name: "Material Science", icon: Box, desc: "Mycelium composites, bio-plastics, and novel semiconductors for supply-chain sovereignty." },
+  { name: "Artificial Intelligence", icon: Brain, desc: "Edge AI, multilingual LLMs, and decision platforms for independent computation." },
+  { name: "Material Science", icon: Box, desc: "Mycelium composites, bio-plastics, and novel semiconductors for supply-chain independence." },
   { name: "Blockchain", icon: Cpu, desc: "Decentralized identity, traceability ledgers, and trustless settlement rails." },
   { name: "Additive Manufacturing", icon: Box, desc: "3D printing, CNC, and modular micro-factories for distributed production." },
-  { name: "Quantum Computing", icon: Atom, desc: "Quantum sensing and unbreakable encryption for sovereign data architectures." },
+  { name: "Quantum Computing", icon: Atom, desc: "Quantum sensing and unbreakable encryption for independent data architectures." },
   { name: "Computer Vision", icon: Eye, desc: "Real-time diagnostics, satellite analytics, and autonomous navigation." },
 ];
 
@@ -71,7 +71,7 @@ const m1Tiers = [
     tier: "M1 Core",
     size: "~1M sq ft",
     floors: "5–6",
-    desc: "Flagship metroburb — the full Bell Labs model. Central atrium, mixed-use promenade, rooftop green space.",
+    desc: "Flagship metroburb: the full Bell Labs model. Central atrium, mixed-use promenade, rooftop green space.",
     cost: "$200–350M",
     population: "3,000–5,000 ProtoCitizens",
   },
@@ -79,7 +79,7 @@ const m1Tiers = [
     tier: "M1 Node",
     size: "~250K sq ft",
     floors: "4–5",
-    desc: "Regional hub — scaled for secondary cities. Core labs, co-working, and pilot zone.",
+    desc: "Regional hub, scaled for secondary cities. Core labs, co-working, and pilot zone.",
     cost: "$50–90M",
     population: "800–1,500 ProtoCitizens",
   },
@@ -87,7 +87,7 @@ const m1Tiers = [
     tier: "M1 Outpost",
     size: "~42K sq ft",
     floors: "2–3",
-    desc: "XEmbassy-class drop-in studio — the distributed micro-campus for frontier locations.",
+    desc: "XEmbassy-class drop-in studio: the distributed micro-campus for frontier locations.",
     cost: "$8–15M",
     population: "150–300 ProtoCitizens",
   },
@@ -100,7 +100,7 @@ const m1DesignInputs = [
   { label: "Exterior", value: "Mirror glass façade with stone/concrete accents" },
   { label: "Interior", value: "Central atrium with vertical garden, mixed-use ground floor, offices above, rooftop green space" },
   { label: "Inspirations", value: "Historical Bell Labs, Eero Saarinen modernism, urban/suburban fusion" },
-  { label: "Climate", value: "Global use — scalable to different climates with flex materials" },
+  { label: "Climate", value: "Global use, scalable to different climates with flex materials" },
 ];
 
 const xembassyZones = [
@@ -159,7 +159,7 @@ function HeroSection() {
             <span className="text-[#FF4D00]">the ground.</span>
           </h1>
           <p className="text-[16px] md:text-[18px] leading-[1.7] text-white/50 font-medium max-w-2xl">
-            Infrastructure is the bedrock. Not offices — operating systems for civilization. M1 Cores, XEmbassies, and 190+ hubs on the Route, providing every layer a venture needs to move from prototype to production.
+            Infrastructure is the bedrock. Not offices, operating systems for civilization. M1 Cores, XEmbassies, and 190+ hubs on the Route, providing every layer a venture needs to move from prototype to production.
           </p>
         </motion.div>
 
@@ -182,7 +182,7 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   CASE FOR INFRASTRUCTURE — Side-by-side comparisons
+   CASE FOR INFRASTRUCTURE, Side-by-side comparisons
    ══════════════════════════════════════════════════════════════════════════ */
 function CaseForInfrastructure() {
   const ref = useRef<HTMLDivElement>(null);
@@ -209,7 +209,7 @@ function CaseForInfrastructure() {
             Infrastructure is the <span className="text-[#111111]/40">invisible prerequisite</span> of everything.
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            In the West, infrastructure is invisible — it already exists. In the Global South, it&apos;s the first thing you have to build.
+            In the West, infrastructure is invisible. It already exists. In the Global South, it&apos;s the first thing you have to build.
           </p>
         </motion.div>
 
@@ -264,7 +264,7 @@ function CaseForInfrastructure() {
               This is why xCelero exists.
             </p>
             <p className="text-[15px] md:text-[17px] text-white/60 font-medium leading-[1.7]">
-              We don&apos;t just invest in ventures — we build the infrastructure those ventures need to exist. The M1 Cores, the XEmbassies, the 190+ hubs on the Route — these aren&apos;t real estate plays. They&apos;re operating systems for the next civilization.
+              We don&apos;t just invest in ventures, we build the infrastructure those ventures need to exist. The M1 Cores, the XEmbassies, the 190+ hubs on the Route, these aren&apos;t real estate plays. They&apos;re operating systems for the next civilization.
             </p>
           </div>
         </motion.div>
@@ -274,7 +274,7 @@ function CaseForInfrastructure() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   XEMBASSY — 42,000 sq ft micro-campus
+   XEMBASSY, 42,000 sq ft micro-campus
    ══════════════════════════════════════════════════════════════════════════ */
 function XEmbassySection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -354,7 +354,7 @@ function XEmbassySection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   M1 CORE MODEL — Basecamp blueprint
+   M1 CORE MODEL, Basecamp blueprint
    ══════════════════════════════════════════════════════════════════════════ */
 function M1CoreSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -381,7 +381,7 @@ function M1CoreSection() {
             The basecamp <span className="text-[#111111]/40">for civilization-building.</span>
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            Inspired by the laboratories that won 9 Nobel Prizes — where scientists ate in the same cafeteria as engineers, and ideas crossed disciplines over coffee. The M1 Core is not an office park. It is a machine for invention.
+            Inspired by the laboratories that won 9 Nobel Prizes, where scientists ate in the same cafeteria as engineers, and ideas crossed disciplines over coffee. The M1 Core is not an office park. It is a machine for invention.
           </p>
         </motion.div>
 
@@ -509,7 +509,7 @@ function M1CoreSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   8 CORE TECHNOLOGIES — Grid with icons
+   8 CORE TECHNOLOGIES, Grid with icons
    ══════════════════════════════════════════════════════════════════════════ */
 function CoreTechnologiesSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -532,7 +532,7 @@ function CoreTechnologiesSection() {
             Core Technologies
           </span>
           <h2 className="text-[32px] md:text-[48px] lg:text-[60px] font-display font-medium tracking-tight leading-[1.05] mb-6">
-            8 domains of <span className="text-[#111111]/40">sovereign innovation.</span>
+            8 domains of <span className="text-[#111111]/40">independent innovation.</span>
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
             The technologies that underpin every M1 Core and XEmbassy. These are the areas where we support innovation and problem-solving within our community.
@@ -566,7 +566,7 @@ function CoreTechnologiesSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   ROUTE HUBS — Union of cities from the Route
+   ROUTE HUBS, Union of cities from the Route
    ══════════════════════════════════════════════════════════════════════════ */
 function RouteHubsSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -603,7 +603,7 @@ function RouteHubsSection() {
             A union of <span className="text-[#111111]/40">cities.</span>
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            190+ hub locations across 6 legs and 63 countries. Each hub is a node in the global internet of innovation — a physical place where ventures, capital, and talent converge.
+            190+ hub locations across 6 legs and 63 countries. Each hub is a node in the global internet of innovation, a physical place where ventures, capital, and talent converge.
           </p>
         </motion.div>
 

@@ -38,7 +38,7 @@ const pathways = [
     label: "Investors",
     title: "For Investors",
     description:
-      "Join the LP network or participate in SPV syndicates alongside institutional partners. Our capital vehicles are structured for the realities of building in the Global South — patient, aligned, and route-connected.",
+      "Join the LP network or participate in SPV syndicates alongside institutional partners. Our capital vehicles are structured for the realities of building in the Global South: patient, aligned, and route-connected.",
     detail:
       "SPV Syndicates · Dedicated Funds · Continuous Capital Flow · Non-Dilutive Desk",
   },
@@ -68,12 +68,12 @@ const processSteps = [
   {
     step: "01",
     title: "Express Interest",
-    desc: "A brief application or referral from someone within the XEmbassy network. No decks required at this stage — just tell us what you're building and why it matters.",
+    desc: "A brief application or referral from someone within the XEmbassy network. No decks required at this stage, just tell us what you're building and why it matters.",
   },
   {
     step: "02",
     title: "Deep Conversation",
-    desc: "We spend three to five hours in real dialogue about your core technical insight, the bottleneck you're addressing, and the architecture you've chosen. Not a pitch — a conversation.",
+    desc: "We spend three to five hours in real dialogue about your core technical insight, the bottleneck you're addressing, and the architecture you've chosen. Not a pitch, a conversation.",
   },
   {
     step: "03",
@@ -97,7 +97,7 @@ export function JoinPage() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO — Light bg, 7+5 grid (NEWLAB style, matching Programs page)
+   HERO, Light bg, 7+5 grid (NEWLAB style, matching Programs page)
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -129,7 +129,7 @@ function HeroSection() {
           </h1>
 
           <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#111111]/60 font-medium max-w-lg">
-            The xCelero ecosystem is not a directory — it&apos;s a living
+            The xCelero ecosystem is not a directory, it&apos;s a living
             infrastructure for people building at the frontier of critical
             technology. Whether you&apos;re a founder, investor, partner, or
             operator, there&apos;s a place on the Route for you.
@@ -165,7 +165,7 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PATHWAYS — "How to Join" — centered label + heading, expandable accordion
+   PATHWAYS, "How to Join", centered label + heading, expandable accordion
    ══════════════════════════════════════════════════════════════════════════ */
 function PathwaysSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -318,7 +318,7 @@ function PathwayRow({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PROCESS — "The Process" — centered 3-step grid (like Approach HowWeWork)
+   PROCESS, "The Process", centered 3-step grid (like Approach HowWeWork)
    ══════════════════════════════════════════════════════════════════════════ */
 function ProcessSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -347,7 +347,7 @@ function ProcessSection() {
             </span>
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            Our onboarding is deliberately rigorous — because the people who
+            Our onboarding is deliberately rigorous, because the people who
             belong here don&apos;t need convincing, they need a path.
           </p>
         </motion.div>
@@ -415,7 +415,7 @@ function ProcessCard({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   APPLICATION SECTION — Newlab-style application form
+   APPLICATION SECTION, Newlab-style application form
    ══════════════════════════════════════════════════════════════════════════ */
 
 type FormMode = "founder" | "partner";
@@ -543,7 +543,7 @@ function FounderForm() {
       className="space-y-8"
     >
       <p className="text-[15px] md:text-[17px] text-white/50 font-medium leading-[1.7] max-w-2xl">
-        Apply for startup membership at xCelero — unlocking access to office
+        Apply for startup membership at xCelero, unlocking access to office
         space, community, and potential pilots, capital, and customers via our
         network.
       </p>

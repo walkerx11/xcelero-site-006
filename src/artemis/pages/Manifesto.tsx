@@ -39,23 +39,23 @@ export function Manifesto() {
             <h2 className="text-3xl lg:text-4xl font-display font-medium tracking-tight mb-8">Centralized, extractive, myopic.</h2>
             <div className="text-[#111111]/70 font-medium leading-[1.8] space-y-6 text-lg">
               <p>
-                The dominant model of global innovation is broken. For decades, &quot;critical technologies&quot; have been defined by narrow geopolitical interests—focused on supremacy in defense, aerospace, and computing. 
+                The dominant model of global innovation is broken. For decades, &quot;critical technologies&quot; have been defined by narrow geopolitical interests, focused on supremacy in defense, aerospace, and computing. 
               </p>
               <p>
-                These models hoard genius in a handful of elite cities, while treating the rest of the world—particularly the Global South—as a market for consumption or an arena for extraction.
+                These models hoard genius in a handful of elite cities, while treating the rest of the world, particularly the Global South, as a market for consumption or an arena for extraction.
               </p>
             </div>
           </div>
 
           <div className="border-t border-[#111111]/10 pt-8">
-            <div className="text-[11px] font-mono tracking-widest uppercase mb-8 text-[#FF4D00]">02. The Sovereign Mandate</div>
-            <h2 className="text-3xl lg:text-4xl font-display font-medium tracking-tight mb-8">True sovereignty is technological.</h2>
+            <div className="text-[11px] font-mono tracking-widest uppercase mb-8 text-[#FF4D00]">02. The Self-Reliance Mandate</div>
+            <h2 className="text-3xl lg:text-4xl font-display font-medium tracking-tight mb-8">True self-reliance is technological.</h2>
             <div className="text-[#111111]/70 font-medium leading-[1.8] space-y-6 text-lg">
               <p>
                 We reject the centralized, elitist models that hoard opportunity. We champion a world where a coder in Niamey can spark a startup with a financier in Tokyo. Where a biotech breakthrough in São Paulo scales faster than an app in Silicon Valley.
               </p>
               <p>
-                Under xHansa, we recognize that true sovereignty is not just political; it is technological. It is the ability to generate electricity, secure food, purify water, and defend networks on one's own terms. Sovereign agile manufacturing.
+                Under xHansa, we recognize that true self-reliance is not just political; it is technological. It is the ability to generate electricity, secure food, purify water, and defend networks on one's own terms. Independent agile manufacturing.
               </p>
             </div>
           </div>

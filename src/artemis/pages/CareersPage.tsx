@@ -471,7 +471,7 @@ export function CareersPage() {
               <span className="text-[#FF4D00]">human progress.</span>
             </h1>
             <p className="text-white/50 text-[15px] max-w-xl leading-relaxed mt-6">
-              For humanity. A new epoch of civilization — built by the ventures redefining energy, housing, AI, space, and every system that matters. Open roles across {careersData.length} portfolio companies.
+              For humanity. A new epoch of civilization, built by the ventures redefining energy, housing, AI, space, and every system that matters. Open roles across {careersData.length} portfolio companies.
             </p>
 
             {/* Nav tabs */}

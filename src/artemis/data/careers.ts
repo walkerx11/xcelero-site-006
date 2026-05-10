@@ -36,7 +36,7 @@ export const careersData: CompanyJobs[] = [
     employees: "10–50",
     industries: ["Energy", "AI"],
     locations: ["Kano, Nigeria", "Kisumu, Kenya"],
-    description: "AI-managed modular solar microgrid OS with pay-as-you-go mobile money billing, peer-to-peer energy trading across 10,000+ nodes. Deploying sovereign energy systems to bypass centralized grids across sub-Saharan Africa.",
+    description: "AI-managed modular solar microgrid OS with pay-as-you-go mobile money billing, peer-to-peer energy trading across 10,000+ nodes. Deploying self-sustaining energy systems to bypass centralized grids across sub-Saharan Africa.",
     jobs: [
       {
         id: "hel-001",
@@ -56,7 +56,7 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "hel-002",
-        title: "AI/ML Engineer — Load Balancing",
+        title: "AI/ML Engineer: Load Balancing",
         location: "Remote",
         remote: true,
         hybrid: false,
@@ -112,11 +112,11 @@ export const careersData: CompanyJobs[] = [
     employees: "10–50",
     industries: ["AI", "NLP"],
     locations: ["Kigali, Rwanda", "Nairobi, Kenya"],
-    description: "Large language model trained on 100+ African languages + oral archives. Building sovereign AI infrastructure that serves health, legal, and government applications across the continent.",
+    description: "Large language model trained on 100+ African languages + oral archives. Building independent AI infrastructure that serves health, legal, and government applications across the continent.",
     jobs: [
       {
         id: "nom-001",
-        title: "Research Scientist — African NLP",
+        title: "Research Scientist: African NLP",
         location: "Kigali, Rwanda",
         remote: false,
         hybrid: true,
@@ -148,7 +148,7 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "nom-003",
-        title: "Product Manager — Government AI",
+        title: "Product Manager: Government AI",
         location: "Nairobi, Kenya",
         remote: false,
         hybrid: true,
@@ -176,7 +176,7 @@ export const careersData: CompanyJobs[] = [
     jobs: [
       {
         id: "vul-001",
-        title: "Robotics Engineer — Automated Assembly",
+        title: "Robotics Engineer: Automated Assembly",
         location: "Harare, Zimbabwe",
         remote: false,
         hybrid: false,
@@ -268,7 +268,7 @@ export const careersData: CompanyJobs[] = [
     jobs: [
       {
         id: "jou-001",
-        title: "Senior Electrical Engineer — EV Powertrains",
+        title: "Senior Electrical Engineer: EV Powertrains",
         location: "Kampala, Uganda",
         remote: false,
         hybrid: true,
@@ -300,8 +300,8 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "jou-003",
-        title: "Mobile Developer — Rider App",
-        location: "Remote — Africa",
+        title: "Mobile Developer: Rider App",
+        location: "Remote – Africa",
         remote: true,
         hybrid: false,
         salaryMin: 35000,
@@ -324,7 +324,7 @@ export const careersData: CompanyJobs[] = [
     employees: "50–200",
     industries: ["Life Sciences", "Healthcare"],
     locations: ["Kigali, Rwanda", "Cape Town, South Africa"],
-    description: "Sovereign diagnostics platform: $5 disposable microfluidic cartridge running 100+ tests from 1 drop of blood, read by smartphone. Making point-of-care diagnostics universally accessible.",
+    description: "Independent diagnostics platform: $5 disposable microfluidic cartridge running 100+ tests from 1 drop of blood, read by smartphone. Making point-of-care diagnostics universally accessible.",
     jobs: [
       {
         id: "ref-001",
@@ -376,8 +376,8 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "ref-004",
-        title: "Software Engineer — Smartphone Reader App",
-        location: "Remote — Africa",
+        title: "Software Engineer: Smartphone Reader App",
+        location: "Remote – Africa",
         remote: true,
         hybrid: false,
         salaryMin: 40000,
@@ -404,7 +404,7 @@ export const careersData: CompanyJobs[] = [
     jobs: [
       {
         id: "den-001",
-        title: "Backend Engineer — Payment Rails",
+        title: "Backend Engineer: Payment Rails",
         location: "Nairobi, Kenya",
         remote: false,
         hybrid: true,
@@ -437,7 +437,7 @@ export const careersData: CompanyJobs[] = [
       {
         id: "den-003",
         title: "Growth Marketing Lead",
-        location: "Remote — Africa",
+        location: "Remote – Africa",
         remote: true,
         hybrid: false,
         salaryMin: 35000,
@@ -480,7 +480,7 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "san-002",
-        title: "Curriculum Designer — STEM",
+        title: "Curriculum Designer: STEM",
         location: "Lagos, Nigeria",
         remote: false,
         hybrid: true,
@@ -496,8 +496,8 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "san-003",
-        title: "UX Researcher — Education",
-        location: "Remote — Africa",
+        title: "UX Researcher: Education",
+        location: "Remote – Africa",
         remote: true,
         hybrid: false,
         salaryMin: 25000,
@@ -568,7 +568,7 @@ export const careersData: CompanyJobs[] = [
     jobs: [
       {
         id: "xcl-001",
-        title: "Venture Architect — Energy Vertical",
+        title: "Venture Architect: Energy Vertical",
         location: "Mauritius HQ",
         remote: false,
         hybrid: false,
@@ -584,7 +584,7 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "xcl-002",
-        title: "Principal Engineer — Platform Infrastructure",
+        title: "Principal Engineer: Platform Infrastructure",
         location: "Remote",
         remote: true,
         hybrid: false,
@@ -600,7 +600,7 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "xcl-003",
-        title: "Head of Capital — Fund Strategy",
+        title: "Head of Capital: Fund Strategy",
         location: "Mauritius HQ",
         remote: false,
         hybrid: false,
@@ -616,8 +616,8 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "xcl-004",
-        title: "Design Lead — ProtoCo Identity",
-        location: "Remote — Global",
+        title: "Design Lead: ProtoCo Identity",
+        location: "Remote – Global",
         remote: true,
         hybrid: false,
         salaryMin: 60000,
@@ -736,7 +736,7 @@ export const careersData: CompanyJobs[] = [
     jobs: [
       {
         id: "aeg-001",
-        title: "Data Engineer — Government Systems",
+        title: "Data Engineer: Government Systems",
         location: "Kigali, Rwanda",
         remote: false,
         hybrid: true,
@@ -752,7 +752,7 @@ export const careersData: CompanyJobs[] = [
       },
       {
         id: "aeg-002",
-        title: "Product Designer — Civic Tech",
+        title: "Product Designer: Civic Tech",
         location: "Accra, Ghana",
         remote: false,
         hybrid: true,

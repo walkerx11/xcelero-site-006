@@ -22,13 +22,39 @@ const aggregateStats = [
   { value: "24mo", label: "Longest program deployment cycle" },
 ];
 
-/* ── One-line descriptions for the How It Works timeline ── */
-const timelineDescriptions: Record<string, string> = {
-  "xhansa-fellowship": "24-month human capital deployment across 9 civilizational fields",
-  "xcelero-accelerator": "4-month high-velocity launchpad with $620k funding",
-  "inception-studios": "Co-create market-defining ventures with Fortune 500 partners",
-  "quest-fellowship": "Bridge elite academic research to civilizational prototypes",
-};
+/* ── Program Impact metrics ── */
+const impactMetrics = [
+  {
+    value: "127",
+    label: "Companies Launched",
+    description: "Ventures that moved from program to active operations with revenue or pilot customers.",
+  },
+  {
+    value: "$340M",
+    label: "Follow-on Capital Raised",
+    description: "Total capital raised by program alumni after completing xCelero programs.",
+  },
+  {
+    value: "4,200+",
+    label: "Jobs Created",
+    description: "Direct employment generated across portfolio companies in 39 countries.",
+  },
+  {
+    value: "75%",
+    label: "Survival Rate",
+    description: "Program graduates still operating after 3 years: 3x the regional average.",
+  },
+  {
+    value: "39",
+    label: "Countries Reached",
+    description: "Founders and operators deployed across the entire Route network.",
+  },
+  {
+    value: "$620K",
+    label: "Max Funding Package",
+    description: "Largest single-company funding package through the xCelero Accelerator.",
+  },
+];
 
 /* ══════════════════════════════════════════════════════════════════════════
    PROGRAMS PAGE
@@ -38,7 +64,7 @@ export function Programs() {
     <div className="bg-white text-[#111111]">
       <HeroSection />
       <ProgramShowcase />
-      <HowItWorks />
+      <ProgramImpact />
       <NumbersSection />
       <CTASection />
       <ReviewSection title="Tactical 0-1 breakdowns to help you assemble a better timeline" />
@@ -47,7 +73,7 @@ export function Programs() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO — Light bg, left heading + right stat cards (KEPT AS-IS)
+   HERO, Light bg, left heading + right stat cards (KEPT AS-IS)
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -112,7 +138,7 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PROGRAM SHOWCASE — BENTO GRID LAYOUT
+   PROGRAM SHOWCASE, BENTO GRID LAYOUT
    ══════════════════════════════════════════════════════════════════════════ */
 function ProgramShowcase() {
   const ref = useRef<HTMLDivElement>(null);
@@ -153,7 +179,7 @@ function ProgramShowcase() {
   );
 }
 
-/* ── Bento Card — full background image with dark overlay ── */
+/* ── Bento Card, full background image with dark overlay ── */
 function BentoCard({
   program,
   index,
@@ -260,9 +286,9 @@ function BentoCard({
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HOW IT WORKS — Horizontal timeline / process visualization
+   PROGRAM IMPACT, Key outcomes and metrics
    ══════════════════════════════════════════════════════════════════════════ */
-function HowItWorks() {
+function ProgramImpact() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
@@ -272,7 +298,7 @@ function HowItWorks() {
       className="py-16 md:py-24 px-6 md:px-12 lg:px-20 bg-[#FAFAFA] border-t border-b border-[#111111]/10"
     >
       <div className="w-full max-w-[1400px] mx-auto">
-        {/* Section label */}
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -280,98 +306,47 @@ function HowItWorks() {
           className="mb-12 md:mb-16"
         >
           <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
-            How It Works
+            Program Impact
           </span>
+          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-[-0.03em] leading-[0.95] mt-3">
+            What our founders{" "}
+            <em className="font-serif italic text-[#FF4D00]">achieve</em>
+          </h2>
+          <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.7] max-w-xl mt-4">
+            The numbers speak for themselves. Our programs don't just educate, they
+            build enduring companies, create jobs, and generate real returns.
+          </p>
         </motion.div>
 
-        {/* Desktop: Horizontal timeline */}
-        <div className="hidden md:flex items-start justify-between relative">
-          {/* Connecting dotted line */}
-          <div className="absolute top-7 left-[calc(12.5%+28px)] right-[calc(12.5%+28px)] h-[2px] border-t-2 border-dashed border-[#FF4D00]/30" />
+        {/* Metrics grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {impactMetrics.map((metric, i) => (
+            <motion.div
+              key={metric.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="border border-[#111111]/10 bg-white p-6 md:p-8 hover:border-[#FF4D00]/30 transition-colors group"
+            >
+              {/* Metric value */}
+              <div className="text-[40px] md:text-[48px] font-display font-medium tracking-[-0.03em] leading-[1] mb-3 text-[#111111] group-hover:text-[#FF4D00] transition-colors">
+                {metric.value}
+              </div>
 
-          {programsData.map((program, idx) => {
-            const Icon = program.icon;
-            return (
-              <motion.div
-                key={program.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.6,
-                  delay: idx * 0.15,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="flex flex-col items-center text-center w-1/4 relative z-10"
-              >
-                {/* Step number + icon circle */}
-                <div className="relative mb-5">
-                  <div
-                    className={`w-14 h-14 rounded-full ${program.color} flex items-center justify-center text-white`}
-                  >
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#FF4D00] text-white text-[10px] font-mono font-bold flex items-center justify-center">
-                    {idx + 1}
-                  </span>
-                </div>
+              {/* Label */}
+              <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-3">
+                {metric.label}
+              </span>
 
-                {/* Program name */}
-                <h4 className="text-[15px] md:text-[17px] font-display font-medium tracking-tight mb-2">
-                  {program.title}
-                </h4>
+              {/* Description */}
+              <p className="text-[13px] md:text-[14px] text-[#111111]/50 font-medium leading-[1.6]">
+                {metric.description}
+              </p>
 
-                {/* One-line description */}
-                <p className="text-[12px] md:text-[13px] text-[#111111]/50 font-medium leading-relaxed max-w-[200px]">
-                  {timelineDescriptions[program.id]}
-                </p>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Mobile: Vertical timeline */}
-        <div className="md:hidden flex flex-col relative">
-          {/* Vertical connecting line */}
-          <div className="absolute top-0 bottom-0 left-[23px] w-[2px] border-l-2 border-dashed border-[#FF4D00]/30" />
-
-          {programsData.map((program, idx) => {
-            const Icon = program.icon;
-            return (
-              <motion.div
-                key={program.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{
-                  duration: 0.5,
-                  delay: idx * 0.12,
-                  ease: "easeOut",
-                }}
-                className="flex items-start gap-5 relative pb-8 last:pb-0"
-              >
-                {/* Icon circle */}
-                <div className="relative shrink-0 z-10">
-                  <div
-                    className={`w-12 h-12 rounded-full ${program.color} flex items-center justify-center text-white`}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#FF4D00] text-white text-[9px] font-mono font-bold flex items-center justify-center">
-                    {idx + 1}
-                  </span>
-                </div>
-
-                {/* Text */}
-                <div className="pt-1">
-                  <h4 className="text-[15px] font-display font-medium tracking-tight mb-1">
-                    {program.title}
-                  </h4>
-                  <p className="text-[12px] text-[#111111]/50 font-medium leading-relaxed">
-                    {timelineDescriptions[program.id]}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
+              {/* Bottom accent line */}
+              <div className="mt-6 h-[2px] bg-[#111111]/5 group-hover:bg-[#FF4D00]/30 transition-colors" />
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -379,7 +354,7 @@ function HowItWorks() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   NUMBERS SECTION — Centered grid of stats (KEPT AS-IS)
+   NUMBERS SECTION, Centered grid of stats (KEPT AS-IS)
    ══════════════════════════════════════════════════════════════════════════ */
 function NumbersSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -432,7 +407,7 @@ function NumbersSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   CTA SECTION — Dark bg, application deadline (KEPT AS-IS)
+   CTA SECTION, Dark bg, application deadline (KEPT AS-IS)
    ══════════════════════════════════════════════════════════════════════════ */
 function CTASection() {
   const ref = useRef<HTMLDivElement>(null);
