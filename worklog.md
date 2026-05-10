@@ -732,3 +732,30 @@ Stage Summary:
 - Section renamed "How we work" instead of "Who we are"
 - Categories updated across both About.tsx and Team.tsx
 - Manifesto remains as horizontal cards below team section
+
+---
+Task ID: 9
+Agent: Main Agent
+Task: Add Abraham Walker as Founder & CEO, make team cards anonymous with initials monograms
+
+Work Log:
+- Added Abraham Walker as first team member (id: "0") with role "Founder & CEO" in investment category
+- Added `isFounder?: boolean` field to TeamMember interface
+- Set `isFounder: true` only on Abraham Walker's entry
+- Removed `image` field from TeamMember interface entirely (no more photo URLs)
+- Replaced all photo-based card avatars with styled initials monograms:
+  - Founder card: orange (#FF4D00) background with white initials + Crown icon
+  - All other cards: dark (#111111) background with white/70 initials
+  - Initials extracted from name (first letter of each word, max 2 chars, filtering out "Dr." titles)
+- Founder card has distinctive border treatment (orange-tinted border instead of default)
+- Founder role text rendered in full #FF4D00; other roles in #FF4D00/70
+- Updated both About.tsx and Team.tsx TeamCard components identically
+- Added Crown icon import from lucide-react to both files
+- All lint checks pass clean
+- Pushed to GitHub
+
+Stage Summary:
+- Abraham Walker added as Founder & CEO with Crown icon and orange monogram
+- All 18 team members now show anonymous initials monograms instead of stock photos
+- Founder card visually distinguished with orange monogram, Crown icon, and tinted border
+- No more Unsplash portrait images anywhere in team data or card components
