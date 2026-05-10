@@ -137,13 +137,14 @@ const categories = [
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
-   ABOUT PAGE — One continuous flowing narrative
+   ABOUT PAGE — Flowing narrative + distinct team section
    ══════════════════════════════════════════════════════════════════════════ */
 export function About() {
   return (
     <div className="bg-white text-[#111111]">
       <OpeningSection />
       <FlowingContent />
+      <TeamSection />
       <ClosingCTA />
     </div>
   );
@@ -187,7 +188,7 @@ function OpeningSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FLOWING CONTENT — Timeline → Manifesto → Team, one continuous thread
+   FLOWING CONTENT — Timeline → Manifesto, one continuous thread
    ══════════════════════════════════════════════════════════════════════════ */
 function FlowingContent() {
   return (
@@ -209,11 +210,21 @@ function FlowingContent() {
           <ManifestoEntry key={point.number} point={point} index={i} />
         ))}
 
-        {/* Transition marker: Manifesto → Team */}
-        <TransitionMarker label="Who we are" />
-
-        {/* Team section */}
-        <TeamFlow />
+        {/* Manifesto link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="relative pl-10 md:pl-14 pt-4"
+        >
+          <Link
+            to="/manifesto"
+            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
+          >
+            Read the full manifesto
+            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
@@ -374,8 +385,10 @@ function ManifestoEntry({
   );
 }
 
-/* ── Team Flow ── */
-function TeamFlow() {
+/* ══════════════════════════════════════════════════════════════════════════
+   TEAM SECTION — Distinct section, separate from the timeline thread
+   ══════════════════════════════════════════════════════════════════════════ */
+function TeamSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const [activeCategory, setActiveCategory] = useState("all");
@@ -387,16 +400,37 @@ function TeamFlow() {
       : teamData.filter((m) => m.category === activeCategory);
 
   return (
-    <div ref={ref} className="relative pl-10 md:pl-14">
-      {/* Thread continues behind team grid */}
-      {/* The thread is handled by the parent FlowingContent */}
+    <section
+      ref={ref}
+      className="py-16 md:py-24 px-5 sm:px-6 md:px-12 lg:px-20 bg-[#FAFAFA]"
+    >
+      <div className="w-full max-w-[1200px] mx-auto">
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mb-10 md:mb-14"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-4 block">
+            Who we are
+          </span>
+          <h2 className="text-[28px] md:text-[40px] lg:text-[48px] font-display font-medium tracking-tight leading-[1.08] mb-4">
+            The people behind the{" "}
+            <em className="italic font-serif text-[#FF4D00]">platform</em>.
+          </h2>
+          <p className="text-[15px] md:text-[17px] text-[#111111]/40 font-medium leading-[1.6] max-w-xl">
+            Operators, investors, engineers, and builders across six African
+            cities. United by a single thesis: critical technology belongs in
+            the markets that need it most.
+          </p>
+        </motion.div>
 
-      <div>
         {/* Filter tabs */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="flex flex-wrap gap-1.5 mb-8"
         >
           {categories.map((cat) => (
@@ -410,7 +444,7 @@ function TeamFlow() {
               className={`px-3 py-1.5 text-[10px] font-mono font-bold tracking-widest uppercase border transition-all ${
                 activeCategory === cat.key
                   ? "bg-[#111111] text-white border-[#111111]"
-                  : "bg-white text-[#111111]/40 border-[#111111]/8 hover:border-[#111111]/20 hover:text-[#111111]/60"
+                  : "bg-white text-[#111111]/40 border-[#111111]/10 hover:border-[#111111]/20 hover:text-[#111111]/60"
               }`}
             >
               {cat.label}
@@ -418,7 +452,7 @@ function TeamFlow() {
           ))}
         </motion.div>
 
-        {/* Team list (not grid — more editorial) */}
+        {/* Team grid */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory}
@@ -426,14 +460,13 @@ function TeamFlow() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="space-y-0"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"
           >
             {filteredMembers.map((member, i) => (
-              <TeamRow
+              <TeamCard
                 key={member.id}
                 member={member}
                 index={i}
-                isInView={isInView}
                 isExpanded={expandedId === member.id}
                 onToggle={() =>
                   setExpandedId(expandedId === member.id ? null : member.id)
@@ -444,12 +477,7 @@ function TeamFlow() {
         </AnimatePresence>
 
         {/* Link to full team page */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-8"
-        >
+        <div className="mt-8 md:mt-10">
           <Link
             to="/team"
             className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
@@ -457,91 +485,73 @@ function TeamFlow() {
             Full team page
             <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
           </Link>
-        </motion.div>
-
-        {/* Link to full manifesto page */}
-        <div className="mt-4">
-          <Link
-            to="/manifesto"
-            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
-          >
-            Full manifesto
-            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
-/* ── Team Row (editorial list style, not card grid) ── */
-function TeamRow({
+/* ── Team Card ── */
+function TeamCard({
   member,
   index,
-  isInView,
   isExpanded,
   onToggle,
 }: {
   member: TeamMember;
   index: number;
-  isInView: boolean;
   isExpanded: boolean;
   onToggle: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const rowInView = useInView(ref, { once: true, margin: "-20px" });
+  const cardInView = useInView(ref, { once: true, margin: "-20px" });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 10 }}
-      animate={rowInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.03, ease: "easeOut" }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={cardInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.4, delay: index * 0.04, ease: "easeOut" }}
+      className={`border p-5 md:p-6 bg-white transition-all duration-300 cursor-pointer group ${
+        isExpanded
+          ? "border-[#FF4D00]/30"
+          : "border-[#111111]/8 hover:border-[#FF4D00]/25"
+      }`}
+      onClick={onToggle}
     >
-      <div
-        className={`flex items-start gap-4 py-4 cursor-pointer group border-b border-[#111111]/5 hover:border-[#111111]/10 transition-colors ${
-          isExpanded ? "border-[#FF4D00]/20" : ""
-        }`}
-        onClick={onToggle}
-      >
-        {/* Photo */}
-        <div className="shrink-0 w-10 h-10 md:w-12 md:h-12 overflow-hidden bg-[#FAFAFA] mt-0.5">
+      {/* Photo + Name */}
+      <div className="flex items-start gap-4 mb-3">
+        <div className="shrink-0 w-12 h-12 md:w-14 md:h-14 overflow-hidden bg-[#F5F5F5]">
           <img
             src={member.image}
             alt={member.name}
             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
           />
         </div>
-
-        {/* Name + Role + Location */}
         <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-3 flex-wrap">
-            <h4 className="text-[15px] md:text-[17px] font-display font-medium tracking-tight leading-[1.3]">
-              {member.name}
-            </h4>
-            <span className="text-[12px] text-[#FF4D00] font-medium">
-              {member.role}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 mt-0.5">
-            <MapPin className="w-3 h-3 text-[#111111]/20" />
-            <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/30">
-              {member.location}
-            </span>
-          </div>
-        </div>
-
-        {/* Expand indicator */}
-        <div className="shrink-0 mt-1.5">
-          <ChevronDown
-            className={`w-3.5 h-3.5 text-[#111111]/15 group-hover:text-[#FF4D00]/50 transition-all duration-300 ${
-              isExpanded ? "rotate-180" : ""
-            }`}
-          />
+          <h4 className="text-[16px] md:text-[18px] font-display font-medium tracking-tight leading-[1.2] mb-0.5">
+            {member.name}
+          </h4>
+          <p className="text-[12px] md:text-[13px] text-[#FF4D00] font-medium leading-[1.4]">
+            {member.role}
+          </p>
         </div>
       </div>
 
-      {/* Expanded bio */}
+      {/* Location */}
+      <div className="flex items-center gap-1.5 mb-3">
+        <MapPin className="w-3 h-3 text-[#111111]/25" />
+        <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/30">
+          {member.location}
+        </span>
+      </div>
+
+      {/* Category tag */}
+      <span className="inline-block px-2 py-0.5 bg-[#F5F5F5] text-[9px] font-mono font-bold tracking-widest uppercase text-[#111111]/30 mb-1">
+        {member.category}
+      </span>
+
+      {/* Expandable bio */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -549,21 +559,27 @@ function TeamRow({
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="overflow-hidden"
           >
-            <div className="pl-14 md:pl-16 py-3">
+            <div className="pt-3 mt-3 border-t border-[#111111]/8">
               <p className="text-[13px] md:text-[14px] text-[#111111]/50 leading-[1.7] font-medium">
                 {member.bio}
               </p>
-              <div className="mt-2">
-                <span className="inline-block px-2 py-0.5 bg-[#FAFAFA] text-[9px] font-mono font-bold tracking-widest uppercase text-[#111111]/30">
-                  {member.category}
-                </span>
-              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Expand hint */}
+      <div className="flex items-center gap-1.5 mt-3 pt-2 border-t border-[#111111]/5">
+        <span className="text-[9px] font-mono font-bold tracking-widest uppercase text-[#111111]/15 group-hover:text-[#FF4D00]/50 transition-colors">
+          {isExpanded ? "Close" : "Bio"}
+        </span>
+        <ChevronDown
+          className={`w-3 h-3 text-[#111111]/15 group-hover:text-[#FF4D00]/50 transition-all duration-300 ${
+            isExpanded ? "rotate-180" : ""
+          }`}
+        />
+      </div>
     </motion.div>
   );
 }
