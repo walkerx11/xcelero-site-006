@@ -173,6 +173,7 @@ const upcomingEvents = [
     description: "12 ventures from Cohort 8 present their validated MVPs to investors, partners, and the XCitizen network. Sector deep-dives in energy, life sciences, and digital finance.",
     spots: "Limited to 200 attendees",
     featured: true,
+    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "Route Summit: Gulf of Guinea Arc",
@@ -183,6 +184,7 @@ const upcomingEvents = [
     description: "Operators and founders from Lagos, Accra, and Abidjan convene for cross-hub deal flow sharing, infrastructure updates, and peer mentorship.",
     spots: "Open to all XCitizens",
     featured: false,
+    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "Building in Life Sciences: From Lab to Market",
@@ -193,6 +195,7 @@ const upcomingEvents = [
     description: "Dr. Adebayo Ogunlesi leads a session on regulatory pathways for diagnostics and therapeutics in African markets. Case studies from Refract and Allele.",
     spots: "Open to all XCitizens",
     featured: false,
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "xHansa Fellowship Applications Open",
@@ -203,6 +206,7 @@ const upcomingEvents = [
     description: "The xHansa Fellowship seeds the talent pipeline. Semester-long program embedded in venture operations. Open to engineers, operators, and domain experts.",
     spots: "50 fellowships available",
     featured: false,
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "Capital Roundtable: Thematic Fund Deep Dive",
@@ -213,6 +217,7 @@ const upcomingEvents = [
     description: "Deep dive into the xCelero Thematic Fund allocation strategy. Portfolio construction, sector weighting, and co-investment opportunities for LPs.",
     spots: "Accredited investors only",
     featured: true,
+    image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "Community Town Hall Q2",
@@ -223,6 +228,7 @@ const upcomingEvents = [
     description: "Quarterly all-hands for the XCitizen network. Route updates, new hub openings, venture milestones, and community-driven agenda items.",
     spots: "Open to all XCitizens",
     featured: false,
+    image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
@@ -669,20 +675,31 @@ function EventDetailModal({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-[#111111]/40 hover:text-[#111111] transition-colors z-10"
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/30 text-white hover:bg-black/60 transition-colors z-10"
           aria-label="Close"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="p-6 md:p-8">
+        {/* Event image */}
+        <div className="relative aspect-[16/9] overflow-hidden">
+          <img
+            src={event.image}
+            alt={event.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           {/* Type badge */}
-          <span className={`inline-block text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2.5 py-1 mb-5 ${eventTypeColor[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
-            {event.type}
-          </span>
+          <div className="absolute top-3 left-3">
+            <span className={`inline-block text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2.5 py-1 ${eventTypeColor[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
+              {event.type}
+            </span>
+          </div>
+        </div>
 
+        <div className="p-6 md:p-8">
           {/* Title */}
-          <h2 className="text-[24px] md:text-[28px] font-display font-medium tracking-tight leading-[1.15] mb-6 pr-8">
+          <h2 className="text-[24px] md:text-[28px] font-display font-medium tracking-tight leading-[1.15] mb-6">
             {event.title}
           </h2>
 
@@ -766,8 +783,8 @@ function UpcomingEventsSection() {
           </p>
         </motion.div>
 
-        {/* Events list */}
-        <div className="max-w-5xl mx-auto space-y-4">
+        {/* Events grid with images */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {upcomingEvents.map((event, i) => (
             <motion.div
               key={event.title}
@@ -775,64 +792,64 @@ function UpcomingEventsSection() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
               onClick={() => setSelectedEvent(event)}
-              className={`group border bg-white p-5 md:p-7 hover:shadow-md transition-all duration-300 cursor-pointer ${
+              className={`group border bg-white overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer ${
                 event.featured
                   ? "border-[#FF4D00]/30 hover:border-[#FF4D00]/60"
                   : "border-[#111111]/10 hover:border-[#111111]/20"
               }`}
             >
-              <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-8">
-                {/* Date block */}
-                <div className="lg:w-[140px] flex-shrink-0">
-                  <div className="flex lg:flex-col items-center lg:items-start gap-3 lg:gap-1">
-                    <Calendar className="w-4 h-4 text-[#FF4D00] lg:mb-2" />
-                    <div className="text-[13px] font-mono font-bold tracking-[0.05em] text-[#111111]">
-                      {event.date}
-                    </div>
-                    <div className="text-[11px] text-[#111111]/40 font-medium flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {event.time}
-                    </div>
+              {/* Event image */}
+              <div className="relative aspect-[16/9] overflow-hidden">
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                {/* Type badge on image */}
+                <div className="absolute top-3 left-3">
+                  <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-1 ${eventTypeColor[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
+                    {event.type}
+                  </span>
+                </div>
+                {event.featured && (
+                  <div className="absolute top-3 right-3">
+                    <span className="text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-1 bg-[#FF4D00] text-white flex items-center gap-1">
+                      <Star className="w-3 h-3" />
+                      Featured
+                    </span>
+                  </div>
+                )}
+                {/* Date overlay on image */}
+                <div className="absolute bottom-3 left-3">
+                  <div className="text-[11px] font-mono font-bold tracking-[0.05em] text-white flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#FF4D00]" />
+                    {event.date}
                   </div>
                 </div>
+              </div>
 
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <h3 className="text-[17px] md:text-[20px] font-display font-medium tracking-tight leading-tight group-hover:text-[#FF4D00] transition-colors">
-                      {event.title}
-                    </h3>
-                    <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 ${eventTypeColor[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
-                      {event.type}
-                    </span>
-                    {event.featured && (
-                      <span className="text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 bg-[#FF4D00]/10 text-[#FF4D00] flex items-center gap-1">
-                        <Star className="w-3 h-3" />
-                        Featured
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-[13px] md:text-[14px] text-[#111111]/55 leading-[1.65] font-medium mb-3">
-                    {event.description}
-                  </p>
-                  <div className="flex flex-wrap items-center gap-4 text-[11px] text-[#111111]/40 font-medium">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3" />
-                      {event.location}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Users className="w-3 h-3" />
-                      {event.spots}
-                    </span>
-                  </div>
-                </div>
-
-                {/* CTA */}
-                <div className="flex-shrink-0 self-start">
-                  <button className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#111111] text-[11px] font-bold uppercase tracking-[0.1em] hover:bg-[#111111] hover:text-white transition-colors group/btn">
-                    RSVP
-                    <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
-                  </button>
+              {/* Content below image */}
+              <div className="p-4 md:p-5">
+                <h3 className="text-[15px] md:text-[17px] font-display font-medium tracking-tight leading-tight mb-2 group-hover:text-[#FF4D00] transition-colors">
+                  {event.title}
+                </h3>
+                <p className="text-[12px] md:text-[13px] text-[#111111]/55 leading-[1.6] font-medium mb-3 line-clamp-2">
+                  {event.description}
+                </p>
+                <div className="flex flex-wrap items-center gap-3 text-[10px] text-[#111111]/40 font-medium">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-3 h-3" />
+                    {event.location}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {event.time}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Users className="w-3 h-3" />
+                    {event.spots}
+                  </span>
                 </div>
               </div>
             </motion.div>

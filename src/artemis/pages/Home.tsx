@@ -171,8 +171,8 @@ export function Home() {
       <IntroSection />
       <NumbersSection />
       <ThreePillarsSection />
-      <UpcomingEventsSection />
       <LocationsSection />
+      <UpcomingEventsSection />
       <ReviewSection title="Field notes on critical technology, venture infrastructure, and the routes that connect them" />
       <NewsletterSection />
     </div>
@@ -475,6 +475,7 @@ const homeEvents = [
     type: "Demo Day",
     description: "12 ventures present validated MVPs to investors and partners. Sector deep-dives in energy, life sciences, and digital finance.",
     featured: true,
+    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "Route Summit: Gulf of Guinea Arc",
@@ -484,6 +485,7 @@ const homeEvents = [
     type: "Summit",
     description: "Operators and founders from Lagos, Accra, and Abidjan convene for cross-hub deal flow and peer mentorship.",
     featured: false,
+    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "Building in Life Sciences: From Lab to Market",
@@ -493,6 +495,7 @@ const homeEvents = [
     type: "Masterclass",
     description: "Regulatory pathways for diagnostics and therapeutics in African markets. Case studies from Refract and Allele.",
     featured: false,
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
   },
   {
     title: "Capital Roundtable: Thematic Fund Deep Dive",
@@ -502,6 +505,7 @@ const homeEvents = [
     type: "Investor Event",
     description: "Thematic Fund allocation strategy, portfolio construction, and co-investment opportunities for LPs.",
     featured: true,
+    image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
@@ -553,7 +557,7 @@ function UpcomingEventsSection() {
           </div>
         </motion.div>
 
-        {/* Events grid */}
+        {/* Events grid with images */}
         <div className="grid md:grid-cols-2 gap-5 md:gap-6">
           {homeEvents.map((event, i) => (
             <motion.div
@@ -561,49 +565,66 @@ function UpcomingEventsSection() {
               initial={{ opacity: 0, y: 25 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
-              className={`group border bg-white p-6 md:p-8 hover:shadow-md transition-all duration-300 ${
+              className={`group border bg-white overflow-hidden hover:shadow-md transition-all duration-300 ${
                 event.featured
                   ? "border-[#FF4D00]/30 hover:border-[#FF4D00]/60"
                   : "border-[#111111]/10 hover:border-[#111111]/25"
               }`}
             >
-              {/* Top row: type + featured badge */}
-              <div className="flex items-center gap-2 mb-4">
-                <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 ${eventTypeStyle[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
-                  {event.type}
-                </span>
-                {event.featured && (
-                  <span className="text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 bg-[#FF4D00]/10 text-[#FF4D00] flex items-center gap-1">
-                    <Star className="w-3 h-3" />
-                    Featured
+              {/* Event image */}
+              <div className="relative aspect-[16/9] overflow-hidden">
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                {/* Type badge */}
+                <div className="absolute top-3 left-3">
+                  <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 ${eventTypeStyle[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
+                    {event.type}
                   </span>
+                </div>
+                {event.featured && (
+                  <div className="absolute top-3 right-3">
+                    <span className="text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 bg-[#FF4D00] text-white flex items-center gap-1">
+                      <Star className="w-3 h-3" />
+                      Featured
+                    </span>
+                  </div>
                 )}
+                {/* Date overlay */}
+                <div className="absolute bottom-3 left-3">
+                  <div className="text-[11px] font-mono font-bold tracking-[0.05em] text-white flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#FF4D00]" />
+                    {event.date}
+                  </div>
+                </div>
               </div>
 
-              {/* Title */}
-              <h3 className="text-[18px] md:text-[22px] font-display font-medium tracking-tight leading-tight mb-3 group-hover:text-[#FF4D00] transition-colors">
-                {event.title}
-              </h3>
+              {/* Content below image */}
+              <div className="p-5 md:p-6">
+                {/* Title */}
+                <h3 className="text-[18px] md:text-[22px] font-display font-medium tracking-tight leading-tight mb-3 group-hover:text-[#FF4D00] transition-colors">
+                  {event.title}
+                </h3>
 
-              {/* Description */}
-              <p className="text-[13px] md:text-[14px] text-[#111111]/50 leading-[1.65] font-medium mb-5">
-                {event.description}
-              </p>
+                {/* Description */}
+                <p className="text-[13px] md:text-[14px] text-[#111111]/50 leading-[1.65] font-medium mb-4 line-clamp-2">
+                  {event.description}
+                </p>
 
-              {/* Meta row */}
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-[#111111]/40 font-medium pt-5 border-t border-[#111111]/5">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#FF4D00]/60" />
-                  {event.date}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-[#FF4D00]/60" />
-                  {event.time}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#FF4D00]/60" />
-                  {event.location}
-                </span>
+                {/* Meta row */}
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-[#111111]/40 font-medium pt-4 border-t border-[#111111]/5">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-[#FF4D00]/60" />
+                    {event.time}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[#FF4D00]/60" />
+                    {event.location}
+                  </span>
+                </div>
               </div>
             </motion.div>
           ))}

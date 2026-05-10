@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Link } from "@/artemis/router";
 import { Search, ChevronDown, X, MapPin, Scale, Rocket, DollarSign, Users, ArrowRight } from "lucide-react";
 import { venturesData, Venture } from "@/artemis/data/ventures";
-import { caseStudiesData } from "@/artemis/data/caseStudies";
+import { caseStudiesData, CaseStudy } from "@/artemis/data/caseStudies";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
 
 const ITEMS_PER_PAGE = 25;
@@ -231,11 +231,16 @@ function VentureExpanded({ venture, onClose }: { venture: Venture; onClose: () =
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   CASE STUDIES SECTION
+   CASE STUDIES SECTION (Expandable cards)
    ══════════════════════════════════════════════════════════════════════════ */
 function CaseStudiesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const selectedStudy = expandedId
+    ? caseStudiesData.find((cs) => cs.id === expandedId) || null
+    : null;
 
   return (
     <section className="bg-white border-t border-[#111111]/10">
@@ -254,55 +259,194 @@ function CaseStudiesSection() {
             Proof that critical technology <em className="font-serif italic text-[#FF4D00]">works</em>
           </h2>
           <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.7] max-w-2xl">
-            Four ventures. Four verticals. Real revenue, real jobs, real impact.
+            Four ventures. Four verticals. Real revenue, real jobs, real impact. Click any card to explore.
           </p>
         </motion.div>
 
         {/* Cards Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-          {caseStudiesData.map((cs, i) => (
-            <motion.div
-              key={cs.id}
-              initial={{ opacity: 0, y: 24 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Link
-                href="/case-study"
-                className="group block relative aspect-[4/3] overflow-hidden"
+          {caseStudiesData.map((cs, i) => {
+            const isSelected = expandedId === cs.id;
+            return (
+              <motion.div
+                key={cs.id}
+                initial={{ opacity: 0, y: 24 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               >
-                {/* Background Image */}
-                <img
-                  src={cs.image}
-                  alt={cs.ventureName}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
-                />
+                <button
+                  onClick={() => setExpandedId(isSelected ? null : cs.id)}
+                  className="group block relative aspect-[4/3] overflow-hidden w-full text-left"
+                >
+                  {/* Background Image */}
+                  <img
+                    src={cs.image}
+                    alt={cs.ventureName}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
+                  />
 
-                {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-300 group-hover:from-black/70 group-hover:via-black/20" />
+                  {/* Dark Gradient Overlay */}
+                  <div className={`absolute inset-0 transition-opacity duration-300 ${isSelected ? "bg-gradient-to-t from-[#FF4D00]/80 via-[#FF4D00]/40 to-[#FF4D00]/20" : "bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/70 group-hover:via-black/20"}`} />
 
-                {/* Vertical Tag Badge */}
-                <div className="absolute top-3 left-3">
-                  <span className="px-2 py-1 bg-[#FF4D00] text-[8px] font-mono font-bold tracking-widest uppercase text-white">
-                    {cs.vertical}
-                  </span>
-                </div>
+                  {/* Vertical Tag Badge */}
+                  <div className="absolute top-3 left-3">
+                    <span className="px-2 py-1 bg-[#FF4D00] text-[8px] font-mono font-bold tracking-widest uppercase text-white">
+                      {cs.vertical}
+                    </span>
+                  </div>
 
-                {/* Bottom Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="text-[15px] md:text-[17px] font-display font-bold text-white leading-tight mb-1">
-                    {cs.ventureName}
-                  </h3>
-                  <span className="text-[12px] md:text-[13px] font-display font-medium text-[#FF4D00]">
-                    {cs.results.revenue}
-                  </span>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+                  {/* Expand/Collapse indicator */}
+                  <div className="absolute top-3 right-3">
+                    <span className={`w-6 h-6 flex items-center justify-center transition-colors ${isSelected ? "bg-white text-[#FF4D00]" : "bg-black/30 text-white/60 group-hover:bg-black/50"}`}>
+                      <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isSelected ? "rotate-180" : ""}`} />
+                    </span>
+                  </div>
+
+                  {/* Bottom Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="text-[15px] md:text-[17px] font-display font-bold text-white leading-tight mb-1">
+                      {cs.ventureName}
+                    </h3>
+                    <span className="text-[12px] md:text-[13px] font-display font-medium text-[#FF4D00]">
+                      {cs.results.revenue}
+                    </span>
+                  </div>
+                </button>
+              </motion.div>
+            );
+          })}
         </div>
+
+        {/* Expanded Case Study Detail */}
+        <AnimatePresence>
+          {selectedStudy && (
+            <CaseStudyExpanded
+              study={selectedStudy}
+              onClose={() => setExpandedId(null)}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </section>
+  );
+}
+
+/* ── Case Study Expanded Detail (inline on Ventures page) ── */
+function CaseStudyExpanded({
+  study,
+  onClose,
+}: {
+  study: CaseStudy;
+  onClose: () => void;
+}) {
+  const detailRef = useRef<HTMLDivElement>(null);
+
+  const metricItems = [
+    { key: "revenue" as const, label: "Annual Revenue", icon: DollarSign },
+    { key: "jobsCreated" as const, label: "Jobs Created", icon: Users },
+    { key: "capitalRaised" as const, label: "Capital Raised", icon: Rocket },
+    { key: "countriesReached" as const, label: "Countries", icon: MapPin },
+  ];
+
+  return (
+    <motion.div
+      ref={detailRef}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="mt-8 md:mt-12 border-2 border-[#FF4D00] bg-white relative"
+    >
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center border border-[#111111]/10 hover:border-[#FF4D00] hover:text-[#FF4D00] transition-colors text-[#111111]/40"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
+      {/* Header with image */}
+      <div className="relative h-[200px] md:h-[280px] overflow-hidden">
+        <img
+          src={study.image}
+          alt={study.ventureName}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+          <span className="inline-block px-2.5 py-1 bg-[#FF4D00] text-[10px] font-mono font-bold tracking-widest uppercase text-white mb-3">
+            {study.vertical}
+          </span>
+          <h3 className="text-[24px] md:text-[36px] font-display font-medium tracking-tight text-white">
+            {study.ventureName}
+          </h3>
+          <p className="text-[14px] md:text-[16px] text-[#FF4D00] font-medium mt-1">
+            {study.title}
+          </p>
+        </div>
+      </div>
+
+      <div className="p-6 md:p-10 lg:p-12">
+        {/* Summary */}
+        <p className="text-[15px] md:text-[17px] text-[#111111]/60 font-medium leading-[1.7] mb-8">
+          {study.summary}
+        </p>
+
+        {/* Metrics grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+          {metricItems.map((m) => {
+            const Icon = m.icon;
+            return (
+              <div key={m.key} className="border border-[#111111]/10 p-4 hover:border-[#FF4D00]/30 transition-colors group">
+                <Icon className="w-4 h-4 text-[#111111]/20 group-hover:text-[#FF4D00] transition-colors mb-2" strokeWidth={1.5} />
+                <div className="text-[24px] md:text-[32px] font-display font-medium tracking-[-0.02em] leading-none mb-1 text-[#111111] group-hover:text-[#FF4D00] transition-colors">
+                  {m.key === "jobsCreated"
+                    ? study.results[m.key].toLocaleString()
+                    : m.key === "countriesReached"
+                    ? String(study.results[m.key])
+                    : study.results[m.key]}
+                </div>
+                <span className="text-[9px] font-mono font-bold tracking-widest uppercase text-[#111111]/40">
+                  {m.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
+          {/* Challenge + Approach */}
+          <div>
+            <div className="mb-8">
+              <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-3">The Challenge</span>
+              <p className="text-[14px] md:text-[15px] text-[#111111]/60 font-medium leading-[1.7]">{study.challenge}</p>
+            </div>
+            <div>
+              <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-3">The Approach</span>
+              <p className="text-[14px] md:text-[15px] text-[#111111]/60 font-medium leading-[1.7]">{study.approach}</p>
+            </div>
+            <div className="mt-6 border-t border-[#111111]/10 pt-4">
+              <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/30 block mb-1">Timeline</span>
+              <p className="text-[15px] font-display font-medium tracking-tight">{study.timeline}</p>
+            </div>
+          </div>
+
+          {/* Quotes */}
+          <div>
+            <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-4">What They Said</span>
+            {study.quotes.map((quote, i) => (
+              <div key={i} className="border-l-2 border-[#FF4D00]/20 pl-5 mb-6 last:mb-0">
+                <p className="text-[14px] md:text-[15px] text-[#111111]/60 font-medium leading-[1.7] italic mb-3">
+                  &ldquo;{quote.text}&rdquo;
+                </p>
+                <div className="text-[12px] font-bold text-[#111111]/70">{quote.author}</div>
+                <div className="text-[11px] text-[#111111]/40">{quote.role}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
