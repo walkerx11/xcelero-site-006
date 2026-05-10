@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Link } from "@/artemis/router";
 import { venturesData } from "@/artemis/data/ventures";
@@ -19,7 +19,13 @@ import {
   HandCoins,
   Landmark,
   Mail,
-  Lock,
+  PiggyBank,
+  FileText,
+  Banknote,
+  Scale,
+  Wallet,
+  CircleDollarSign,
+  Layers,
 } from "lucide-react";
 
 /* ── Derived Data ── */
@@ -29,6 +35,124 @@ const totalVentures = venturesData.length;
 const totalCountries = 39;
 const totalHubs = 190;
 const capitalTarget = "$4B";
+
+/* ── Investment Vehicles ── */
+const investmentVehicles = [
+  {
+    id: "xcelero-fund",
+    name: "xCelero Fund",
+    shortName: "The Fund",
+    icon: CircleDollarSign,
+    tagline: "Continuous capital. Broad exposure. Open access.",
+    description:
+      "An open-ended, evergreen commingled fund that deploys across the full xCelero venture portfolio. The Fund offers quarterly liquidity windows, transparent NAV reporting, and entry from $500 — making institutional-grade venture accessible to everyone.",
+    details: [
+      { label: "Structure", value: "Open-ended evergreen fund" },
+      { label: "Min entry", value: "$500" },
+      { label: "Mgmt fee", value: "1.0%" },
+      { label: "Carry", value: "None" },
+      { label: "Liquidity", value: "Quarterly (up to 5% NAV)" },
+      { label: "Reporting", value: "Quarterly NAV + updates" },
+    ],
+    bestFor: "First-time venture investors, portfolio diversification, passive exposure to critical tech",
+    color: "#FF4D00",
+  },
+  {
+    id: "spv-syndicates",
+    name: "SPV Syndicates",
+    shortName: "SPV",
+    icon: Layers,
+    tagline: "Co-invest alongside institutions on breakout deals.",
+    description:
+      "Purpose-built Special Purpose Vehicles for individual follow-on investments in high-conviction ventures. Each SPV is a single-asset vehicle with defined economics — you know exactly what you're investing in, with side-by-side GP economics and institutional-grade deal terms.",
+    details: [
+      { label: "Structure", value: "Single-asset SPV per deal" },
+      { label: "Min entry", value: "$5,000" },
+      { label: "Mgmt fee", value: "1.0%" },
+      { label: "Carry", value: "10% above hurdle" },
+      { label: "Liquidity", value: "Illiquid until exit" },
+      { label: "Reporting", value: "Quarterly + ad-hoc" },
+    ],
+    bestFor: "Experienced investors seeking deal-level selection, co-investment rights with institutional partners",
+    color: "#FF4D00",
+  },
+  {
+    id: "thematic-funds",
+    name: "Thematic Funds",
+    shortName: "Thematic",
+    icon: PiggyBank,
+    tagline: "Concentrated bets on critical technology verticals.",
+    description:
+      "Commingled closed-end funds targeting specific verticals — Energy, Food Systems, Sovereign Tech, Digital Finance. Each fund concentrates capital in 8–15 ventures within a single domain, giving investors targeted exposure to the sectors they believe in most.",
+    details: [
+      { label: "Structure", value: "7-year closed-end fund" },
+      { label: "Min entry", value: "$50,000" },
+      { label: "Mgmt fee", value: "1.5%" },
+      { label: "Carry", value: "20% above 8% hurdle" },
+      { label: "Liquidity", value: "Semi-annual tender offers" },
+      { label: "Reporting", value: "Monthly + custom" },
+    ],
+    bestFor: "Institutional allocators, family offices, sector-conviction investors, impact-mandated capital",
+    color: "#FF4D00",
+  },
+  {
+    id: "catalyst-notes",
+    name: "Catalyst Notes",
+    shortName: "Catalyst",
+    icon: Banknote,
+    tagline: "Revenue-linked returns. Venture velocity without equity dilution.",
+    description:
+      "Revenue-based financing instruments for portfolio ventures that have reached revenue milestones. Investors receive a fixed return multiple tied to venture revenue performance — no equity dilution, no valuation negotiations. Capital that moves at the speed of the business.",
+    details: [
+      { label: "Structure", value: "Revenue-linked note" },
+      { label: "Min entry", value: "$10,000" },
+      { label: "Return target", value: "1.5–2.5x multiple" },
+      { label: "Duration", value: "24–48 months" },
+      { label: "Security", value: "Revenue assignment" },
+      { label: "Reporting", value: "Monthly revenue reports" },
+    ],
+    bestFor: "Yield-oriented investors, revenue-stage venture exposure, non-dilutive capital supporters",
+    color: "#111111",
+  },
+  {
+    id: "non-dilutive-desk",
+    name: "Non-Dilutive Desk",
+    shortName: "Non-Dilutive",
+    icon: Shield,
+    tagline: "Unlock grants, prizes, and government incentives across 39 countries.",
+    description:
+      "Not a fund — a service. Our Non-Dilutive Capital Desk matches ventures with grants, prizes, sovereign incentives, and development finance across every country on the Route. Average non-dilutive raise per venture: $180K. This is capital that doesn't cost equity.",
+    details: [
+      { label: "Structure", value: "Advisory + placement" },
+      { label: "Min entry", value: "N/A (venture-side)" },
+      { label: "Fee", value: "8–12% success fee" },
+      { label: "Avg raise", value: "$180K per venture" },
+      { label: "Pipeline", value: "2,400+ active programs" },
+      { label: "Geographies", value: "39 countries" },
+    ],
+    bestFor: "Ventures seeking working capital without dilution; grant-mandated organizations seeking pipeline",
+    color: "#111111",
+  },
+  {
+    id: "anchor-mandate",
+    name: "Anchor Mandate",
+    shortName: "Anchor",
+    icon: Landmark,
+    tagline: "Custom portfolio construction for institutional-scale allocators.",
+    description:
+      "For investors deploying $250K+, Anchor Mandates offer bespoke portfolio construction with advisory board participation, direct venture selection input, custom SPV formation, GP carry participation, and real-time dashboard access. This is venture investing on your terms.",
+    details: [
+      { label: "Structure", value: "Custom mandate / SMA" },
+      { label: "Min entry", value: "$250,000" },
+      { label: "Mgmt fee", value: "Negotiated" },
+      { label: "Carry", value: "Negotiated carry participation" },
+      { label: "Liquidity", value: "Custom terms" },
+      { label: "Reporting", value: "Real-time dashboard" },
+    ],
+    bestFor: "Sovereign wealth funds, DFIs, endowments, ultra-high-net-worth, family offices with strategic mandates",
+    color: "#111111",
+  },
+];
 
 /* ── Investment Tiers ── */
 const investmentTiers = [
@@ -41,12 +165,12 @@ const investmentTiers = [
     color: "#FF4D00",
     tagline: "Start building your position",
     benefits: [
-      "Access to xCelero Capital Continuous Flow",
+      "Access to xCelero Fund (Continuous Capital Flow)",
       "Quarterly portfolio updates & NAV reports",
       "Route Deal Flow pipeline visibility",
       "Community investor network access",
     ],
-    vehicle: "Continuous Capital Flow",
+    vehicle: "xCelero Fund",
     holdPeriod: "Open-ended",
     reporting: "Quarterly",
   },
@@ -66,7 +190,7 @@ const investmentTiers = [
       "Dedicated investor relations contact",
     ],
     vehicle: "SPV Syndicates",
-    holdPeriod: "3–5 years",
+    holdPeriod: "3\u20135 years",
     reporting: "Quarterly + ad-hoc",
   },
   {
@@ -79,13 +203,13 @@ const investmentTiers = [
     tagline: "Institutional-grade allocation",
     benefits: [
       "All Syndicate benefits",
-      "Dedicated Fund allocation",
+      "Thematic Fund allocation",
       "Board observer seats (select ventures)",
       "Co-investment first-look rights",
       "Custom reporting & data room access",
       "Annual strategy summit attendance",
     ],
-    vehicle: "Dedicated Funds",
+    vehicle: "Thematic Funds",
     holdPeriod: "7-year fund life",
     reporting: "Monthly + custom",
   },
@@ -105,7 +229,7 @@ const investmentTiers = [
       "GP carry participation",
       "Portfolio construction rights",
     ],
-    vehicle: "Custom Mandate",
+    vehicle: "Anchor Mandate",
     holdPeriod: "Custom",
     reporting: "Real-time dashboard",
   },
@@ -115,19 +239,19 @@ const investmentTiers = [
 const faqItems = [
   {
     q: "Who can invest?",
-    a: "Individual investors from $500. No accreditation required for the Continuous Capital Flow. SPV syndicates and Dedicated Funds require qualified investor status depending on jurisdiction. Anchor allocations are for institutional investors and family offices.",
+    a: "Individual investors from $500 via the xCelero Fund. No accreditation required. SPV Syndicates and Thematic Funds require qualified investor status depending on jurisdiction. Anchor Mandates are for institutional investors and family offices.",
   },
   {
     q: "How does xCelero deploy capital?",
-    a: "We deploy across three channels: (1) Direct venture builds — originating critical technology companies inside the studio and funding them through MVP to revenue; (2) SPV co-investments — syndicating alongside institutional partners for follow-on rounds in breakout ventures; (3) Dedicated thematic funds — commingled vehicles targeting specific verticals like energy, food systems, or sovereign tech.",
+    a: "We deploy across five vehicles: (1) xCelero Fund — broad exposure across the full portfolio; (2) SPV Syndicates — single-deal co-investments alongside institutions; (3) Thematic Funds — concentrated sector bets in energy, food, sovereign tech; (4) Catalyst Notes — revenue-linked returns for revenue-stage ventures; (5) Non-Dilutive Desk — grants and incentives matching across 39 countries.",
   },
   {
     q: "What are the fees?",
-    a: "Continuous Capital Flow: 1% management fee, no carry. SPV Syndicates: 1% management + 10% carry above hurdle. Dedicated Funds: 1.5% management + 20% carry above 8% hurdle. No sales load on any vehicle. Total expense ratios vary by vehicle — see offering documents for details.",
+    a: "xCelero Fund: 1% management fee, no carry. SPV Syndicates: 1% management + 10% carry above hurdle. Thematic Funds: 1.5% management + 20% carry above 8% hurdle. Catalyst Notes: no management fee, return target 1.5–2.5x. No sales load on any vehicle. See offering documents for full expense ratios.",
   },
   {
     q: "How does liquidity work?",
-    a: "The Continuous Capital Flow offers quarterly redemption windows (up to 5% of NAV per quarter). SPV positions are illiquid until exit event. Dedicated Funds may offer semi-annual tender offers at Board discretion. You should consider all positions illiquid and invest only capital you can commit for 3–7 years.",
+    a: "The xCelero Fund offers quarterly redemption windows (up to 5% of NAV per quarter). SPV positions are illiquid until exit event. Thematic Funds may offer semi-annual tender offers at Board discretion. Catalyst Notes have a defined 24–48 month duration. Consider all positions illiquid and invest only capital you can commit.",
   },
   {
     q: "Is this a fund-of-funds?",
@@ -156,9 +280,9 @@ export function Capital() {
   return (
     <div className="bg-white text-[#111111]">
       <Hero onSubscribe={() => setShowSubscribe(true)} />
-      <PortfolioStats />
+      <StatsBar />
+      <InvestmentVehicles />
       <InvestmentTiers />
-      <HowCapitalMoves />
       <PortfolioSectors />
       <FAQSection />
       <InvestCTA onSubscribe={() => setShowSubscribe(true)} />
@@ -171,35 +295,33 @@ export function Capital() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO — USVC-style: editorial headline + Invest Now CTA
+   HERO — Editorial centered with serif accent
    ══════════════════════════════════════════════════════════════════════════ */
 function Hero({ onSubscribe }: { onSubscribe: () => void }) {
   return (
-    <section className="bg-[#FAFAFA] pt-12 pb-16 md:pt-20 md:pb-24 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
-      <div className="w-full max-w-[1400px] mx-auto">
+    <section className="bg-[#FAFAFA] py-16 md:py-24 lg:py-32 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
+      <div className="w-full max-w-[1400px] mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-4xl"
+          className="max-w-4xl mx-auto"
         >
           <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] mb-6 block">
             xCelero Capital
           </span>
           <h1 className="text-[36px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-6">
-            Venture capital is the{" "}
-            <em className="font-serif italic text-[#FF4D00]">asset class</em>
+            Invest in{" "}
+            <em className="font-serif italic text-[#FF4D00]">critical</em>
             <br />
-            behind the biggest companies
-            <br />
-            of the century
+            technology from $500
           </h1>
-          <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#111111]/60 font-medium max-w-xl mb-10">
-            But most people have never been able to access it. xCelero is
-            changing that — one investment creates exposure to critical technology
-            ventures across 39 countries, from $500.
+          <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#111111]/60 font-medium max-w-xl mx-auto mb-10">
+            Six investment vehicles. One thesis: the technology that defines
+            the next century will be built in the markets that need it most.
+            xCelero gives you access to that pipeline.
           </p>
-          <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex flex-wrap gap-4 items-center justify-center">
             <Link
               to="#invest-tiers"
               onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -228,22 +350,61 @@ function Hero({ onSubscribe }: { onSubscribe: () => void }) {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PORTFOLIO STATS — USVC network-style display
+   STATS BAR — Horizontal ticker
    ══════════════════════════════════════════════════════════════════════════ */
-function PortfolioStats() {
+function StatsBar() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   const stats = [
-    { value: capitalTarget, label: "Capital mobilization target", size: "big" },
-    { value: String(totalVentures), label: "Active ventures in portfolio", size: "small" },
-    { value: `${totalCountries}+`, label: "Countries on the Route", size: "small" },
-    { value: String(totalHubs), label: "Hub locations", size: "small" },
+    { value: capitalTarget, label: "Capital target" },
+    { value: String(totalVentures), label: "Active ventures" },
+    { value: `${totalCountries}+`, label: "Countries" },
+    { value: "6", label: "Investment vehicles" },
+    { value: String(totalHubs), label: "Route hubs" },
   ];
 
   return (
     <section
       ref={ref}
+      className="py-8 md:py-10 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10 bg-white"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        <div className="flex flex-wrap justify-between gap-6 md:gap-8">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
+              className="text-center flex-1 min-w-[100px]"
+            >
+              <span className="block text-[28px] md:text-[36px] font-display font-medium tracking-[-0.03em] leading-[1]">
+                {stat.value}
+              </span>
+              <span className="block text-[11px] md:text-[12px] text-[#111111]/40 font-medium tracking-[0.05em] uppercase mt-1">
+                {stat.label}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INVESTMENT VEHICLES — Expandable detail cards
+   ══════════════════════════════════════════════════════════════════════════ */
+function InvestmentVehicles() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  return (
+    <section
+      ref={ref}
+      id="investment-vehicles"
       className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10"
     >
       <div className="w-full max-w-[1400px] mx-auto">
@@ -251,39 +412,120 @@ function PortfolioStats() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-10 md:mb-14"
+          className="mb-12 md:mb-16"
         >
           <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
-            Portfolio
+            Investment Vehicles
           </span>
-          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-[-0.03em] leading-[0.95] mt-3">
-            Built for the terrain
+          <h2 className="text-[32px] md:text-[48px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.9] mt-3">
+            Six ways to deploy{" "}
+            <em className="font-serif italic text-[#FF4D00]">capital</em>
           </h2>
+          <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.7] max-w-xl mt-4">
+            From $500 in the xCelero Fund to custom Anchor Mandates at $250K+,
+            every vehicle is built for the same thesis — critical technology in
+            the markets that need it most.
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="border-t border-[#111111]/10 pt-6"
-            >
-              <span
-                className={`block font-display font-medium tracking-[-0.03em] leading-[1] mb-3 ${
-                  stat.size === "big"
-                    ? "text-[48px] md:text-[64px]"
-                    : "text-[36px] md:text-[48px]"
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {investmentVehicles.map((vehicle, i) => {
+            const Icon = vehicle.icon;
+            const isExpanded = expanded === vehicle.id;
+            return (
+              <motion.div
+                key={vehicle.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className={`border p-6 md:p-8 bg-white transition-all flex flex-col cursor-pointer group ${
+                  isExpanded
+                    ? "border-[#FF4D00] ring-1 ring-[#FF4D00]/20 md:col-span-1"
+                    : "border-[#111111]/10 hover:border-[#FF4D00]/30"
                 }`}
+                onClick={() => setExpanded(isExpanded ? null : vehicle.id)}
               >
-                {stat.value}
-              </span>
-              <span className="text-[13px] md:text-[14px] text-[#111111]/50 font-medium leading-[1.5]">
-                {stat.label}
-              </span>
-            </motion.div>
-          ))}
+                {/* Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                        isExpanded
+                          ? "bg-[#FF4D00]"
+                          : "border border-[#111111]/10 group-hover:border-[#FF4D00]/30"
+                      }`}
+                    >
+                      <Icon
+                        className={`w-4 h-4 transition-colors ${
+                          isExpanded ? "text-white" : "text-[#FF4D00]"
+                        }`}
+                        strokeWidth={1.5}
+                      />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#111111]/30 block">
+                        {vehicle.shortName}
+                      </span>
+                    </div>
+                  </div>
+                  <ChevronDown
+                    className={`w-5 h-5 text-[#111111]/30 transition-transform duration-300 ${
+                      isExpanded ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+
+                {/* Title + Tagline */}
+                <h3 className="text-[20px] md:text-[24px] font-display font-medium tracking-tight mb-2">
+                  {vehicle.name}
+                </h3>
+                <p className="text-[13px] text-[#FF4D00] font-medium leading-[1.5] mb-3">
+                  {vehicle.tagline}
+                </p>
+
+                {/* Description */}
+                <p className="text-[13px] md:text-[14px] text-[#111111]/50 font-medium leading-[1.7] mb-4">
+                  {vehicle.description}
+                </p>
+
+                {/* Details Grid — always visible */}
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
+                  {vehicle.details.map((detail, di) => (
+                    <div key={di} className="flex flex-col">
+                      <span className="text-[9px] font-mono font-bold tracking-widest uppercase text-[#111111]/30">
+                        {detail.label}
+                      </span>
+                      <span className="text-[12px] md:text-[13px] font-medium text-[#111111]/70 leading-[1.4]">
+                        {detail.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Best For — expandable */}
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      className="overflow-hidden"
+                    >
+                      <div className="border-t border-[#111111]/10 pt-4 mt-auto">
+                        <span className="text-[9px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] block mb-1">
+                          Best for
+                        </span>
+                        <p className="text-[12px] md:text-[13px] text-[#111111]/60 font-medium leading-[1.6]">
+                          {vehicle.bestFor}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -351,27 +593,23 @@ function InvestmentTiers() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center mb-12 md:mb-16"
+          className="mb-12 md:mb-16"
         >
           <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
             Invest Now
           </span>
-          <h2 className="text-[32px] md:text-[48px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.9] mt-4">
-            Building a venture portfolio
-            <br />
-            used to require{" "}
-            <em className="font-serif italic text-[#FF4D00]">a lot.</em>{" "}
-            <br />
-            Now it starts at $500
+          <h2 className="text-[32px] md:text-[48px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.9] mt-3">
+            Pick your{" "}
+            <em className="font-serif italic text-[#FF4D00]">entry</em>
           </h2>
-          <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.7] max-w-xl mx-auto mt-6">
-            Institutions solved this decades ago — dedicated teams, decades-long
-            relationships, hundreds of millions. You never had that option. Until
-            now.
+          <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.7] max-w-xl mt-4">
+            Four tiers, each mapped to the investment vehicle that fits your
+            capital and conviction. Select a tier to start your investment
+            inquiry.
           </p>
         </motion.div>
 
-        {/* Tier Cards */}
+        {/* Tier Cards — horizontal scroll on mobile */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
           {investmentTiers.map((tier, i) => {
             const Icon = tier.icon;
@@ -419,7 +657,7 @@ function InvestmentTiers() {
                     ${tier.min.toLocaleString()}
                   </span>
                   <span className="text-[13px] text-[#111111]/40 font-medium ml-1">
-                    {tier.max ? `– $${tier.max.toLocaleString()}` : "+ "}
+                    {tier.max ? `\u2013 $${tier.max.toLocaleString()}` : "+ "}
                     minimum
                   </span>
                 </div>
@@ -482,7 +720,9 @@ function InvestmentTiers() {
                         </h3>
                         <p className="text-[13px] text-[#111111]/40 font-medium mt-1">
                           {investmentTiers.find((t) => t.id === selectedTier)?.name} tier
-                          — from $
+                          {" "}via{" "}
+                          {investmentTiers.find((t) => t.id === selectedTier)?.vehicle}{" "}
+                          &mdash; from $
                           {investmentTiers
                             .find((t) => t.id === selectedTier)
                             ?.min.toLocaleString()}
@@ -621,7 +861,7 @@ function InvestmentTiers() {
                         {formState === "submitting" ? (
                           <>
                             <Loader2 className="w-4 h-4 animate-spin" />
-                            Processing…
+                            Processing&hellip;
                           </>
                         ) : (
                           <>
@@ -649,117 +889,6 @@ function InvestmentTiers() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HOW CAPITAL MOVES — Cards showing capital vehicles
-   ══════════════════════════════════════════════════════════════════════════ */
-function HowCapitalMoves() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  const vehicles = [
-    {
-      icon: Shield,
-      title: "Non-Dilutive Capital Desk",
-      description:
-        "Matching ventures with grants, prizes, and government incentives across 39+ countries. Average non-dilutive raise: $180K per venture.",
-      stat: "$180K",
-      statLabel: "Avg non-dilutive raise",
-    },
-    {
-      icon: TrendingUp,
-      title: "Solidarity Pricing",
-      description:
-        "Founders in early-stage markets access the same quality of support at a fraction of Silicon Valley costs. Program fees scale with venture revenue.",
-      stat: "60%",
-      statLabel: "Cost reduction vs SV",
-    },
-    {
-      icon: Globe,
-      title: "Route Deal Flow",
-      description:
-        "Shared deal flow across 190 hubs. Ventures in Nairobi see the same pipeline access as those in Lagos, Cairo, or Cape Town.",
-      stat: "190",
-      statLabel: "Connected hubs",
-    },
-    {
-      icon: Users,
-      title: "LP Network",
-      description:
-        "Curated network of DFIs, sovereign wealth allocators, family offices, and impact investors aligned on critical technology commercialization.",
-      stat: "4,500+",
-      statLabel: "Active managers",
-    },
-  ];
-
-  return (
-    <section
-      ref={ref}
-      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-t border-[#111111]/10"
-    >
-      <div className="w-full max-w-[1400px] mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-12 md:mb-16"
-        >
-          <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00]">
-            Capital Vehicles
-          </span>
-          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-[-0.03em] leading-[0.95] mt-3">
-            How venture capital{" "}
-            <em className="font-serif italic text-[#FF4D00]">actually</em>{" "}
-            works
-          </h2>
-          <p className="text-[15px] md:text-[17px] text-[#111111]/50 font-medium leading-[1.7] max-w-xl mt-4">
-            Venture investing doesn&apos;t follow the rules you&apos;re used
-            to. We apply the same principles institutions have used for decades
-            — but broke down the barriers.
-          </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {vehicles.map((vehicle, i) => {
-            const Icon = vehicle.icon;
-            return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="border border-[#111111]/10 p-8 md:p-10 bg-white group hover:border-[#FF4D00]/30 transition-colors flex flex-col"
-              >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-10 h-10 rounded-full border border-[#111111]/10 flex items-center justify-center group-hover:border-[#FF4D00]/30 transition-colors">
-                    <Icon
-                      className="w-4 h-4 text-[#FF4D00]"
-                      strokeWidth={1.5}
-                    />
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.03em] leading-[1]">
-                      {vehicle.stat}
-                    </span>
-                    <span className="block text-[10px] font-mono text-[#111111]/30 tracking-widest uppercase mt-1">
-                      {vehicle.statLabel}
-                    </span>
-                  </div>
-                </div>
-                <h3 className="text-[20px] md:text-[24px] font-display font-medium tracking-tight mb-3">
-                  {vehicle.title}
-                </h3>
-                <p className="text-[14px] md:text-[15px] text-[#111111]/50 font-medium leading-[1.7]">
-                  {vehicle.description}
-                </p>
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
    PORTFOLIO SECTORS — Visual sector matrix from ventures data
    ══════════════════════════════════════════════════════════════════════════ */
 function PortfolioSectors() {
@@ -772,17 +901,17 @@ function PortfolioSectors() {
   });
 
   const sectorIcons: Record<string, string> = {
-    Energy: "⚡",
-    Water: "💧",
-    "Food & Agriculture": "🌾",
-    "Materials & Manufacturing": "⚙️",
-    "Mobility & Logistics": "🚀",
-    "Data & Intelligence": "🧠",
-    "Built Environments": "🏗️",
-    "Life Sciences": "🧬",
-    "Digital Finance": "💰",
-    "Education & Cognitive Infrastructure": "📚",
-    "Space & Off-World Industrialization": "🌌",
+    Energy: "\u26A1",
+    Water: "\uD83D\uDCA7",
+    "Food & Agriculture": "\uD83C\uDF3E",
+    "Materials & Manufacturing": "\u2699\uFE0F",
+    "Mobility & Logistics": "\uD83D\uDE80",
+    "Data & Intelligence": "\uD83E\uDDE0",
+    "Built Environments": "\uD83C\uDFD7\uFE0F",
+    "Life Sciences": "\uD83E\uDDEC",
+    "Digital Finance": "\uD83D\uDCB0",
+    "Education & Cognitive Infrastructure": "\uD83D\uDCDA",
+    "Space & Off-World Industrialization": "\uD83C\uDF0C",
   };
 
   return (
@@ -820,7 +949,7 @@ function PortfolioSectors() {
               className="border border-white/10 p-4 md:p-5 hover:border-[#FF4D00]/40 hover:bg-white/5 transition-all text-center"
             >
               <span className="text-[24px] md:text-[32px] block mb-2">
-                {sectorIcons[sector.name] || "🔬"}
+                {sectorIcons[sector.name] || "\uD83D\uDD2C"}
               </span>
               <span className="text-[11px] md:text-[12px] font-bold text-white/80 block mb-1 leading-tight">
                 {sector.name}
@@ -847,7 +976,7 @@ function PortfolioSectors() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FAQ — Accordion like USVC
+   FAQ — Accordion
    ══════════════════════════════════════════════════════════════════════════ */
 function FAQSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -861,7 +990,6 @@ function FAQSection() {
     >
       <div className="w-full max-w-[1400px] mx-auto">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
-          {/* Left: Sticky heading */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -878,7 +1006,6 @@ function FAQSection() {
             </h2>
           </motion.div>
 
-          {/* Right: FAQ items */}
           <div className="lg:col-span-7">
             {faqItems.map((item, i) => (
               <motion.div
@@ -936,61 +1063,56 @@ function FAQSection() {
    INVEST CTA — Bottom call-to-action
    ══════════════════════════════════════════════════════════════════════════ */
 function InvestCTA({ onSubscribe }: { onSubscribe: () => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
-    <section
-      ref={ref}
-      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 bg-[#111111] text-white border-t border-white/10"
-    >
+    <section className="py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-[#111111] text-white border-t border-white/10">
       <div className="w-full max-w-[1400px] mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
-          <h2 className="text-[32px] md:text-[48px] lg:text-[64px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-4">
-            The goal is to capture
-            <br />
-            <em className="font-serif italic text-[#FF4D00]">the outliers.</em>
-          </h2>
-          <p className="text-[15px] md:text-[17px] text-white/50 font-medium leading-[1.7] max-w-xl mx-auto mb-10">
-            The entire venture model depends on being in the right rooms,
-            backing the right people, and having enough exposure that when a
-            breakout happens — you own a meaningful piece of it.
-          </p>
-
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link
-              to="#invest-tiers"
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault();
-                document
-                  .getElementById("invest-tiers")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="inline-flex items-center gap-2 px-10 py-5 bg-[#FF4D00] text-white text-[12px] font-bold uppercase tracking-[0.12em] hover:bg-[#FF6A2A] transition-colors"
-            >
-              Invest Now
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <button
-              onClick={onSubscribe}
-              className="inline-flex items-center gap-2 px-10 py-5 border border-white/20 text-[12px] font-bold uppercase tracking-[0.12em] hover:bg-white hover:text-[#111111] transition-all"
-            >
-              Get Updates by Email
-              <Mail className="w-4 h-4" />
-            </button>
-          </div>
-        </motion.div>
+        <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] mb-6 block">
+          Start Today
+        </span>
+        <h2 className="text-[36px] md:text-[56px] lg:text-[72px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-6">
+          The next century is being{" "}
+          <em className="font-serif italic text-[#FF4D00]">built</em>
+          <br />
+          right now. Will you fund it?
+        </h2>
+        <p className="text-[15px] md:text-[17px] text-white/50 font-medium leading-[1.7] max-w-xl mx-auto mb-10">
+          From $500 in the xCelero Fund to custom Anchor Mandates — six
+          vehicles, one thesis, 39 countries of deal flow.
+        </p>
+        <div className="flex flex-wrap gap-4 items-center justify-center">
+          <Link
+            to="#invest-tiers"
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+              e.preventDefault();
+              document
+                .getElementById("invest-tiers")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="inline-flex items-center gap-2 px-10 py-5 bg-[#FF4D00] text-white text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-white hover:text-[#111111] transition-colors"
+          >
+            Invest Now
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+          <button
+            onClick={onSubscribe}
+            className="inline-flex items-center gap-2 px-10 py-5 border border-white/20 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-white hover:text-[#111111] transition-all"
+          >
+            Get Updates
+            <Mail className="w-4 h-4" />
+          </button>
+        </div>
+        <p className="text-[10px] text-white/20 font-medium text-center leading-[1.6] mt-8 max-w-lg mx-auto">
+          This is not an offer to sell securities. Investment inquiries are
+          subject to eligibility verification and offering document review.
+          Past performance does not guarantee future results.
+        </p>
       </div>
     </section>
   );
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   SUBSCRIBE MODAL — USVC-style email capture
+   SUBSCRIBE MODAL
    ══════════════════════════════════════════════════════════════════════════ */
 function SubscribeModal({
   isOpen,
@@ -1001,18 +1123,7 @@ function SubscribeModal({
 }) {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
-  const [status, setStatus] = useState<
-    "idle" | "submitting" | "success" | "error"
-  >("idle");
-
-  // Close on escape
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    if (isOpen) window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [isOpen, onClose]);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1025,7 +1136,8 @@ function SubscribeModal({
         body: JSON.stringify({ email, consent }),
       });
 
-      if (!res.ok) throw new Error("Failed");
+      if (!res.ok) throw new Error("Subscription failed");
+
       setStatus("success");
     } catch {
       setStatus("error");
@@ -1039,56 +1151,50 @@ function SubscribeModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-6"
           onClick={onClose}
         >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-
-          {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="relative bg-white text-[#111111] w-full max-w-md p-8 md:p-10 shadow-2xl"
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white border border-[#111111]/10 p-8 md:p-10 max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 p-2 hover:bg-[#111111]/5 transition-colors"
-              aria-label="Close"
-            >
-              <X className="w-5 h-5 text-[#111111]/40" />
-            </button>
-
             {status === "success" ? (
-              <div className="text-center py-4">
-                <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">
-                  <Check
-                    className="w-7 h-7 text-green-600"
-                    strokeWidth={2}
-                  />
+              <div className="text-center py-6">
+                <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-5">
+                  <Check className="w-7 h-7 text-green-600" strokeWidth={2} />
                 </div>
                 <h3 className="text-[20px] font-display font-medium mb-2">
                   You&apos;re on the list
                 </h3>
-                <p className="text-[13px] text-[#111111]/50 font-medium">
-                  New holdings, fund updates, and notes from the team.
+                <p className="text-[13px] text-[#111111]/50 font-medium leading-[1.7]">
+                  We&apos;ll send you portfolio updates, NAV reports, and new
+                  investment opportunities.
                 </p>
               </div>
             ) : (
               <>
-                <p className="text-[14px] text-[#111111]/50 font-medium mb-2">
-                  New holdings, fund updates, and occasional notes from the team.
-                </p>
-                <h3
-                  id="get-updates-title"
-                  className="text-[20px] font-display font-medium mb-6"
-                >
-                  Get updates by email
-                </h3>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-[20px] font-display font-medium tracking-tight">
+                      Get investor updates
+                    </h3>
+                    <p className="text-[12px] text-[#111111]/40 font-medium mt-1">
+                      Portfolio news, NAV reports, and deal alerts
+                    </p>
+                  </div>
+                  <button
+                    onClick={onClose}
+                    className="p-2 hover:bg-[#111111]/5 transition-colors"
+                    aria-label="Close modal"
+                  >
+                    <X className="w-5 h-5 text-[#111111]/40" />
+                  </button>
+                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
@@ -1097,9 +1203,8 @@ function SubscribeModal({
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="investor@xcelero.com"
-                      className="w-full border border-[#111111]/10 px-4 py-3.5 text-[14px] font-medium focus:outline-none focus:border-[#FF4D00] transition-colors"
-                      aria-label="Email address"
+                      className="w-full border border-[#111111]/10 px-4 py-3 text-[14px] font-medium focus:outline-none focus:border-[#FF4D00] transition-colors bg-white"
+                      placeholder="your@email.com"
                     />
                   </div>
 
@@ -1110,15 +1215,15 @@ function SubscribeModal({
                       required
                       checked={consent}
                       onChange={(e) => setConsent(e.target.checked)}
-                      className="mt-0.5 accent-[#FF4D00]"
+                      className="mt-1 accent-[#FF4D00]"
                     />
                     <label
                       htmlFor="modal-consent"
-                      className="text-[11px] text-[#111111]/40 font-medium leading-[1.6]"
+                      className="text-[11px] text-[#111111]/50 font-medium leading-[1.6]"
                     >
-                      By selecting this I agree to receive marketing
-                      communications from xCelero Labs related to investments
-                      xCelero has or intends to make.
+                      I agree to receive communications from xCelero Labs
+                      related to investments. I understand I can unsubscribe at
+                      any time.
                     </label>
                   </div>
 
@@ -1136,7 +1241,7 @@ function SubscribeModal({
                     {status === "submitting" ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        Subscribing…
+                        Subscribing&hellip;
                       </>
                     ) : (
                       "Subscribe"
