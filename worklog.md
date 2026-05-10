@@ -53,6 +53,39 @@ Stage Summary:
 - Clean white background, centered typography, serif italic accent
 
 ---
+Task ID: 3
+Agent: Main Agent
+Task: Redesign Capital page — USVC-style actionable investing platform with backend
+
+Work Log:
+- Analyzed USVC website blueprint from user's HTML dump — identified key patterns: "Invest Now" CTA, email subscription modal with consent, investment tiers, portfolio stats, FAQ accordion, "Get Updates" modal
+- Read current Capital.tsx (472 lines, passive information-only page)
+- Read ventures data (40+ ventures across 11 verticals) for portfolio stats
+- Complete rewrite of Capital.tsx (now ~700 lines) with USVC-style features:
+  - **Hero**: Editorial headline "Venture capital is the asset class behind the biggest companies of the century" with serif italic accent, Invest Now + Get Updates CTAs
+  - **Portfolio Stats**: Derived from ventures data — $4B target, 40+ ventures, 39+ countries, 190 hubs
+  - **Investment Tiers**: 4 interactive tier cards (Scout $500, Syndicate $5K, Partner $50K, Anchor $250K) with benefits, vehicle types, hold periods
+  - **Inline Investment Form**: Appears when tier selected — name, email, amount, accredited checkbox, consent checkbox, submit with loading/success/error states
+  - **How Capital Moves**: 4 cards with stats (Non-Dilutive Desk, Solidarity Pricing, Route Deal Flow, LP Network)
+  - **Portfolio Sectors**: Dark section with 11 sector cards showing venture counts, emoji icons, linked to ventures page
+  - **FAQ Accordion**: 8 questions with smooth AnimatePresence animations, sticky heading layout
+  - **Invest CTA**: Bottom dark section with "The goal is to capture the outliers." headline
+  - **Subscribe Modal**: USVC-style email capture with consent checkbox, success state, ESC key close
+- Updated Prisma schema with `InvestmentInquiry` and `Subscriber` models
+- Created `/api/capital/invest` route: POST (validates + creates inquiry), GET (lists inquiries)
+- Created `/api/capital/subscribe` route: POST (upserts subscriber with consent), GET (lists subscribers)
+- Pushed Prisma schema changes with `bun run db:push`
+- All lint checks pass clean
+
+Stage Summary:
+- Capital page transformed from passive information page to actionable investment platform
+- Full USVC-style investing flow: tier selection → form → backend submission → confirmation
+- Backend payment-ready: investment inquiries stored in database with tier, amount, accreditation status
+- Email subscription with consent tracking in database
+- 4 investment tiers from $500 to $250K+ with differentiated benefits
+- Portfolio exposure visualization across 11 critical technology sectors
+
+---
 ## ⚡ AUTO-SAVE RULE
 After every completed task, always run:
   git add -A && git commit -m "<task description>" && git push origin main
