@@ -876,3 +876,56 @@ Stage Summary:
 - Event Detail Popup: Clickable event cards open animated modal with full event details, ESC/backdrop close
 - Community Rhythm Section: Two-part section (white header + dark cards) showing Weekly/Monthly/Quarterly/Annually cadence with mini-stats row
 - Both features match xCelero design language: font-display, font-mono, #FF4D00 accent, #111111 text, clean borders
+
+---
+Task ID: 12
+Agent: Sub Agent (full-stack-developer)
+Task: Add 13 Critical Domains image cards section to About page
+
+Work Log:
+- Added criticalDomains data array with 13 domains (Energy, Water, Food & Agriculture, Manufacturing, Mobility & Logistics, Data & Intelligence, Built Environments, Life Sciences, Digital Finance, Education, Space, Defense & Security, Climate & Regeneration), each with name, description, and Unsplash image
+- Created CriticalDomainsSection component with dark bg (#111111), image cards in responsive grid
+- Cards have aspect-[3/4], gradient overlay, hover scale effects, staggered animations
+- Section placed between HowWeWorkSection and ManifestoCardsSection
+- "Explore ventures in these domains" link to /ventures at bottom
+
+Stage Summary:
+- 13 Critical Domains section added as image cards on About page
+- Dark section with tall image cards and gradient overlays
+- Links to ventures page
+
+---
+Task ID: 13
+Agent: Sub Agent (full-stack-developer)
+Task: Add case studies section to Ventures page below Load More
+
+Work Log:
+- Added import for caseStudiesData from @/artemis/data/caseStudies
+- Created CaseStudiesSection component with white bg header and 4-column card grid
+- Cards show case study images with gradient overlay, vertical badge, venture name, revenue metric
+- Each card links to /case-study page
+- Section inserted between Load More button and ReviewSection
+
+Stage Summary:
+- Case studies section added to Ventures page showing all 4 case studies as image cards
+- Positioned below Load More, above Review Section
+
+---
+Task ID: 14 + 15
+Agent: Sub Agent (full-stack-developer)
+Task: Community page: event detail popup + community rhythm section
+
+Work Log:
+- Added selectedEvent state to UpcomingEventsSection
+- Created EventDetailModal component with full-screen backdrop, centered modal, close button, ESC key support, AnimatePresence animations
+- Modal shows event type badge, title, date/time/location with icons, full description, spots, RSVP button
+- Made event cards clickable with cursor-pointer
+- Created CommunityRhythmSection with white header and dark cards grid
+- 4 rhythm cards: Weekly (Office Hours), Monthly (Deal Flow), Quarterly (Demo Days), Annually (Assembly)
+- Added "Community by the numbers" mini-stats row (52+ sessions/yr, 12 masterclasses/yr, 4 demo days/yr, 1 Assembly)
+- Section inserted between CommunityPillarsSection and PastHighlightsSection
+
+Stage Summary:
+- Event detail popup works on click with smooth animations and ESC/backdrop close
+- Community rhythm section shows weekly/monthly/quarterly/annual cadence with dark cards
+- Mini-stats row shows annual community activity numbers
