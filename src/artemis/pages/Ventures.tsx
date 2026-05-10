@@ -326,6 +326,17 @@ function CaseStudiesSection() {
             />
           )}
         </AnimatePresence>
+
+        {/* Redirect to full Case Studies page */}
+        <div className="mt-12 md:mt-16 text-center">
+          <Link
+            to="/case-studies"
+            className="group inline-flex items-center gap-3 px-8 py-4 border border-[#111111] text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111] hover:bg-[#111111] hover:text-white transition-colors"
+          >
+            View All Case Studies
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
       </div>
     </section>
   );
