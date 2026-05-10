@@ -19,6 +19,7 @@ import { CareersPage } from "@/artemis/pages/CareersPage";
 import { Team } from "@/artemis/pages/Team";
 import { CaseStudies } from "@/artemis/pages/CaseStudies";
 import { Community } from "@/artemis/pages/Community";
+import { About } from "@/artemis/pages/About";
 import { InvestorDashboard } from "@/artemis/pages/InvestorDashboard";
 
 function Router() {
@@ -44,6 +45,7 @@ function Router() {
     if (path === "/case-studies") return <CaseStudies />;
     if (path === "/dashboard") return <InvestorDashboard />;
     if (path === "/community") return <Community />;
+    if (path === "/about") return <About />;
 
     // 404 fallback
     return (

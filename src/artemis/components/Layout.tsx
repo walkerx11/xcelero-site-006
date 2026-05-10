@@ -73,6 +73,7 @@ function Nav() {
   }, []);
 
   const navLinks = [
+    { name: "about", path: "/about" },
     { name: "approach", path: "/approach" },
     { name: "infrastructure", path: "/platform" },
     { name: "routes", path: "/routes" },
@@ -85,23 +86,25 @@ function Nav() {
 
   const mobileNavGroups = [
     {
+      label: "Company",
+      links: [
+        { name: "about", path: "/about" },
+        { name: "approach", path: "/approach" },
+        { name: "manifesto", path: "/manifesto" },
+      ],
+    },
+    {
       label: "The Platform",
       links: [
-        { name: "approach", path: "/approach" },
         { name: "infrastructure", path: "/platform" },
         { name: "routes", path: "/routes" },
-      ],
-    },
-    {
-      label: "Ventures & Capital",
-      links: [
         { name: "ventures", path: "/ventures" },
-        { name: "capital", path: "/capital" },
       ],
     },
     {
-      label: "Network",
+      label: "Capital & Network",
       links: [
+        { name: "capital", path: "/capital" },
         { name: "community", path: "/community" },
         { name: "careers", path: "/careers" },
         { name: "insights", path: "/insights" },
@@ -423,6 +426,7 @@ function Footer() {
           <div className="lg:col-span-6 grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="flex flex-col gap-4">
               <span className="text-[10px] font-bold tracking-widest uppercase text-white/30">xCelero Labs</span>
+              <Link to="/about" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">About</Link>
               <Link to="/ventures" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Companies</Link>
               <Link to="/careers" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Careers</Link>
               <Link to="/approach" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Who we back</Link>
