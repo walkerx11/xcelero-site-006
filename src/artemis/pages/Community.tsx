@@ -1,90 +1,298 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { Rocket, Settings, Coins, GraduationCap, ArrowRight, MapPin, Briefcase, BookOpen, Users } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import {
+  ArrowRight,
+  Calendar,
+  MapPin,
+  Users,
+  ChevronRight,
+  Clock,
+  Star,
+  Quote,
+  Sparkles,
+  Globe,
+  Microscope,
+  Building2,
+  Handshake,
+  Lightbulb,
+  Heart,
+} from "lucide-react";
 import { Link } from "@/artemis/router";
 
 /* ── Network Stats ── */
 const networkStats = [
-  { value: "1,000+", label: "Operators" },
-  { value: "190", label: "Hubs" },
-  { value: "39+", label: "Countries" },
-  { value: "4", label: "Engines" },
+  { value: "1,200+", label: "XCitizens", sub: "active members across the network" },
+  { value: "190", label: "Hubs", sub: "co-working, lab, and maker spaces" },
+  { value: "39+", label: "Countries", sub: "spanning the entire Route" },
+  { value: "840+", label: "Connections / mo", sub: "deals, intros, collaborations" },
 ];
 
-/* ── XCitizen Personas ── */
-const personas = [
+/* ── Gallery Images ── */
+const galleryImages = [
   {
-    icon: Rocket,
-    title: "Founders",
-    description:
-      "Building ventures from thesis to operating company. Access to prototyping labs, accelerator programs, and non-dilutive capital.",
+    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+    alt: "Team collaborating at a hub",
+    span: "col-span-2 row-span-2",
   },
   {
-    icon: Settings,
-    title: "Operators",
-    description:
-      "Running the Route infrastructure. Hub managers, lab technicians, logistics coordinators across 190 locations.",
+    src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80",
+    alt: "Workshop in progress",
+    span: "col-span-1 row-span-1",
   },
   {
-    icon: Coins,
-    title: "Investors",
-    description:
-      "Deploying capital through six vehicles. From $500 community notes to institutional thematic funds.",
+    src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80",
+    alt: "Community gathering",
+    span: "col-span-1 row-span-1",
   },
   {
-    icon: GraduationCap,
-    title: "Mentors",
-    description:
-      "Transferring knowledge across cohorts. Domain experts in energy, biotech, manufacturing, and defense.",
+    src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80",
+    alt: "Lab work at M1 Core",
+    span: "col-span-1 row-span-2",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80",
+    alt: "Founders working at XEmbassy",
+    span: "col-span-1 row-span-1",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",
+    alt: "Conference keynote",
+    span: "col-span-2 row-span-1",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=600&q=80",
+    alt: "Mentorship session",
+    span: "col-span-1 row-span-1",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80",
+    alt: "Team planning sprint",
+    span: "col-span-1 row-span-1",
   },
 ];
 
-/* ── How It Works Steps ── */
-const howItWorks = [
+/* ── Current Members (Featured XCitizens) ── */
+const featuredMembers = [
   {
-    step: "01",
-    title: "Apply or Get Nominated",
-    desc: "XCitizens enter through accelerator cohorts, hub memberships, or direct nomination by existing members.",
+    name: "Amina Osei-Mensah",
+    role: "CEO & Founder",
+    location: "Nairobi",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
+    type: "Founder",
   },
   {
-    step: "02",
-    title: "Get Matched to the Route",
-    desc: "Your skills, venture stage, and geography are matched to the right hub, program, and peer group.",
+    name: "David Kamau",
+    role: "CTO",
+    location: "Addis Ababa",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+    type: "Operator",
   },
   {
-    step: "03",
+    name: "Ngozi Eze",
+    role: "Sr. Investment Associate",
+    location: "Lagos",
+    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=400&q=80",
+    type: "Investor",
+  },
+  {
+    name: "Thandiwe Moyo",
+    role: "Director of Programs",
+    location: "Harare",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+    type: "Mentor",
+  },
+  {
+    name: "Yusuf Hassan",
+    role: "Accelerator Lead",
+    location: "Mombasa",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
+    type: "Operator",
+  },
+  {
+    name: "Fatima Al-Rashid",
+    role: "COO",
+    location: "Lagos",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
+    type: "Founder",
+  },
+  {
+    name: "Isata Bangura",
+    role: "Investment Associate",
+    location: "Freetown",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    type: "Investor",
+  },
+  {
+    name: "Marie-Claire Uwimana",
+    role: "Fellowship Director",
+    location: "Kigali",
+    image: "https://images.unsplash.com/photo-1570840306053-7a4117db0f62?auto=format&fit=crop&w=400&q=80",
+    type: "Mentor",
+  },
+  {
+    name: "Emeka Obi",
+    role: "Hub Operations Lead",
+    location: "Lagos",
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
+    type: "Operator",
+  },
+  {
+    name: "Samuel Mengistu",
+    role: "Investment Analyst",
+    location: "Addis Ababa",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+    type: "Investor",
+  },
+  {
+    name: "Liya Tadesse",
+    role: "Engineering Lead",
+    location: "Addis Ababa",
+    image: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?auto=format&fit=crop&w=400&q=80",
+    type: "Operator",
+  },
+  {
+    name: "Blessing Okonkwo",
+    role: "Route Infrastructure Mgr",
+    location: "Accra",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=400&q=80",
+    type: "Operator",
+  },
+];
+
+/* ── Upcoming Events ── */
+const upcomingEvents = [
+  {
+    title: "xCelero Accelerator Cohort 8 Demo Day",
+    date: "March 28, 2026",
+    time: "10:00 AM EAT",
+    location: "M1 Core Nairobi + Virtual",
+    type: "Demo Day",
+    description: "12 ventures from Cohort 8 present their validated MVPs to investors, partners, and the XCitizen network. Sector deep-dives in energy, life sciences, and digital finance.",
+    spots: "Limited to 200 attendees",
+    featured: true,
+  },
+  {
+    title: "Route Summit: Gulf of Guinea Arc",
+    date: "April 12, 2026",
+    time: "9:00 AM WAT",
+    location: "XEmbassy Lagos",
+    type: "Summit",
+    description: "Operators and founders from Lagos, Accra, and Abidjan convene for cross-hub deal flow sharing, infrastructure updates, and peer mentorship.",
+    spots: "Open to all XCitizens",
+    featured: false,
+  },
+  {
+    title: "Building in Life Sciences: From Lab to Market",
+    date: "April 25, 2026",
+    time: "2:00 PM EAT",
+    location: "Virtual Masterclass",
+    type: "Masterclass",
+    description: "Dr. Adebayo Ogunlesi leads a session on regulatory pathways for diagnostics and therapeutics in African markets. Case studies from Refract and Allele.",
+    spots: "Open to all XCitizens",
+    featured: false,
+  },
+  {
+    title: "xHansa Fellowship Applications Open",
+    date: "May 1 - May 31, 2026",
+    time: "Rolling admissions",
+    location: "All Route Hubs",
+    type: "Fellowship",
+    description: "The xHansa Fellowship seeds the talent pipeline. Semester-long program embedded in venture operations. Open to engineers, operators, and domain experts.",
+    spots: "50 fellowships available",
+    featured: false,
+  },
+  {
+    title: "Capital Roundtable: Thematic Fund Deep Dive",
+    date: "May 15, 2026",
+    time: "11:00 AM CAT",
+    location: "M1 Core Cape Town + Virtual",
+    type: "Investor Event",
+    description: "Deep dive into the xCelero Thematic Fund allocation strategy. Portfolio construction, sector weighting, and co-investment opportunities for LPs.",
+    spots: "Accredited investors only",
+    featured: true,
+  },
+  {
+    title: "Community Town Hall Q2",
+    date: "June 5, 2026",
+    time: "3:00 PM UTC",
+    location: "Virtual",
+    type: "Town Hall",
+    description: "Quarterly all-hands for the XCitizen network. Route updates, new hub openings, venture milestones, and community-driven agenda items.",
+    spots: "Open to all XCitizens",
+    featured: false,
+  },
+];
+
+/* ── Member Testimonials ── */
+const testimonials = [
+  {
+    quote: "I joined as a Fellow in Cohort 3. Within six months I was running operations for Helios in Kano. The network doesn't just connect you; it places you where you're needed most.",
+    name: "Chioma Adekunle",
+    role: "Operations Lead, Helios",
+    location: "Kano, Nigeria",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    quote: "The peer network is real. I needed a regulatory contact in Rwanda for our diagnostics pilot. An XCitizen in Kigali made the intro within 24 hours. That's the flywheel.",
+    name: "Dr. Kofi Mensah",
+    role: "Co-Founder, Refract",
+    location: "Cape Town, South Africa",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    quote: "As an investor, the deal flow is unlike anything else. Six vehicles, vetted ventures, and the infrastructure to actually de-risk early-stage Africa. I deployed through four SPVs last year.",
+    name: "Amara Diallo",
+    role: "LP, xCelero Capital",
+    location: "Dakar, Senegal",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
+  },
+];
+
+/* ── Community Pillars (What makes it tick) ── */
+const communityPillars = [
+  {
+    icon: Handshake,
+    title: "Trust-Based Introductions",
+    description: "Every connection is vetted. Members don't cold-pitch; they earn access through contribution. The result: higher-signal deals, faster trust, longer partnerships.",
+  },
+  {
+    icon: Globe,
+    title: "Borderless Collaboration",
+    description: "A founder in Nairobi works with an operator in Accra and an investor in London. The Route makes cross-border as easy as cross-desk.",
+  },
+  {
+    icon: Lightbulb,
+    title: "Knowledge Transfer",
+    description: "Workshops, playbooks, and field reports from ventures that have scaled on the Route. Hard-won lessons flow back into the network in real time.",
+  },
+  {
+    icon: Sparkles,
     title: "Compound Returns",
-    desc: "Every connection, deal, and collaboration strengthens the network for everyone. The flywheel accelerates.",
+    description: "Every new member strengthens the whole. Deals get faster, talent gets deeper, capital gets smarter. The flywheel accelerates with every connection made.",
   },
 ];
 
-/* ── Benefits ── */
-const benefits = [
+/* ── Past Event Highlights ── */
+const pastHighlights = [
   {
-    icon: MapPin,
-    title: "Route Access",
-    description:
-      "Work from any of 190 hubs. CNC machines, prototyping labs, and co-working spaces across 39 countries.",
+    title: "Cohort 7 Demo Day",
+    stat: "9 ventures",
+    detail: "raised $2.4M collectively",
+    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=400&q=80",
   },
   {
-    icon: Briefcase,
-    title: "Deal Flow",
-    description:
-      "First access to investment opportunities, venture data rooms, and co-investment rounds.",
+    title: "Route Summit East Africa",
+    stat: "180 attendees",
+    detail: "across 3 hub cities",
+    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=400&q=80",
   },
   {
-    icon: Users,
-    title: "Peer Network",
-    description:
-      "Connect with operators and founders building in the same vertical and geography.",
-  },
-  {
-    icon: BookOpen,
-    title: "Knowledge Base",
-    description:
-      "Workshops, playbooks, and field reports from ventures that have scaled on the Route.",
+    title: "Masterclass: Battery Chemistry",
+    stat: "340 viewers",
+    detail: "live + replay",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=80",
   },
 ];
 
@@ -95,17 +303,20 @@ export function Community() {
   return (
     <div className="bg-white text-[#111111]">
       <HeroSection />
+      <GalleryCollage />
       <NetworkStatsSection />
-      <WhoAreXCitizensSection />
-      <HowItWorksSection />
-      <BenefitsSection />
+      <FeaturedMembersSection />
+      <UpcomingEventsSection />
+      <TestimonialsSection />
+      <CommunityPillarsSection />
+      <PastHighlightsSection />
       <CTASection />
     </div>
   );
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO, Editorial centered with serif accent (matching Route/Capital pages)
+   HERO, Editorial centered with serif accent
    ══════════════════════════════════════════════════════════════════════════ */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -126,15 +337,35 @@ function HeroSection() {
           </span>
 
           <h1 className="text-[36px] sm:text-[48px] md:text-[60px] lg:text-[72px] leading-[1.05] font-display font-medium tracking-[-0.02em] mb-8 md:mb-10">
-            The fourth{" "}
-            <em className="italic font-serif text-[#FF4D00]">engine</em>.
+            Where builders{" "}
+            <em className="italic font-serif text-[#FF4D00]">compound</em>.
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl lg:text-[22px] leading-[1.6] text-[#111111]/50 font-medium max-w-2xl">
-            XCitizens are the connective tissue that turns individual efforts
-            into collective momentum. Operators, founders, investors, and
-            mentors across 190 hubs and 39 countries.
+            1,200+ operators, founders, investors, and mentors across 190 hubs
+            and 39 countries. The fourth engine that turns individual efforts
+            into collective momentum.
           </p>
+
+          {/* Quick stats row */}
+          <div className="flex flex-wrap justify-center gap-8 mt-10 md:mt-14 pt-8 border-t border-[#111111]/10">
+            <div className="text-center">
+              <div className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em]">1,200+</div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/35 mt-1">XCitizens</div>
+            </div>
+            <div className="text-center">
+              <div className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em]">190</div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/35 mt-1">Hubs</div>
+            </div>
+            <div className="text-center">
+              <div className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em]">39+</div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/35 mt-1">Countries</div>
+            </div>
+            <div className="text-center">
+              <div className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em]">840+</div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/35 mt-1">Connections/mo</div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -142,9 +373,9 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   NETWORK STATS, Inline metrics row
+   GALLERY COLLAGE, Masonry-style photo grid
    ══════════════════════════════════════════════════════════════════════════ */
-function NetworkStatsSection() {
+function GalleryCollage() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -154,20 +385,41 @@ function NetworkStatsSection() {
       className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10"
     >
       <div className="w-full max-w-[1400px] mx-auto">
-        <div className="flex flex-wrap justify-center gap-x-10 gap-y-8 md:gap-x-20 md:gap-y-10">
-          {networkStats.map((stat, i) => (
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-10 md:mb-14"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-4 block">
+            Life on the Route
+          </span>
+          <h2 className="text-[28px] md:text-[40px] font-display font-medium tracking-tight leading-[1.1]">
+            Inside the <em className="italic font-serif text-[#FF4D00]">network</em>
+          </h2>
+        </motion.div>
+
+        {/* Masonry grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 auto-rows-[180px] md:auto-rows-[200px]">
+          {galleryImages.map((img, i) => (
             <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
-              className="text-center min-w-[80px]"
+              key={i}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.06, ease: "easeOut" }}
+              className={`relative overflow-hidden group cursor-pointer ${img.span}`}
             >
-              <div className="text-[40px] sm:text-[48px] md:text-[64px] font-display font-medium tracking-[-0.03em] text-[#111111]">
-                {stat.value}
-              </div>
-              <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/35 mt-2">
-                {stat.label}
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              />
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                <span className="text-white text-[11px] font-mono font-bold tracking-[0.15em] uppercase">
+                  {img.alt}
+                </span>
               </div>
             </motion.div>
           ))}
@@ -178,11 +430,65 @@ function NetworkStatsSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   WHO ARE XCITIZENS, Grid of 4 persona cards
+   NETWORK STATS, Inline metrics row with sub-labels
    ══════════════════════════════════════════════════════════════════════════ */
-function WhoAreXCitizensSection() {
+function NetworkStatsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-16 md:py-20 px-6 md:px-12 lg:px-20 bg-[#FAFAFA] border-b border-[#111111]/10"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+          {networkStats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
+              className="text-center lg:text-left"
+            >
+              <div className="text-[40px] sm:text-[48px] md:text-[56px] font-display font-medium tracking-[-0.03em] text-[#111111]">
+                {stat.value}
+              </div>
+              <div className="text-[12px] font-mono font-bold tracking-[0.15em] uppercase text-[#111111]/60 mt-1">
+                {stat.label}
+              </div>
+              <div className="text-[12px] text-[#111111]/40 mt-1 font-medium">
+                {stat.sub}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FEATURED MEMBERS, Photo grid of current XCitizens
+   ══════════════════════════════════════════════════════════════════════════ */
+function FeaturedMembersSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [filter, setFilter] = useState<string>("all");
+
+  const filters = ["all", "Founder", "Operator", "Investor", "Mentor"];
+
+  const filteredMembers =
+    filter === "all"
+      ? featuredMembers
+      : featuredMembers.filter((m) => m.type === filter);
+
+  const typeColor: Record<string, string> = {
+    Founder: "bg-[#FF4D00] text-white",
+    Operator: "bg-[#111111] text-white",
+    Investor: "bg-[#FF4D00]/10 text-[#FF4D00]",
+    Mentor: "bg-[#111111]/10 text-[#111111]",
+  };
 
   return (
     <section
@@ -195,45 +501,90 @@ function WhoAreXCitizensSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-3xl mx-auto text-center mb-16 md:mb-24"
+          className="max-w-3xl mx-auto text-center mb-10 md:mb-14"
         >
           <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
-            Who Are XCitizens
+            Current Members
           </span>
-          <h2 className="text-[32px] md:text-[48px] lg:text-[60px] font-display font-medium tracking-tight leading-[1.05] mb-6">
-            Four roles, <span className="text-[#111111]/40">one network</span>.
+          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05] mb-6">
+            The people on the{" "}
+            <em className="italic font-serif text-[#FF4D00]">Route</em>.
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            Every XCitizen plays a distinct part in the flywheel. Whether you
-            build, operate, invest, or teach, your contribution compounds
-            across the Route.
+            Founders building ventures, operators running infrastructure,
+            investors deploying capital, mentors transferring knowledge. Every
+            XCitizen plays a part.
           </p>
         </motion.div>
 
-        {/* Persona grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {personas.map((persona, i) => {
-            const Icon = persona.icon;
-            return (
+        {/* Filter tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+          className="flex flex-wrap justify-center gap-2 mb-10 md:mb-14"
+        >
+          {filters.map((f) => (
+            <button
+              key={f}
+              suppressHydrationWarning
+              onClick={() => setFilter(f)}
+              className={`px-4 py-2 text-[11px] font-mono font-bold tracking-[0.12em] uppercase border transition-colors ${
+                filter === f
+                  ? "bg-[#111111] text-white border-[#111111]"
+                  : "bg-white text-[#111111]/50 border-[#111111]/15 hover:border-[#111111]/30"
+              }`}
+            >
+              {f}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Members grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-5">
+          <AnimatePresence mode="popLayout">
+            {filteredMembers.map((member, i) => (
               <motion.div
-                key={persona.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
-                className="border border-[#111111]/10 bg-white p-6 md:p-8 hover:border-[#FF4D00]/30 transition-colors group"
+                key={member.name}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.35, delay: i * 0.04, ease: "easeOut" }}
+                className="group"
               >
-                <div className="w-12 h-12 border border-[#111111]/10 flex items-center justify-center mb-5 group-hover:border-[#FF4D00] group-hover:text-[#FF4D00] transition-colors">
-                  <Icon className="w-5 h-5" strokeWidth={1.5} />
+                <div className="border border-[#111111]/10 bg-white overflow-hidden hover:border-[#FF4D00]/30 transition-all duration-300">
+                  {/* Photo */}
+                  <div className="aspect-[4/5] overflow-hidden relative">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                    />
+                    {/* Type badge */}
+                    <div className="absolute top-2 left-2">
+                      <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-1 ${typeColor[member.type]}`}>
+                        {member.type}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Info */}
+                  <div className="p-3 md:p-4">
+                    <h3 className="text-[14px] md:text-[15px] font-display font-medium tracking-tight leading-tight">
+                      {member.name}
+                    </h3>
+                    <p className="text-[11px] text-[#111111]/50 font-medium mt-1">
+                      {member.role}
+                    </p>
+                    <div className="flex items-center gap-1 mt-2 text-[10px] text-[#111111]/35 font-medium">
+                      <MapPin className="w-3 h-3" />
+                      {member.location}
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-[20px] md:text-[24px] font-display font-medium tracking-tight mb-3">
-                  {persona.title}
-                </h3>
-                <p className="text-[14px] md:text-[15px] text-[#111111]/55 leading-[1.7] font-medium">
-                  {persona.description}
-                </p>
               </motion.div>
-            );
-          })}
+            ))}
+          </AnimatePresence>
         </div>
       </div>
     </section>
@@ -241,11 +592,20 @@ function WhoAreXCitizensSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HOW IT WORKS, 3-step process (matching Approach.tsx step-card style)
+   UPCOMING EVENTS, Cards with dates, locations, and registration
    ══════════════════════════════════════════════════════════════════════════ */
-function HowItWorksSection() {
+function UpcomingEventsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const eventTypeColor: Record<string, string> = {
+    "Demo Day": "bg-[#FF4D00] text-white",
+    Summit: "bg-[#111111] text-white",
+    Masterclass: "bg-[#FF4D00]/10 text-[#FF4D00]",
+    Fellowship: "bg-[#111111]/10 text-[#111111]",
+    "Investor Event": "bg-[#FF4D00] text-white",
+    "Town Hall": "bg-[#111111]/10 text-[#111111]",
+  };
 
   return (
     <section
@@ -258,84 +618,112 @@ function HowItWorksSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center max-w-3xl mx-auto mb-16 md:mb-24"
+          className="max-w-3xl mx-auto text-center mb-10 md:mb-14"
         >
           <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
-            How It Works
+            Upcoming Events
           </span>
-          <h2 className="text-[32px] md:text-[48px] lg:text-[60px] font-display font-medium tracking-tight leading-[1.05] mb-6">
-            Three steps to the{" "}
-            <span className="text-[#111111]/40">flywheel</span>.
+          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05] mb-6">
+            Where the network{" "}
+            <em className="italic font-serif text-[#FF4D00]">gathers</em>.
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            The network gets stronger with every member. Here is how you enter,
-            find your place, and start compounding.
+            Demo days, summits, masterclasses, and town halls. The community
+            compounds when it convenes.
           </p>
         </motion.div>
 
-        {/* Step cards */}
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-            {howItWorks.map((step, i) => (
-              <HowItWorksCard key={step.step} step={step} index={i} />
-            ))}
-          </div>
+        {/* Events list */}
+        <div className="max-w-5xl mx-auto space-y-4">
+          {upcomingEvents.map((event, i) => (
+            <motion.div
+              key={event.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
+              className={`group border bg-white p-5 md:p-7 hover:shadow-md transition-all duration-300 ${
+                event.featured
+                  ? "border-[#FF4D00]/30 hover:border-[#FF4D00]/60"
+                  : "border-[#111111]/10 hover:border-[#111111]/20"
+              }`}
+            >
+              <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-8">
+                {/* Date block */}
+                <div className="lg:w-[140px] flex-shrink-0">
+                  <div className="flex lg:flex-col items-center lg:items-start gap-3 lg:gap-1">
+                    <Calendar className="w-4 h-4 text-[#FF4D00] lg:mb-2" />
+                    <div className="text-[13px] font-mono font-bold tracking-[0.05em] text-[#111111]">
+                      {event.date}
+                    </div>
+                    <div className="text-[11px] text-[#111111]/40 font-medium flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {event.time}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <h3 className="text-[17px] md:text-[20px] font-display font-medium tracking-tight leading-tight group-hover:text-[#FF4D00] transition-colors">
+                      {event.title}
+                    </h3>
+                    <span className={`text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 ${eventTypeColor[event.type] || "bg-[#111111]/10 text-[#111111]"}`}>
+                      {event.type}
+                    </span>
+                    {event.featured && (
+                      <span className="text-[9px] font-mono font-bold tracking-[0.1em] uppercase px-2 py-0.5 bg-[#FF4D00]/10 text-[#FF4D00] flex items-center gap-1">
+                        <Star className="w-3 h-3" />
+                        Featured
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[13px] md:text-[14px] text-[#111111]/55 leading-[1.65] font-medium mb-3">
+                    {event.description}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-4 text-[11px] text-[#111111]/40 font-medium">
+                    <span className="flex items-center gap-1">
+                      <MapPin className="w-3 h-3" />
+                      {event.location}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Users className="w-3 h-3" />
+                      {event.spots}
+                    </span>
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <div className="flex-shrink-0 self-start">
+                  <button className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#111111] text-[11px] font-bold uppercase tracking-[0.1em] hover:bg-[#111111] hover:text-white transition-colors group/btn">
+                    RSVP
+                    <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* View all link */}
+        <div className="text-center mt-10">
+          <Link
+            to="/insights"
+            className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.12em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
+          >
+            View past event recaps
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </div>
     </section>
   );
 }
 
-function HowItWorksCard({
-  step,
-  index,
-}: {
-  step: (typeof howItWorks)[number];
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.15, ease: "easeOut" }}
-      className="group"
-    >
-      <div className="border-l-4 border-[#FF4D00] pt-8 pb-8 px-6 md:px-8 bg-white shadow-sm hover:shadow-md transition-all duration-300 min-h-[280px] flex flex-col justify-between hover:-translate-y-1">
-        {/* Top content */}
-        <div>
-          <div className="text-[48px] md:text-[56px] font-display font-medium tracking-[-0.03em] leading-none text-[#FF4D00] mb-6">
-            {step.step}
-          </div>
-          <h3 className="text-[22px] md:text-[26px] font-display font-medium tracking-tight leading-[1.15] mb-5 text-[#111111]">
-            {step.title}
-          </h3>
-          <p className="text-[15px] md:text-[16px] text-[#111111]/55 font-medium leading-[1.7]">
-            {step.desc}
-          </p>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#111111]/5">
-          <span className="text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/30">
-            Step {step.step}
-          </span>
-          <span className="w-8 h-8 rounded-full border border-[#111111]/10 flex items-center justify-center text-[#111111]/30 group-hover:border-[#FF4D00] group-hover:text-[#FF4D00] transition-all">
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </span>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 /* ══════════════════════════════════════════════════════════════════════════
-   BENEFITS, 4-column grid (matching Careers culture section)
+   TESTIMONIALS, Member voices
    ══════════════════════════════════════════════════════════════════════════ */
-function BenefitsSection() {
+function TestimonialsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -350,45 +738,57 @@ function BenefitsSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-3xl mx-auto text-center mb-16 md:mb-24"
+          className="max-w-3xl mx-auto text-center mb-14 md:mb-20"
         >
           <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
-            Benefits
+            Member Voices
           </span>
-          <h2 className="text-[32px] md:text-[48px] lg:text-[60px] font-display font-medium tracking-tight leading-[1.05] mb-6">
-            What you gain as an{" "}
-            <em className="italic font-serif text-[#FF4D00]">XCitizen</em>.
+          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05]">
+            What XCitizens{" "}
+            <em className="italic font-serif text-[#FF4D00]">say</em>.
           </h2>
         </motion.div>
 
-        {/* Benefits grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {benefits.map((benefit, i) => {
-            const Icon = benefit.icon;
-            return (
-              <motion.div
-                key={benefit.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.1,
-                  ease: "easeOut",
-                }}
-                className="border border-[#111111]/10 bg-white p-6 hover:border-[#111111]/20 transition-colors group"
-              >
-                <div className="w-10 h-10 border border-[#111111]/10 flex items-center justify-center mb-5 group-hover:border-[#FF4D00] group-hover:text-[#FF4D00] transition-colors">
-                  <Icon className="w-5 h-5" />
+        {/* Testimonial cards */}
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          {testimonials.map((testimonial, i) => (
+            <motion.div
+              key={testimonial.name}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+              className="border border-[#111111]/10 p-6 md:p-8 hover:border-[#FF4D00]/20 transition-colors relative"
+            >
+              {/* Quote icon */}
+              <Quote className="w-8 h-8 text-[#FF4D00]/20 mb-6" />
+
+              {/* Quote text */}
+              <p className="text-[15px] md:text-[16px] leading-[1.75] text-[#111111]/70 font-medium mb-8">
+                &ldquo;{testimonial.quote}&rdquo;
+              </p>
+
+              {/* Author */}
+              <div className="flex items-center gap-3 pt-6 border-t border-[#111111]/5">
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="w-10 h-10 rounded-full object-cover grayscale"
+                />
+                <div>
+                  <div className="text-[14px] font-display font-medium tracking-tight">
+                    {testimonial.name}
+                  </div>
+                  <div className="text-[11px] text-[#111111]/40 font-medium">
+                    {testimonial.role}
+                  </div>
+                  <div className="text-[10px] text-[#111111]/30 font-medium flex items-center gap-1 mt-0.5">
+                    <MapPin className="w-2.5 h-2.5" />
+                    {testimonial.location}
+                  </div>
                 </div>
-                <h3 className="text-lg font-display font-medium tracking-tight mb-3">
-                  {benefit.title}
-                </h3>
-                <p className="text-[13px] text-[#111111]/55 leading-[1.65] font-medium">
-                  {benefit.description}
-                </p>
-              </motion.div>
-            );
-          })}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -396,7 +796,205 @@ function BenefitsSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   CTA SECTION, Dark bg (matching other pages)
+   COMMUNITY PILLARS, How the network compounds
+   ══════════════════════════════════════════════════════════════════════════ */
+function CommunityPillarsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 bg-[#111111] text-white"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-3xl mx-auto text-center mb-14 md:mb-20"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
+            How It Works
+          </span>
+          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05] mb-6">
+            The flywheel{" "}
+            <em className="italic font-serif text-[#FF4D00]">effect</em>.
+          </h2>
+          <p className="text-[17px] md:text-[19px] text-white/40 font-medium leading-relaxed">
+            Community isn't a feature; it's the compound engine. Here's how
+            XCitizens turn individual effort into collective momentum.
+          </p>
+        </motion.div>
+
+        {/* Pillar rows */}
+        <div className="max-w-5xl mx-auto space-y-0">
+          {communityPillars.map((pillar, i) => {
+            const Icon = pillar.icon;
+            return (
+              <motion.div
+                key={pillar.title}
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{
+                  duration: 0.6,
+                  delay: i * 0.15,
+                  ease: "easeOut",
+                }}
+                className="group flex flex-col md:flex-row md:items-start gap-5 md:gap-8 py-8 md:py-10 border-t border-white/10"
+              >
+                {/* Icon + Number */}
+                <div className="flex items-center gap-4 md:w-[200px] flex-shrink-0">
+                  <div className="w-12 h-12 border border-white/10 flex items-center justify-center group-hover:border-[#FF4D00] group-hover:text-[#FF4D00] transition-colors">
+                    <Icon className="w-5 h-5" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-white/25">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1">
+                  <h3 className="text-[20px] md:text-[24px] font-display font-medium tracking-tight mb-3 group-hover:text-[#FF4D00] transition-colors">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-[14px] md:text-[15px] text-white/45 leading-[1.7] font-medium max-w-lg">
+                    {pillar.description}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* How to join flow */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+          className="max-w-5xl mx-auto mt-12 md:mt-16 pt-10 border-t border-white/10"
+        >
+          <h3 className="text-[20px] md:text-[24px] font-display font-medium tracking-tight mb-8 text-center">
+            Three steps to the flywheel
+          </h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                step: "01",
+                title: "Apply or Get Nominated",
+                desc: "XCitizens enter through accelerator cohorts, hub memberships, or direct nomination by existing members.",
+              },
+              {
+                step: "02",
+                title: "Get Matched to the Route",
+                desc: "Your skills, venture stage, and geography are matched to the right hub, program, and peer group.",
+              },
+              {
+                step: "03",
+                title: "Compound Returns",
+                desc: "Every connection, deal, and collaboration strengthens the network for everyone. The flywheel accelerates.",
+              },
+            ].map((step, i) => (
+              <div key={step.step} className="relative">
+                <div className="text-[48px] md:text-[56px] font-display font-medium tracking-[-0.03em] leading-none text-[#FF4D00]/30 mb-3">
+                  {step.step}
+                </div>
+                <h4 className="text-[17px] font-display font-medium tracking-tight mb-2">
+                  {step.title}
+                </h4>
+                <p className="text-[13px] text-white/40 leading-[1.65] font-medium">
+                  {step.desc}
+                </p>
+                {i < 2 && (
+                  <div className="hidden md:block absolute top-8 -right-3 text-white/15">
+                    <ChevronRight className="w-6 h-6" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PAST HIGHLIGHTS, Photo-backed stat cards
+   ══════════════════════════════════════════════════════════════════════════ */
+function PastHighlightsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-16 md:py-24 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10"
+    >
+      <div className="w-full max-w-[1400px] mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-3xl mx-auto text-center mb-12 md:mb-16"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
+            Recent Highlights
+          </span>
+          <h2 className="text-[32px] md:text-[48px] lg:text-[56px] font-display font-medium tracking-tight leading-[1.05]">
+            What the community{" "}
+            <em className="italic font-serif text-[#FF4D00]">built</em>.
+          </h2>
+        </motion.div>
+
+        {/* Highlight cards */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {pastHighlights.map((highlight, i) => (
+            <motion.div
+              key={highlight.title}
+              initial={{ opacity: 0, y: 25 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                duration: 0.5,
+                delay: i * 0.12,
+                ease: "easeOut",
+              }}
+              className="group relative overflow-hidden border border-[#111111]/10 hover:border-[#FF4D00]/30 transition-all duration-300"
+            >
+              {/* Image */}
+              <div className="aspect-[16/10] overflow-hidden">
+                <img
+                  src={highlight.image}
+                  alt={highlight.title}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                />
+              </div>
+              {/* Content */}
+              <div className="p-5 md:p-6">
+                <h3 className="text-[17px] md:text-[20px] font-display font-medium tracking-tight mb-2">
+                  {highlight.title}
+                </h3>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[28px] md:text-[36px] font-display font-medium tracking-[-0.02em] text-[#FF4D00]">
+                    {highlight.stat}
+                  </span>
+                  <span className="text-[13px] text-[#111111]/45 font-medium">
+                    {highlight.detail}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CTA SECTION, Dark bg with warm community messaging
    ══════════════════════════════════════════════════════════════════════════ */
 function CTASection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -423,9 +1021,9 @@ function CTASection() {
           </h2>
 
           <p className="text-base sm:text-lg md:text-xl leading-[1.6] text-white/50 font-medium max-w-2xl mb-10 sm:mb-14">
-            The network that builds the next century is accepting new members.
-            Apply to the Accelerator, invest through xCelero Capital, or join a
-            hub near you.
+            1,200+ builders already on the Route. The network that builds the
+            next century is accepting new members. Apply to the Accelerator,
+            invest through xCelero Capital, or join a hub near you.
           </p>
 
           <div className="flex flex-wrap gap-4 items-center justify-center">
