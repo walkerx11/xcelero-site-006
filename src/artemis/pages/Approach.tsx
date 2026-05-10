@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { Plus, Minus, ArrowRight, ChevronDown, Building2, Rocket, Coins } from "lucide-react";
+import { Plus, Minus, ArrowRight, ChevronDown, Building2, Rocket, Coins, Users } from "lucide-react";
 import { Link } from "@/artemis/router";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
 
@@ -13,7 +13,7 @@ const heroMetrics = [
   { value: "$1-7M", label: "Initial Investment Range" },
 ];
 
-/* ── The 3 Engines ── */
+/* ── The 4 Engines ── */
 const engines = [
   {
     num: "01",
@@ -24,7 +24,7 @@ const engines = [
   },
   {
     num: "02",
-    title: "Projects",
+    title: "Ventures",
     icon: Rocket,
     desc: "Convening industry, government, and entrepreneurs to run real-world pilots. Structured commercialization programs — from the Quest Fellowship to industry sprints — transforming ideas into tangible change at civilizational scale.",
     link: "/programs",
@@ -35,6 +35,13 @@ const engines = [
     icon: Coins,
     desc: "Mobilizing capital through dedicated funds and SPVs. Blending grants, risk capital, and project finance to ensure transformative tech scales. Solidarity pricing so founders in early-stage markets access the same quality at a fraction of Silicon Valley costs.",
     link: "/capital",
+  },
+  {
+    num: "04",
+    title: "Community",
+    icon: Users,
+    desc: "The XCitizens network — operators, founders, investors, and mentors creating compound network effects across the Route. Every hub, every cohort, every deal strengthens the connective tissue that turns individual efforts into collective momentum.",
+    link: "/join",
   },
 ];
 
@@ -161,7 +168,7 @@ function HeroSection() {
           </h1>
 
           <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#111111]/60 font-medium max-w-lg">
-            We back founders who go unreasonably deep to get their beginnings right — and we provide the infrastructure, projects, and capital to make it work.
+            We back founders who go unreasonably deep to get their beginnings right — and we provide the infrastructure, ventures, capital, and community to make it work.
           </p>
         </motion.div>
 
@@ -194,7 +201,7 @@ function HeroSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   3 ENGINES — Moved from Infrastructure page
+   4 ENGINES — Moved from Infrastructure page
    ══════════════════════════════════════════════════════════════════════════ */
 function ThreeEnginesSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -214,18 +221,18 @@ function ThreeEnginesSection() {
           className="max-w-3xl mb-16 md:mb-24"
         >
           <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-6 block">
-            The 3 Engines
+            The 4 Engines
           </span>
           <h2 className="text-[32px] md:text-[48px] lg:text-[60px] font-display font-medium tracking-tight leading-[1.05] mb-6">
-            Three engines, <span className="text-[#111111]/40">one machine.</span>
+            Four engines, <span className="text-[#111111]/40">one machine.</span>
           </h2>
           <p className="text-[17px] md:text-[19px] text-[#111111]/50 font-medium leading-relaxed">
-            xCelero operates through three integrated engines — Infrastructure, Projects, and Capital — each reinforcing the others to unblock commercialization at civilizational scale.
+            xCelero operates through four integrated engines — Infrastructure, Ventures, Capital, and Community — each reinforcing the others to unblock commercialization at civilizational scale.
           </p>
         </motion.div>
 
         {/* Engine cards */}
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {engines.map((engine, i) => {
             const Icon = engine.icon;
             return (

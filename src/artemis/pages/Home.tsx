@@ -10,6 +10,7 @@ import {
   Building2,
   Rocket,
   Coins,
+  Users,
   MapPin,
 } from "lucide-react";
 import { ReviewSection } from "@/artemis/components/ReviewSection";
@@ -65,11 +66,11 @@ const pillars = [
     link: "/platform",
   },
   {
-    id: "projects",
+    id: "ventures",
     icon: Rocket,
-    heading: "Projects",
+    heading: "Ventures",
     subtext:
-      "Startup commercialization programs with industry & government partners",
+      "Venture commercialization programs with industry & government partners",
     description:
       "We run structured commercialization programs that take ventures from idea to revenue. Each program is co-designed with industry and government partners who provide market access, pilot opportunities, and first-customer contracts. The Quest Fellowship — our flagship semester-long program run in collaboration with DDQIC at Queen's University — uses MIT's Disciplined Entrepreneurship framework to guide founders through 24 steps of validated learning. Programs run on the Route, connecting cohorts across hub cities for shared deal flow and peer support.",
     images: [
@@ -102,6 +103,26 @@ const pillars = [
       },
     ],
     link: "/capital",
+  },
+  {
+    id: "community",
+    icon: Users,
+    heading: "Community",
+    subtext:
+      "The XCitizens network — operators, founders, investors & mentors across the Route",
+    description:
+      "The fourth engine. Community is the connective tissue that turns individual efforts into collective momentum. The XCitizens network spans every hub on the Route — operators who run infrastructure, founders building ventures, investors deploying capital, and mentors transferring knowledge. Compound network effects mean every new member strengthens the whole, creating a flywheel that accelerates commercialization for everyone.",
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
+        alt: "Team collaboration",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80",
+        alt: "Community gathering",
+      },
+    ],
+    link: "/join",
   },
 ];
 
@@ -285,7 +306,7 @@ function IntroSection() {
             starting line.{" "}
             <span className="text-[#111111]">
               xCelero unblocks commercialization through infrastructure,
-              projects, and capital in the geographies that need it most
+              ventures, capital, and community in the geographies that need it most
             </span>{" "}
             — so the right ideas don&apos;t just survive, they scale.
           </p>

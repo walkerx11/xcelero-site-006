@@ -280,7 +280,6 @@ export function Capital() {
   return (
     <div className="bg-white text-[#111111]">
       <Hero onSubscribe={() => setShowSubscribe(true)} />
-      <StatsBar />
       <InvestmentVehicles />
       <InvestmentTiers />
       <PortfolioSectors />
@@ -298,29 +297,63 @@ export function Capital() {
    HERO — Editorial centered with serif accent
    ══════════════════════════════════════════════════════════════════════════ */
 function Hero({ onSubscribe }: { onSubscribe: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  const heroStats = [
+    { value: capitalTarget, label: "Capital target" },
+    { value: String(totalVentures), label: "Active ventures" },
+    { value: `${totalCountries}+`, label: "Countries" },
+    { value: "6", label: "Investment vehicles" },
+    { value: String(totalHubs), label: "Route hubs" },
+  ];
+
   return (
-    <section className="bg-[#FAFAFA] py-16 md:py-24 lg:py-32 px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
-      <div className="w-full max-w-[1400px] mx-auto text-center">
+    <section className="relative bg-white text-[#111111] pt-24 pb-16 sm:pt-32 sm:pb-20 md:pt-44 md:pb-28 px-5 sm:px-6 md:px-12 lg:px-20 border-b border-[#111111]/10">
+      <div ref={ref} className="w-full max-w-4xl mx-auto text-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col items-center"
         >
-          <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#FF4D00] mb-6 block">
+          {/* Small label */}
+          <span className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-[#FF4D00] mb-8 md:mb-12">
             xCelero Capital
           </span>
-          <h1 className="text-[36px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-display font-medium tracking-[-0.03em] leading-[0.9] mb-6">
+
+          <h1 className="text-[36px] sm:text-[48px] md:text-[60px] lg:text-[72px] leading-[1.05] font-display font-medium tracking-[-0.02em] mb-8 md:mb-10">
             Invest in{" "}
-            <em className="font-serif italic text-[#FF4D00]">critical</em>
-            <br />
+            <em className="italic font-serif text-[#FF4D00]">critical</em>{" "}
             technology from $500
           </h1>
-          <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#111111]/60 font-medium max-w-xl mx-auto mb-10">
+
+          <p className="text-base sm:text-lg md:text-xl lg:text-[22px] leading-[1.6] text-[#111111]/50 font-medium max-w-2xl mb-10 sm:mb-14 md:mb-20">
             Six investment vehicles. One thesis: the technology that defines
             the next century will be built in the markets that need it most.
             xCelero gives you access to that pipeline.
           </p>
+
+          {/* Stats metrics row — matching Route page style */}
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-5 sm:gap-x-10 md:gap-x-16 mb-10 sm:mb-14 md:mb-20">
+            {heroStats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 10 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.4 + i * 0.08, ease: "easeOut" }}
+                className="text-center min-w-[60px]"
+              >
+                <div className="text-[26px] sm:text-[32px] md:text-[40px] font-display font-medium tracking-[-0.02em] text-[#111111]">
+                  {stat.value}
+                </div>
+                <div className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#111111]/35 mt-1">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
           <div className="flex flex-wrap gap-4 items-center justify-center">
             <Link
               to="#invest-tiers"
