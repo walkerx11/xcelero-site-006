@@ -16,6 +16,7 @@ import {
   Globe,
   Lightbulb,
   Users,
+  Crown,
 } from "lucide-react";
 import { teamData, TeamMember } from "@/artemis/data/team";
 
@@ -378,6 +379,17 @@ function HowWeWorkSection() {
   );
 }
 
+/* ── Helper: Get initials from name ── */
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .filter((part) => !part.endsWith("."))
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
 /* ── Team Card ── */
 function TeamCard({
   member,
@@ -392,6 +404,8 @@ function TeamCard({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const cardInView = useInView(ref, { once: true, margin: "-20px" });
+  const initials = getInitials(member.name);
+  const isFounder = member.isFounder;
 
   return (
     <motion.div
@@ -400,26 +414,41 @@ function TeamCard({
       animate={cardInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.04, ease: "easeOut" }}
       className={`border p-5 md:p-6 bg-white transition-all duration-300 cursor-pointer group ${
-        isExpanded
-          ? "border-[#FF4D00]/30"
-          : "border-[#111111]/8 hover:border-[#FF4D00]/25"
+        isFounder
+          ? isExpanded
+            ? "border-[#FF4D00]/40"
+            : "border-[#FF4D00]/20 hover:border-[#FF4D00]/40"
+          : isExpanded
+            ? "border-[#FF4D00]/30"
+            : "border-[#111111]/8 hover:border-[#FF4D00]/25"
       }`}
       onClick={onToggle}
     >
-      {/* Photo + Name */}
+      {/* Monogram + Name */}
       <div className="flex items-start gap-4 mb-3">
-        <div className="shrink-0 w-12 h-12 md:w-14 md:h-14 overflow-hidden bg-[#F5F5F5]">
-          <img
-            src={member.image}
-            alt={member.name}
-            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-          />
+        <div
+          className={`shrink-0 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center ${
+            isFounder
+              ? "bg-[#FF4D00] text-white"
+              : "bg-[#111111] text-white/70 group-hover:bg-[#111111]/80 transition-colors"
+          }`}
+        >
+          <span className="text-[14px] md:text-[16px] font-display font-medium tracking-tight leading-none">
+            {initials}
+          </span>
         </div>
         <div className="min-w-0 flex-1">
-          <h4 className="text-[16px] md:text-[18px] font-display font-medium tracking-tight leading-[1.2] mb-0.5">
-            {member.name}
-          </h4>
-          <p className="text-[12px] md:text-[13px] text-[#FF4D00] font-medium leading-[1.4]">
+          <div className="flex items-center gap-1.5">
+            <h4 className="text-[16px] md:text-[18px] font-display font-medium tracking-tight leading-[1.2] mb-0.5">
+              {member.name}
+            </h4>
+            {isFounder && (
+              <Crown className="w-3.5 h-3.5 text-[#FF4D00] shrink-0" strokeWidth={1.5} />
+            )}
+          </div>
+          <p className={`text-[12px] md:text-[13px] font-medium leading-[1.4] ${
+            isFounder ? "text-[#FF4D00]" : "text-[#FF4D00]/70"
+          }`}>
             {member.role}
           </p>
         </div>
