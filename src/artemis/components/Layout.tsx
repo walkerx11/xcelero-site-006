@@ -74,7 +74,7 @@ function Nav() {
 
   const navLinks = [
     { name: "about", path: "/about" },
-    { name: "approach", path: "/approach" },
+    { name: "how we work", path: "/approach" },
     { name: "infrastructure", path: "/platform" },
     { name: "routes", path: "/routes" },
     { name: "ventures", path: "/ventures" },
@@ -89,7 +89,7 @@ function Nav() {
       label: "Company",
       links: [
         { name: "about", path: "/about" },
-        { name: "approach", path: "/approach" },
+        { name: "how we work", path: "/approach" },
         { name: "manifesto", path: "/manifesto" },
       ],
     },
@@ -429,7 +429,7 @@ function Footer() {
               <Link to="/about" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">About</Link>
               <Link to="/ventures" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Companies</Link>
               <Link to="/careers" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Careers</Link>
-              <Link to="/approach" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">Who we back</Link>
+              <Link to="/approach" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">How we work</Link>
               <Link to="/insights" className="text-[13px] font-bold text-white/60 hover:text-white transition-colors">News</Link>
             </div>
 

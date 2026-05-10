@@ -130,14 +130,14 @@ const manifestoPoints = [
 const categories = [
   { key: "all", label: "All" },
   { key: "leadership", label: "Leadership" },
-  { key: "investment", label: "Investment" },
-  { key: "programs", label: "Programs" },
-  { key: "infrastructure", label: "Infrastructure" },
-  { key: "advisory", label: "Advisory" },
+  { key: "partners", label: "Partners" },
+  { key: "venture-building", label: "Venture Building" },
+  { key: "platform", label: "Platform" },
+  { key: "operations", label: "Operations" },
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
-   ABOUT PAGE — Flowing narrative + distinct team section
+   ABOUT PAGE — Flowing narrative + distinct team + manifesto cards
    ══════════════════════════════════════════════════════════════════════════ */
 export function About() {
   return (
@@ -145,6 +145,7 @@ export function About() {
       <OpeningSection />
       <FlowingContent />
       <TeamSection />
+      <ManifestoCardsSection />
       <ClosingCTA />
     </div>
   );
@@ -420,9 +421,9 @@ function TeamSection() {
             <em className="italic font-serif text-[#FF4D00]">platform</em>.
           </h2>
           <p className="text-[15px] md:text-[17px] text-[#111111]/40 font-medium leading-[1.6] max-w-xl">
-            Operators, investors, engineers, and builders across six African
-            cities. United by a single thesis: critical technology belongs in
-            the markets that need it most.
+            Founders, scientists, engineers, investors, and operators. Now we
+            use our expertise to help critical technology founders go further,
+            faster.
           </p>
         </motion.div>
 
@@ -475,17 +476,6 @@ function TeamSection() {
             ))}
           </motion.div>
         </AnimatePresence>
-
-        {/* Link to full team page */}
-        <div className="mt-8 md:mt-10">
-          <Link
-            to="/team"
-            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
-          >
-            Full team page
-            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-        </div>
       </div>
     </section>
   );
@@ -581,6 +571,83 @@ function TeamCard({
         />
       </div>
     </motion.div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MANIFESTO CARDS — Horizontal side-by-side cards below team
+   ══════════════════════════════════════════════════════════════════════════ */
+function ManifestoCardsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section
+      ref={ref}
+      className="py-16 md:py-24 px-5 sm:px-6 md:px-12 lg:px-20 bg-white"
+    >
+      <div className="w-full max-w-[1200px] mx-auto">
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mb-10 md:mb-14"
+        >
+          <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-[#FF4D00] mb-4 block">
+            What we believe
+          </span>
+          <h2 className="text-[28px] md:text-[40px] lg:text-[48px] font-display font-medium tracking-tight leading-[1.08] mb-4">
+            Not incrementalists.{" "}
+            <em className="italic font-serif text-[#FF4D00]">Systematic maximalists</em>.
+          </h2>
+        </motion.div>
+
+        {/* Horizontal cards grid */}
+        <div className="grid md:grid-cols-3 gap-4 md:gap-5">
+          {manifestoPoints.map((point, i) => (
+            <motion.div
+              key={point.number}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: i * 0.12, ease: "easeOut" }}
+              className="border border-[#111111]/8 p-6 md:p-8 bg-[#FAFAFA] group hover:border-[#FF4D00]/20 transition-colors"
+            >
+              {/* Number + label */}
+              <div className="flex items-center gap-2 mb-5">
+                <span className="text-[11px] font-mono font-bold tracking-[0.15em] text-[#FF4D00]">
+                  {point.number}
+                </span>
+                <span className="text-[10px] font-mono font-bold tracking-[0.1em] uppercase text-[#111111]/25">
+                  {point.title}
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h3 className="text-[20px] md:text-[24px] font-display font-medium tracking-tight leading-[1.2] mb-4">
+                {point.heading}
+              </h3>
+
+              {/* Text */}
+              <p className="text-[13px] md:text-[14px] text-[#111111]/45 leading-[1.7] font-medium">
+                {point.text}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Link to full manifesto */}
+        <div className="mt-8 md:mt-10">
+          <Link
+            to="/manifesto"
+            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-[#FF4D00] hover:text-[#111111] transition-colors group"
+          >
+            Read the full manifesto
+            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }
 

@@ -10,10 +10,10 @@ import { teamData, TeamMember } from "@/artemis/data/team";
 const categories = [
   { key: "all", label: "All" },
   { key: "leadership", label: "Leadership" },
-  { key: "investment", label: "Investment" },
-  { key: "programs", label: "Programs" },
-  { key: "infrastructure", label: "Infrastructure" },
-  { key: "advisory", label: "Advisory" },
+  { key: "partners", label: "Partners" },
+  { key: "venture-building", label: "Venture Building" },
+  { key: "platform", label: "Platform" },
+  { key: "operations", label: "Operations" },
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -39,7 +39,7 @@ function HeroSection() {
   const heroStats = [
     { value: String(teamData.length), label: "Team Members" },
     { value: "6", label: "African Cities" },
-    { value: "5", label: "Disciplines" },
+    { value: "5", label: "Functions" },
   ];
 
   return (
@@ -64,9 +64,9 @@ function HeroSection() {
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl lg:text-[22px] leading-[1.6] text-[#111111]/50 font-medium max-w-2xl mb-10 sm:mb-14 md:mb-20">
-            Operators, investors, engineers, and builders across six African
-            cities. United by a single thesis: critical technology belongs in
-            the markets that need it most.
+            Founders, scientists, engineers, investors, and operators. Now we
+            use our expertise to help critical technology founders go further,
+            faster.
           </p>
 
           {/* Stats row */}
